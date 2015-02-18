@@ -166,7 +166,7 @@
         if(Np.eq.0) then
           time1=MPI_WTIME()
         open(9,file=fncp,form='unformatted')
-	  Dp=p(0,0,0)
+        Dp=p(0,0,0)
         write(9)t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,nsym
         end if
         do k=1,Km

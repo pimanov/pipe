@@ -77,11 +77,10 @@
         w2=w(i,j2,k)
         w3=w(i,j3,k)
         write(8,120)t,dt,Dp,amp,ucl,dds,cf,u1,u2,u3,v1,v2,v3,w1,w2,w3
-*        write(8,120)t,dt,Dp,amp,ucl,dds,cf
-        write(*,110)Dp,amp,ucl,dds,cf
+        write(*,110)t,dt,Dp,amp,ucl,dds,cf
       end if 
 120   format(1pe14.6,15e12.4)
-110   format('    Dp =',1pe12.4,'  amp =',e12.4,'  Ucl =',e12.4,
-     >       '  Div =',e12.4,'  Cf=',e12.4)
+110   format('    t = ',f9.3,'  dt = ',f9.3,'  Dp =',1pe12.4,
+     > '  amp =',e12.4,'  Ucl =',e12.4,'  Div =',e12.4,'  Cf=',e12.4)
       return
       end
