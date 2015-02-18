@@ -8,12 +8,9 @@ primary branches:
 + pipeSym - code to time integration with symmetry reduction (reflection and rotation symmetry).
 + pipeMPI - MPI version of code to time integration, without init or other support tools. 
 + pipeSymMPI - MPI version of code to time integration with simmetry reduction (reflection and rotation symmetry), without other tools. 
-+ pytools - python scriptes to manipulation with control points (change of greed, Re, sym, ... ). 
++ pytools - python scriptes to manipulation with control points files (change of greed, Re, sym, ... ). 
 + master - nothing special
 
-  There is no common files in primary branches, changes are in all files of progect. 
-
-Other branches are produced by primary branches with name like <primary_branch_name>-<feature> and contain some spetial cases of code.
+Other branches are produced by primary branches with name like (primary_branch_name)-(feature) and contain some spetial cases of code.
 
   Expirements used code is supplied with tag
-  Only compiled and correct code is in commites. 
