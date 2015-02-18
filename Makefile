@@ -1,6 +1,6 @@
 CC=mpif90
 
-CFLAGS=-O3
+CFLAGS=-lm -lgfortran -m64 -Ofast
 
 pipe: $(wildcard *.for)
 	$(LINK.c) -I. \
