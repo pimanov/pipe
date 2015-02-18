@@ -30,7 +30,7 @@
       l=0
       do k=1,Km
         do j=1,Jm
-	    l=l+1
+          l=l+1
           buf(l)=u(Im,j,k)
           buf(l+lng)=v(1,j,k)
           buf(l+2*lng)=v(Im,j,k)
@@ -65,7 +65,7 @@
       l=0
       do k=1,Km
         do j=1,Jm
-	    l=l+1
+          l=l+1
           u(0,j,k)=buf(l+5*lng)
           v(Im+1,j,k)=buf(l+6*lng)
           v(0,j,k)=buf(l+7*lng)

@@ -34,7 +34,7 @@
       integer status(MPI_STATUS_SIZE)
       call MPI_INIT(ier)
       call MPI_COMM_SIZE(MPI_COMM_WORLD,Npm,ier)
-      call MPI_COMM_RANK(MPI_COMM_WORLD,Np,ier) 
+      call MPI_COMM_RANK(MPI_COMM_WORLD,Np,ier)
       if(Np.eq.0)then
       open(5,file='pipe.car')
       read(5,*) tol
@@ -51,8 +51,6 @@
       if(istop.ne.0) goto 333
       if(Np.eq.0)then
       read(9)t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt
-*           t=0.           
-*          Re=2000.
       end if
 *
       call MPI_BCAST(tol,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
@@ -71,7 +69,7 @@
       call MPI_BCAST(lt,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
 *
       call com
-      if(Np.eq.0) then      
+      if(Np.eq.0) then
       write(*,*)' ***************************************************'
       write(*,*)' *        Number of processors =',Npm,'          *'
       write(*,200) t,dt,Dp,Re,Xmax,epsr,Imm,Jm,Km
@@ -107,13 +105,13 @@
               w(i,j,k)=buf(i+3*Imm-Im)
             end do
             do n=1,Npm-1
-	        n1=n-1
+              n1=n-1
               call MPI_SEND(buf(n1*Im+1),Im,MPI_DOUBLE_PRECISION
-     >                     ,n,1,MPI_COMM_WORLD,ier)              
+     >                     ,n,1,MPI_COMM_WORLD,ier)
               call MPI_SEND(buf(n1*Im+1+Imm),Im,MPI_DOUBLE_PRECISION
-     >                     ,n,2,MPI_COMM_WORLD,ier)              
+     >                     ,n,2,MPI_COMM_WORLD,ier)
               call MPI_SEND(buf(n1*Im+1+2*Imm),Im,MPI_DOUBLE_PRECISION
-     >                     ,n,3,MPI_COMM_WORLD,ier)             
+     >                     ,n,3,MPI_COMM_WORLD,ier)
             end do
           else
             call MPI_RECV(u(1,j,k),Im,MPI_DOUBLE_PRECISION,0,1
@@ -162,7 +160,7 @@
         if(Np.eq.0) then
           time1=MPI_WTIME()
         open(9,file=fncp,form='unformatted')
-	  Dp=p(0,0,0)
+        Dp=p(0,0,0)
         write(9)t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt
         end if
         do k=1,Km
@@ -174,7 +172,7 @@
                 buf(i+3*Imm-Im)=w(i,j,k)
               end do
               do n=1,Npm-1
-	          n1=n-1
+                n1=n-1
                 call MPI_RECV(buf(n1*Im+1),Im,MPI_DOUBLE_PRECISION
      >                     ,n,1,MPI_COMM_WORLD,status,ier)
                 call MPI_RECV(buf(n1*Im+1+Imm),Im,MPI_DOUBLE_PRECISION
@@ -187,11 +185,11 @@
               write(9)(buf(i+2*Imm),i=1,Imm)
             else
               call MPI_SEND(u(1,j,k),Im,MPI_DOUBLE_PRECISION,0,1
-     >                     ,MPI_COMM_WORLD,ier)              
+     >                     ,MPI_COMM_WORLD,ier)
               call MPI_SEND(v(1,j,k),Im,MPI_DOUBLE_PRECISION,0,2
-     >                     ,MPI_COMM_WORLD,ier)              
+     >                     ,MPI_COMM_WORLD,ier)
               call MPI_SEND(w(1,j,k),Im,MPI_DOUBLE_PRECISION,0,3
-     >                     ,MPI_COMM_WORLD,ier)   
+     >                     ,MPI_COMM_WORLD,ier)
             end if
             call MPI_BARRIER(MPI_COMM_WORLD,ier)
           end do
@@ -201,12 +199,12 @@
           close(8)
           write(*,*)'*************************************************'
           write(*,*)'*               Control Point                   *'
-          write(*,*)'*      Npm=',Npm,'  time=',time1-time0,'         *' 
+          write(*,*)'*      Npm=',Npm,'  time=',time1-time0,'         *'
           write(*,*)'*************************************************'
           open(8,file=fndat,access='append')
           time0=MPI_WTIME()
         end if
-      end if 
+      end if
       if(t+0.01*dt.lt.tmax) goto 10
 *
 333   continue

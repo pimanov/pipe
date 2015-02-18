@@ -329,9 +329,9 @@
       do k=1,Kmm
         do j=1,Jm
           do i=1,Im
-	    u(i,j,k)=u(i,j,k)+Dpp
-	  end do
-	end do
+            u(i,j,k)=u(i,j,k)+Dpp
+          end do
+        end do
       end do  
       return
       end

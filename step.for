@@ -146,10 +146,8 @@
           end do
         end do
       end do
-      call MPI_REDUCE(err,error,1,MPI_DOUBLE_PRECISION,MPI_MAX,0
+      call MPI_ALLREDUCE(err,error,1,MPI_DOUBLE_PRECISION,MPI_MAX
      >               ,MPI_COMM_WORLD,ier)
-      call MPI_BCAST(error,1,MPI_DOUBLE_PRECISION,0
-     >            	,MPI_COMM_WORLD,ier)
       fac=(tol/error)**c13
       if(fac.lt.facmin) then
         dt=dt*fac
