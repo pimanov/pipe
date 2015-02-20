@@ -1,10 +1,7 @@
 *
 *     program an
 *      implicit real*8 (a-h,o-z)
-*      parameter (Imax=257, Jmax=97, Kmax=129)
       parameter (Imax=513, Jmax=33, Kmax=65)
-      character*1 getcharqq
-      logical peekcharqq
       character*12 fncp,fndat
       dimension
      > u(0:Imax,0:Jmax,0:Kmax)
@@ -60,11 +57,11 @@
       end if
       if(Jm.gt.Jmax-1.or.Jm.gt.128) then
         write(*,*)'  Jm=',Jm,'  is greater than   Jmax-1=',Jmax-1
-        go to 55
+        goto 55
       end if
       if(Km.gt.Kmax-1.or.Km.gt.256) then
         write(*,*)'  Km=',Km,'  is greater than   Kmax=',Kmax
-        go to 55
+        goto 55
       end if
 *
       do k=1,Km
@@ -77,12 +74,12 @@
       close(9)
       dt=min(dt,dtmax)
 *
+      open(8,file=fndat,access='append')
+*
       call rp(t,u,v,w,u1,v1,w1,ox,or,ot,Imax,Jmax)
       p(0,0,1)=0.
       call pres(u1,v1,w1,p,Imax,Jmax)
       Dp=p(0,0,0)
-*
-      open(8,file=fndat,access='append')
 *
       call prt(t,dt,u,v,w,p,Imax,Jmax)
       lprt=0
@@ -90,15 +87,10 @@
 10    continue
       call step(t,dt,tol,u,v,w,u1,v1,w1,u2,v2,w2,u3,v3,w3
      >    ,ox,or,ot,p,q,Imax,Jmax)
+      dt=min(dt,dtmax)
       lprt=lprt+1
       lwrt=lwrt+1
-      dt=min(dt,dtmax)
-!      if(peekcharqq()) then
-!        write(*,*)'  Keeboard symbol typed'
-!        if(getcharqq().eq.'w') tmax=t
-!      end if
       call servis(t,u,v,w,ox,or,ot,p,0,Imax,Jmax)
-      write(*,*)'  t=',t,'  dt=',dt
       if(lprt.ge.nprt.or.t.ge.tmax) then
         lprt=0
         call servis(t,u,v,w,ox,or,ot,p,1,Imax,Jmax)
@@ -107,7 +99,6 @@
       if(lwrt.ge.nwrt.or.t+0.01*dt.ge.tmax) then
         lwrt=0
         call servis(t,u,v,w,ox,or,ot,p,2,Imax,Jmax)
-555           continue
         open(9,file=fncp,form='unformatted')
         write(9)t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt
         do k=1,Km

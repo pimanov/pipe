@@ -26,8 +26,6 @@
       nit=nit+1
       a=a+da
       b=b+db
-      write(*,*)' nit=',nit,' da=',da,' db=',db
-      write(*,*)'     a =',a,'   b=',b
       if(abs(da).gt.1.e-5.or.abs(db).gt.1.e-5) goto 1
       aset=a
       bset=b
