@@ -3,6 +3,6 @@
  100.       - kwrt
  100000.       - tmax
  0.125         - dtmax
- 1         - icf
+ 0.5             - cf
  tt4.cp
  a0.dat

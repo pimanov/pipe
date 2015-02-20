@@ -22,7 +22,7 @@
      >/dimr/rt(0:128),rt1(0:128),yt(129),yt1(129),hr,Jm
      >/dimt/ht,Km,lt
      >/Dp/Dp
-     >/cf/cf,icf
+     >/cf/cf
 *
       c12=1.d0/2.d0
       c13=1.d0/3.d0
@@ -34,22 +34,6 @@
       c58=5.d0/8.d0
       facmin=0.5d0
       facmax=1.5d0
-* cf
-      cf=0.
-      if(icf.ne.0) then
-      stx=0.
-      sxx=0.
-      do k=1,Km
-        do j=1,Jm
-          do i=1,Im
-            ux=(u(i+1,j,k)-u(i-1,j,k))/(2.*hx)
-            stx=stx+u1(i,j,k)*ux*yt1(j)
-            sxx=sxx+ux*ux*yt1(j)
-          end do
-        end do
-      end do
-      cf=-stx/sxx
-      end if
 *
 1     continue
       tau=c13*dt

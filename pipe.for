@@ -28,7 +28,7 @@
      >/dimt/ht,Km,lt
      >/Re/Re
      >/Dp/Dp
-     >/cf/cf,icf
+     >/cf/cf
 *
       open(5,file='pipe.car')
       read(5,*) tol
@@ -36,7 +36,7 @@
       read(5,*) nwrt
       read(5,*) tmax
       read(5,*) dtmax
-      read(5,*) icf
+      read(5,*) cf
       read(5,*) fncp
       read(5,*) fndat
 *

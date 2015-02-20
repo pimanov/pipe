@@ -13,7 +13,7 @@
      >/dimt/ht,Km,lt
      >/Re/Re
      >/Dp/Dp
-     >/cf/cf,icf
+     >/cf/cf
 *
       ubulk=0.
       Ss=0.
