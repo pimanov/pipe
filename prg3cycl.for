@@ -1,6 +1,6 @@
 *
       subroutine prg3cycl(a,b,c,y,x,m)
-*      implicit real*8 (a-h,o-z)
+      implicit real*8 (a-h,o-z)
       dimension a(m),b(m),c(m),y(m),x(m)
       do j=2,m-2
         e=a(j)/b(j-1)

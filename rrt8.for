@@ -1,6 +1,6 @@
 *
       function rrt(x,i)
-*      implicit real*8 (a-h,o-z)
+      implicit real*8 (a-h,o-z)
       common/set/y0,y01,aset,bset,iset
       yp(a,b)=0.01*sqrt(0.3*(b+1))*(a*(58.*b-21.-21.*b*b)+100.)
       y1p(a,b)=1.+a*(b-0.45*(b+1.)**2)

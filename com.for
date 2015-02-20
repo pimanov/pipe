@@ -1,6 +1,6 @@
 *
       subroutine com
-*      implicit real*8 (a-h,o-z)
+      implicit real*8 (a-h,o-z)
       common
      >/dim/Xmax,epsr
      >/dimx/hx,Im,lx

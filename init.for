@@ -1,6 +1,6 @@
 *
 *     program an
-*      implicit real*8 (a-h,o-z)
+      implicit real*8 (a-h,o-z)
       parameter (Imax=513, Jmax=33, Kmax=65)
       character*12 fncp,fndat
       dimension
