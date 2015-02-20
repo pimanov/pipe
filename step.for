@@ -145,46 +145,18 @@
       q(0,0,1)=c12
       call pres(u1,v1,w1,q,Imax,Jmax)
 * Accuracy estimation
-      err=0.
-      ss=0.
-      eru=0.
-      erv=0.
-      erw=0.
+      error=0.
       do k=1,Km
         do j=1,Jm
           do i=1,Im
             uu=u1(i,j,k)-u3(i,j,k)
             vv=v1(i,j,k)-v3(i,j,k)
             ww=w1(i,j,k)-w3(i,j,k)
-              if(abs(uu).gt.eru)then
-                eru=abs(uu)
-                iu=i
-                ju=j
-                ku=k
-              end if
-              if(abs(vv).gt.erv)then
-                erv=abs(vv)
-                iv=i
-                jv=j
-                kv=k
-              end if
-              if(abs(ww).gt.erw)then
-                erw=abs(ww)
-                iw=i
-                jw=j
-                kw=k
-              end if
-*            err=err+(uu**2+vv**2+ww**2)*yt(j)*yt1(j)
-*            ss=ss+yt(j)*yt1(j)
-            err=max(err,abs(uu),abs(vv),abs(ww))
+            error=max(error,abs(uu),abs(vv),abs(ww))
           end do
         end do
       end do
-          write(*,*)' eru=',eru,' iu=',iu,' ju=',ju,' ku=',ku
-          write(*,*)' erv=',erv,' iv=',iv,' jv=',jv,' kv=',kv
-          write(*,*)' erw=',erw,' iw=',iw,' jw=',jw,' kw=',kw
-*      err=sqrt(err/ss)
-      fac=(tol/err)**c13
+      fac=(tol/error)**c13
       if(fac.lt.facmin) then
         dt=dt*fac
         write(*,*)'  STEP:  fac=',fac,'  dt=',dt
