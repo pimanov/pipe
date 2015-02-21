@@ -85,7 +85,7 @@
       end do
       do k=1,Km
         do i=1,Im
-          v(i,Jm,k)=0.
+          v(i,Jm,k)=0.d0
         end do
       end do
       do j=1,Jm
@@ -124,7 +124,7 @@
           end do
           sw=sw/Km
           do k=0,Km
-            ox(i,j,k)=2.*sw/yt(1)
+            ox(i,j,k)=2.d0*sw/yt(1)
           end do
       end do
       do k=0,Km

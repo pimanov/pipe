@@ -39,7 +39,7 @@
         ro=j*hr
         rt(j)=rrt(ro,0)
         rt1(j)=rrt(ro,1)*hr
-        ro=(j+0.5)*hr
+        ro=(j+0.5d0)*hr
         yt(j+1)=rrt(ro,0)
         yt1(j+1)=rrt(ro,1)*hr
       end do

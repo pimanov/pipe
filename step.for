@@ -135,20 +135,20 @@
       q(0,0,1)=c12
       call pres(u1,v1,w1,q,buf,Imax,Jmax)
 * Accuracy estimation
-      err=0.
+      error=0.d0
       do k=1,Km
         do j=1,Jm
           do i=1,Im
             uu=u1(i,j,k)-u3(i,j,k)
             vv=v1(i,j,k)-v3(i,j,k)
             ww=w1(i,j,k)-w3(i,j,k)
-            err=max(err,abs(uu),abs(vv),abs(ww))
+            error=max(error,abs(uu),abs(vv),abs(ww))
           end do
         end do
       end do
-      call MPI_ALLREDUCE(err,error,1,MPI_DOUBLE_PRECISION,MPI_MAX
+      call MPI_ALLREDUCE(error,errors,1,MPI_DOUBLE_PRECISION,MPI_MAX
      >               ,MPI_COMM_WORLD,ier)
-      fac=(tol/error)**c13
+      fac=(tol/errors)**c13
       if(fac.lt.facmin) then
         dt=dt*fac
         if(Np.eq.0)write(*,*)'  STEP:  fac=',fac,'  dt=',dt

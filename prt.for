@@ -15,13 +15,13 @@
      >/proc/Np,Npm
 *
       Dp=p(0,0,0)
-      ubulk=0.
-      Ss=0.
-      amp=0.
-      dd=0.
+      ubulk=0.d0
+      Ss=0.d0
+      amp=0.d0
+      dd=0.d0
       do j=1,Jm
         Ss=Ss+yt(j)*yt1(j)
-        u0=0.
+        u0=0.d0
         do k=1,Km
           ubulk=ubulk+u(1,j,k)*yt(j)*yt1(j)
           do i=1,Im
@@ -40,7 +40,7 @@
       end do
       ubulk=ubulk/(Ss*Km)
       amp=amp/(Ss*Im*Km)
-      ucl=0.
+      ucl=0.d0
       do k=1,Km
         do i=1,Im
           ucl=ucl+u(i,1,k)

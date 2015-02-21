@@ -149,7 +149,7 @@
       dt=min(dt,dtmax)
       call servis(t,u,v,w,ox,or,ot,p,0,Imax,Jmax)
       if(Np.eq.0)write(*,*)'  t=',t,'  dt=',dt
-      if(lprt.ge.nprt.or.t.ge.tmax) then
+      if(lprt.ge.nprt.or.t+0.01*dt.ge.tmax) then
         lprt=0
         call servis(t,u,v,w,ox,or,ot,p,1,Imax,Jmax)
         call prt(t,dt,u,v,w,p,Imax,Jmax)
