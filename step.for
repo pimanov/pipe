@@ -46,9 +46,9 @@
       do k=1,Km
         do j=1,Jm
           do i=1,Im
-            ux=(u(i+1,j,k)-u(i-1,j,k))/(2.*hx)
-            vx=(v(i+1,j,k)-v(i-1,j,k))/(2.*hx)
-            wx=(w(i+1,j,k)-w(i-1,j,k))/(2.*hx)
+            ux=(u(i+1,j,k)-u(i-1,j,k))/(2.d0*hx)
+            vx=(v(i+1,j,k)-v(i-1,j,k))/(2.d0*hx)
+            wx=(w(i+1,j,k)-w(i-1,j,k))/(2.d0*hx)
             u1(i,j,k)=dt23*(u1(i,j,k)+cf*ux)
             v1(i,j,k)=dt23*(v1(i,j,k)+cf*vx)
             w1(i,j,k)=dt23*(w1(i,j,k)+cf*wx)
@@ -72,9 +72,9 @@
       do k=1,Km
         do j=1,Jm
           do i=1,Im
-            ux=(u1(i+1,j,k)-u1(i-1,j,k))/(2.*hx)
-            vx=(v1(i+1,j,k)-v1(i-1,j,k))/(2.*hx)
-            wx=(w1(i+1,j,k)-w1(i-1,j,k))/(2.*hx)
+            ux=(u1(i+1,j,k)-u1(i-1,j,k))/(2.d0*hx)
+            vx=(v1(i+1,j,k)-v1(i-1,j,k))/(2.d0*hx)
+            wx=(w1(i+1,j,k)-w1(i-1,j,k))/(2.d0*hx)
             u2(i,j,k)=dt13*(u2(i,j,k)+cf*ux)
      >               -(u1(i,j,k)-u(i,j,k))
             v2(i,j,k)=dt13*(v2(i,j,k)+cf*vx)
@@ -120,9 +120,9 @@
       do k=1,Km
         do j=1,Jm
           do i=1,Im
-            ux=(u2(i+1,j,k)-u2(i-1,j,k))/(2.*hx)
-            vx=(v2(i+1,j,k)-v2(i-1,j,k))/(2.*hx)
-            wx=(w2(i+1,j,k)-w2(i-1,j,k))/(2.*hx)
+            ux=(u2(i+1,j,k)-u2(i-1,j,k))/(2.d0*hx)
+            vx=(v2(i+1,j,k)-v2(i-1,j,k))/(2.d0*hx)
+            wx=(w2(i+1,j,k)-w2(i-1,j,k))/(2.d0*hx)
             u1(i,j,k)=dt34*(u1(i,j,k)+cf*ux)
      >          -(u3(i,j,k)-c38*u2(i,j,k)-c58*u(i,j,k))
             v1(i,j,k)=dt34*(v1(i,j,k)+cf*vx)
@@ -145,7 +145,7 @@
       q(0,0,1)=c12
       call pres(u1,v1,w1,q,Imax,Jmax)
 * Accuracy estimation
-      error=0.
+      error=0.d0
       do k=1,Km
         do j=1,Jm
           do i=1,Im

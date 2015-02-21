@@ -15,15 +15,33 @@
      >/Dp/Dp
      >/cf/cf
 *
-      ubulk=0.
-      Ss=0.
-      amp=0.
-      dd=0.
+      Ss=0.d0
+      ubulk=0.d0
+      volume=0.d0
+      enrg=0.d0
+      dd=0.d0
+      do k=1,Km
+        do j=1,Jm
+          Ss=Ss+yt(j)*ht*yt1(j)
+          ubulk=ubulk+u(1,j,k)*yt(j)*ht*yt1(j)
+          do i=1,Im
+            uP=1.d0-yt(j)**2
+            volume=volume+yt(j)*ht*yt1(j)*hx
+            enrg=enrg+(u(i,j,k)-uP)**2*yt(j)*ht*yt1(j)*hx
+     >                    +v(i,j,k)**2*rt(j)*ht*rt1(j)*hx
+     >                    +w(i,j,k)**2*yt(j)*ht*yt1(j)*hx
+            call div(i,j,k,u,v,w,d,Imax,Jmax)
+            dd=max(dd,abs(d))
+          end do
+        end do
+      end do
+      ubulk=ubulk/Ss
+      enrg=enrg/2
+
+      amp=0.d0
       do j=1,Jm
-        Ss=Ss+yt(j)*yt1(j)
-        u0=0.
+        u0=0.d0
         do k=1,Km
-          ubulk=ubulk+u(1,j,k)*yt(j)*yt1(j)
           do i=1,Im
             u0=u0+u(i,j,k)
           end do
@@ -31,16 +49,15 @@
         u0=u0/(Im*Km)
         do k=1,Km
           do i=1,Im
-            amp=amp
-     >       +((u(i,j,k)-u0)**2+w(i,j,k)**2+v(i,j,k)**2)*yt(j)*yt1(j)
-            call div(i,j,k,u,v,w,d,Imax,Jmax)
-            dd=max(dd,abs(d))
+            amp=amp+yt(j)*ht*yt1(j)*hx*(u(i,j,k)-u0)**2
+     >             +rt(j)*ht*rt1(j)*hx*v(i,j,k)**2
+     >             +yt(j)*ht*yt1(j)*hx*v(i,j,k)**2
           end do
         end do
       end do
-      ubulk=ubulk/(Ss*Km)
-      amp=sqrt(amp/(Ss*Im*Km))
-      ucl=0.
+      amp=sqrt(amp)
+
+      ucl=0.d0
       do k=1,Km
         do i=1,Im
           ucl=ucl+u(i,1,k)
@@ -48,10 +65,10 @@
       end do
       ucl=ucl/(Im*Km)
 *
-      write(8,120)t,dt,Dp,amp,ucl,dd,cf
-      write(*,110)t,dt,Dp,amp,ucl,dd,cf
-120   format(1pe14.6,15e12.4)
-110   format('    t=',f10.4,'  dt=',f10.4,'  Dp=',1pe12.4,
-     > '  amp=',e12.4,'  Ucl=',e12.4,'  Div=',e12.4,'  cf=',e12.4)
+      write(8,120)t,dt,amp,enrg,ucl,Dp,cf,ubulk,dd
+      write(*,120)t,dt,amp,enrg,ucl,Dp,cf,ubulk,dd
+120   format(15e25.15)
+110   format('t=',f10.4,',dt=',f10.4,',amp=',e12.4,',enr=',e12.4,',Ucl='
+     > ,e12.4,',Dp=',e12.4,',cf=',e12.4,',ub=',e12.4,',dd=',e12.4)
       return
       end

@@ -1,7 +1,7 @@
 *
 *     program an
       implicit real*8 (a-h,o-z)
-      parameter (Imax=513, Jmax=33, Kmax=65)
+      parameter (Imax=1025, Jmax=65, Kmax=128)
       character*12 fncp,fndat
       dimension
      > u(0:Imax,0:Jmax,0:Kmax)
@@ -39,6 +39,7 @@
       read(5,*) cf
       read(5,*) fncp
       read(5,*) fndat
+      close(5)
 *
       open(9,file=fncp,form='unformatted',status='old',err=1)
       read(9)t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt
@@ -51,7 +52,7 @@
      >' *  Xmax=',f6.2,' epsr=',f6.2,'  Im=',i3,'  Jm=',i3
      >,'  Km=',i3,'   *')
 *
-      if(Im.gt.Imax-1.or.Im.gt.512) then
+      if(Im.gt.Imax-1.or.Im.gt.4096) then
         write(*,*)'  Im=',Im,'  is greater than   Imax-1=',Imax-1
         goto 55
       end if
@@ -77,7 +78,7 @@
       open(8,file=fndat,access='append')
 *
       call rp(t,u,v,w,u1,v1,w1,ox,or,ot,Imax,Jmax)
-      p(0,0,1)=0.
+      p(0,0,1)=0.d0
       call pres(u1,v1,w1,p,Imax,Jmax)
       Dp=p(0,0,0)
 *
@@ -91,7 +92,7 @@
       lprt=lprt+1
       lwrt=lwrt+1
       call servis(t,u,v,w,ox,or,ot,p,0,Imax,Jmax)
-      if(lprt.ge.nprt.or.t.ge.tmax) then
+      if(lprt.ge.nprt.or.t+0.01*dt.ge.tmax) then
         lprt=0
         call servis(t,u,v,w,ox,or,ot,p,1,Imax,Jmax)
         call prt(t,dt,u,v,w,p,Imax,Jmax)
@@ -118,7 +119,7 @@
       if(t+0.01*dt.lt.tmax) goto 10
 *
       stop
-1     write(*,*)'  File ',fncp,' was not found'
 100   format(10(1pe12.4))
+1     write(*,*)'  File ',fncp,' was not found'
 55    stop
       end

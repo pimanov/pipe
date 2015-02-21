@@ -1,7 +1,7 @@
 *
 *     program an
       implicit real*8 (a-h,o-z)
-      parameter (Imax=513, Jmax=33, Kmax=65)
+      parameter (Imax=1025, Jmax=65, Kmax=129)
       character*12 fncp,fndat
       dimension
      > u(0:Imax,0:Jmax,0:Kmax)
@@ -35,14 +35,14 @@
           r=yt(j)
           do i=1,Im
             x=(1.d0*i)/Im
-            u(i,j,k)=(1.-r**2)*r*(sin(2.*pi*(x-tt))
-     >       +r*sin(2.*pi*(x+2.*tt)))
-            v(i,j,k)=0.
-            w(i,j,k)=0.
+            u(i,j,k)=(1.d0-r**2)*r*(sin(2.d0*pi*(x-tt))
+     >       +r*sin(2.d0*pi*(x+2.d0*tt)))
+            v(i,j,k)=0.d0
+            w(i,j,k)=0.d0
           end do
         end do
       end do
-      dd=0.
+      dd=0.d0
       do k=1,Km
       do j=1,Jm
       do i=1,Im
@@ -54,9 +54,9 @@
       write(*,*)' Div0=',dd
       p(0,0,1)=0.d0
       call pres(u,v,w,p,Imax,Jmax)
-      dd=0.
-      a=0.
-      ss=0.
+      dd=0.d0
+      a=0.d0
+      ss=0.d0
       do k=1,Km
       do j=1,Jm
       do i=1,Im
@@ -74,7 +74,7 @@
       do k=1,Km
         do j=1,Jm
           do i=1,Im
-            u(i,j,k)=1.-yt(j)**2+u(i,j,k)*amp/a
+            u(i,j,k)=1.d0-yt(j)**2+u(i,j,k)*amp/a
             v(i,j,k)=v(i,j,k)*amp/a
             w(i,j,k)=w(i,j,k)*amp/a
           end do

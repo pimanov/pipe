@@ -19,7 +19,7 @@
 *
       Im2=Im/2
       Km2=Km/2
-      cik=4./(Im2*Km2)
+      cik=4.d0/(Im2*Km2)
 *
       do k=1,Km
         do i=1,Im
