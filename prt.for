@@ -66,7 +66,7 @@
       ucl=ucl/(Im*Km)
 *
       write(8,120)t,dt,amp,enrg,ucl,Dp,cf,ubulk,dd
-      write(*,120)t,dt,amp,enrg,ucl,Dp,cf,ubulk,dd
+      write(*,110)t,dt,amp,enrg,ucl,Dp,cf,ubulk,dd
 120   format(15e25.15)
 110   format('t=',f10.4,',dt=',f10.4,',amp=',e12.4,',enr=',e12.4,',Ucl='
      > ,e12.4,',Dp=',e12.4,',cf=',e12.4,',ub=',e12.4,',dd=',e12.4)
