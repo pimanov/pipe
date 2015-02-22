@@ -307,8 +307,6 @@
         end do
       end do
 *
-      p(0,0,0)=0.d0
-      call gradp(u,v,w,p,Imax,Jmax)
 *  Mean pressure gradient
       Ub=p(0,0,1)
       ss=0.d0
@@ -323,16 +321,12 @@
         end do
         su=su+ssu*yt(j)*yt1(j)
       end do
-      Dpp=Ub-su/(Im*Kmm*ss)
+      call MPI_ALLREDUCE(su,sus,1,MPI_DOUBLE_PRECISION,MPI_SUM
+     >               ,MPI_COMM_WORLD,ier) 
+      Dpp=Ub-sus/(Imm*Kmm*ss)
       p(0,0,0)=Dpp
 *
-      do k=1,Kmm
-        do j=1,Jm
-          do i=1,Im
-            u(i,j,k)=u(i,j,k)+Dpp
-          end do
-        end do
-      end do  
+      call gradp(u,v,w,p,Imax,Jmax)
       return
       end
 *

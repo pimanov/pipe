@@ -17,9 +17,6 @@
      >/cf/cf
 *
       Dp=p(0,0,0)
-      call MPI_REDUCE(Dp,Dps,1,MPI_DOUBLE_PRECISION,MPI_SUM,0
-     >               ,MPI_COMM_WORLD,ier)
-      Dp=Dps/Npm
 
       Ss=0.d0
       ubulk=0.d0
@@ -44,13 +41,13 @@
       ubulk=ubulk/Ss
       enrg=enrg/2
 
-      call MPI_REDUCE(volume,volumes,1,MPI_DOUBLE_PRECISION,MPI_SUM,0
+      call MPI_ALLREDUCE(volume,vols,1,MPI_DOUBLE_PRECISION,MPI_SUM
      >               ,MPI_COMM_WORLD,ier)
-      volume=volumes
-      call MPI_REDUCE(enrg,enrgs,1,MPI_DOUBLE_PRECISION,MPI_SUM,0
+      volume=vols
+      call MPI_ALLREDUCE(enrg,enrgs,1,MPI_DOUBLE_PRECISION,MPI_SUM
      >               ,MPI_COMM_WORLD,ier)
       enrg=enrgs
-      call MPI_REDUCE(dd,dds,1,MPI_DOUBLE_PRECISION,MPI_MAX,0
+      call MPI_ALLREDUCE(dd,dds,1,MPI_DOUBLE_PRECISION,MPI_MAX
      >               ,MPI_COMM_WORLD,ier)
       dd=dds
 
@@ -63,7 +60,7 @@
           end do
         end do
         u0=u0/(Im*Km)
-        call MPI_REDUCE(u0,u0s,1,MPI_DOUBLE_PRECISION,MPI_SUM,0
+        call MPI_ALLREDUCE(u0,u0s,1,MPI_DOUBLE_PRECISION,MPI_SUM
      >               ,MPI_COMM_WORLD,ier)
         u0=u0s/Npm
 
@@ -75,7 +72,7 @@
           end do
         end do
       end do
-      call MPI_REDUCE(amp,amps,1,MPI_DOUBLE_PRECISION,MPI_SUM,0
+      call MPI_ALLREDUCE(amp,amps,1,MPI_DOUBLE_PRECISION,MPI_SUM
      >               ,MPI_COMM_WORLD,ier)
       amp=sqrt(amps)
 
@@ -86,7 +83,7 @@
         end do
       end do
       ucl=ucl/(Im*Km)
-      call MPI_REDUCE(ucl,ucls,1,MPI_DOUBLE_PRECISION,MPI_SUM,0
+      call MPI_ALLREDUCE(ucl,ucls,1,MPI_DOUBLE_PRECISION,MPI_SUM
      >               ,MPI_COMM_WORLD,ier)
       ucl=ucls/Npm
 *
