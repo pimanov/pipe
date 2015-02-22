@@ -11,6 +11,12 @@ primary branches:
 + pytools - python scriptes to manipulation with control points files (change of greed, Re, sym, ... ). 
 + master - nothing special
 
-Other branches are produced by primary branches with name like (primary_branch_name)-(feature) and contain some spetial cases of code.
+Other branches are produced by primary branches with name like _(primary_branch_name)-(feature) and contain some spetial cases of code.
 
   Expirements used code is supplied with tag
+
+
+About pipeMPI branch
+=================
+
+Cf (speed of frame) is constant and is seted in pipe.car. 

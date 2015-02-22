@@ -30,27 +30,30 @@
      >/dimt/ht,Km,lt
      >/Re/Re
      >/proc/Np,Npm
+     >/cf/cf
 *
       integer status(MPI_STATUS_SIZE)
       call MPI_INIT(ier)
       call MPI_COMM_SIZE(MPI_COMM_WORLD,Npm,ier)
       call MPI_COMM_RANK(MPI_COMM_WORLD,Np,ier)
       if(Np.eq.0)then
-      open(5,file='pipe.car')
-      read(5,*) tol
-      read(5,*) nprt
-      read(5,*) nwrt
-      read(5,*) tmax
-      read(5,*) dtmax
-      read(5,*) fncp
-      read(5,*) fndat
-      istop=0
-      open(9,file=fncp,form='unformatted',status='old',err=111)
+        open(5,file='pipe.car')
+        read(5,*) tol
+        read(5,*) nprt
+        read(5,*) nwrt
+        read(5,*) tmax
+        read(5,*) dtmax
+        read(5,*) cf
+        read(5,*) fncp
+        read(5,*) fndat
+        close(5)
+        istop=0
+        open(9,file=fncp,form='unformatted',status='old',err=111)
       end if
 222   call MPI_BCAST(istop,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
       if(istop.ne.0) goto 333
       if(Np.eq.0)then
-      read(9)t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt
+        read(9)t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt
       end if
 *
       call MPI_BCAST(tol,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
@@ -70,27 +73,27 @@
 *
       call com
       if(Np.eq.0) then
-      write(*,*)' ***************************************************'
-      write(*,*)' *        Number of processors =',Npm,'          *'
-      write(*,200) t,dt,Dp,Re,Xmax,epsr,Imm,Jm,Km
-      write(*,*)' ***************************************************'
+        write(*,*)' ***************************************************'
+        write(*,*)' *        Number of processors =',Npm,'          *'
+        write(*,200) t,dt,Dp,Re,Xmax,epsr,Imm,Jm,Km
+        write(*,*)' ***************************************************'
 200   format('    t=',1pe10.3,' dt=',e9.2,' Dp=',e9.2,/,
-     >'    Re=',e9.2,/,
-     >'    Xmax=',e9.2,/,
-     >'    epsr=',e9.2,' Im=',i4,' Jm=',i4,' Km=',i4)
+     >  '    Re=',e9.2,/,
+     >  '    Xmax=',e9.2,/,
+     >  '    epsr=',e9.2,' Im=',i4,' Jm=',i4,' Km=',i4)
 *
-      if(Im.gt.Imax-1.or.Im*Npm.gt.2048) then
-        write(*,*)'  Im=',Im,'  is greater than   Imax-1=',Imax-1
-        goto 333
-      end if
-      if(Jm.gt.Jmax-1.or.Jm.gt.128) then
-        write(*,*)'  Jm=',Jm,'  is greater than   Jmax-1=',Jmax-1
-        goto 333
-      end if
-      if(Km.gt.Kmax-1.or.Km.gt.256) then
-        write(*,*)'  Km=',Km,'  is greater than   Kmax=',Kmax
-        goto 333
-      end if
+        if(Im.gt.Imax-1.or.Im*Npm.gt.2048) then
+          write(*,*)'  Im=',Im,'  is greater than   Imax-1=',Imax-1
+          goto 333
+        end if
+        if(Jm.gt.Jmax-1.or.Jm.gt.128) then
+          write(*,*)'  Jm=',Jm,'  is greater than   Jmax-1=',Jmax-1
+          goto 333
+        end if
+        if(Km.gt.Kmax-1.or.Km.gt.256) then
+          write(*,*)'  Km=',Km,'  is greater than   Kmax=',Kmax
+          goto 333
+        end if
       end if
 *
       do k=1,Km
@@ -127,12 +130,12 @@
       if(Np.eq.0) close(9)
       dt=min(dt,dtmax)
 *
-      call rp(t,u,v,w,u1,v1,w1,ox,or,ot,buf,Imax,Jmax)
+      if(Np.eq.0) open(8,file=fndat,access='append')
 *
+      call rp(t,u,v,w,u1,v1,w1,ox,or,ot,buf,Imax,Jmax)
       p(0,0,1)=0.d0
       call pres(u1,v1,w1,p,buf,Imax,Jmax)
-*
-      if(Np.eq.0) open(8,file=fndat,access='append')
+      Dp=p(0,0,0)
 *
       call servis(t,u,v,w,ox,or,ot,p,0,Imax,Jmax)
       call prt(t,dt,u,v,w,p,Imax,Jmax)
@@ -148,7 +151,6 @@
       lwrt=lwrt+1
       dt=min(dt,dtmax)
       call servis(t,u,v,w,ox,or,ot,p,0,Imax,Jmax)
-      if(Np.eq.0)write(*,*)'  t=',t,'  dt=',dt
       if(lprt.ge.nprt.or.t+0.01*dt.ge.tmax) then
         lprt=0
         call servis(t,u,v,w,ox,or,ot,p,1,Imax,Jmax)
@@ -207,8 +209,7 @@
       end if
       if(t+0.01*dt.lt.tmax) goto 10
 *
-333   continue
-      call MPI_FINALIZE(ier)
+333   call MPI_FINALIZE(ier)
       stop
 111   write(*,*)'  File ',fncp,' was not found'
       istop=1
