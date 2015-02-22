@@ -83,6 +83,7 @@
       Dp=p(0,0,0)
 *
       call prt(t,dt,u,v,w,p,Imax,Jmax)
+      call servis(t,u,v,w,ox,or,ot,p,1,Imax,Jmax)
       lprt=0
       lwrt=0
 10    continue
