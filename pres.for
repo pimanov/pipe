@@ -51,7 +51,7 @@
 *
       Im2=Imm/2
       Km2=Kmm/2
-      cik=4./(Im2*Km2)
+      cik=4.d0/(Im2*Km2)
 *
       do k=1,Kmm
         do i=1,Im
@@ -68,8 +68,8 @@
         do i=1,Im 
           do k=1,Km2
             k1=Kmm+1-k            
-            a1(k)=0.5*(p(i,j,k)+p(i,j,k1))
-            a2(k)=0.5*(p(i,j,k)-p(i,j,k1))
+            a1(k)=0.5d0*(p(i,j,k)+p(i,j,k1))
+            a2(k)=0.5d0*(p(i,j,k)-p(i,j,k1))
           end do
           call ftc05d(a1,b1,lt-1)
           call fts05d(a2,b2,lt-1)
@@ -138,8 +138,8 @@
           end do 
           do i=1,Im2
             i1=Imm+1-i
-            a1(i)=0.5*(b1(i)+b1(i1))
-            a2(i)=0.5*(b1(i)-b1(i1))
+            a1(i)=0.5d0*(b1(i)+b1(i1))
+            a2(i)=0.5d0*(b1(i)-b1(i1))
           end do
           call ftc05d(a1,b1,lx-1)
           call fts05d(a2,b2,lx-1)
@@ -174,8 +174,8 @@
             bp(1)=bp(1)+apy(1)
             bp(Jm)=bp(Jm)+cpy(Jm)
             Jm1=Jm
-            ep(Jm)=0.
-            if(rlx(il).eq.0..and.rlt(kl).eq.0.)Jm1=Jm-1
+            ep(Jm)=0.d0
+            if(rlx(il).eq.0.d0.and.rlt(kl).eq.0.d0)Jm1=Jm-1
             call prog3(apy,bp,cpy,dp,ep,Jm1)
             do j=1,Jm
               p(i,j,k1)=ep(j)
@@ -307,8 +307,6 @@
         end do
       end do
 *
-      p(0,0,0)=0.
-      call gradp(u,v,w,p,Imax,Jmax)
 *  Mean pressure gradient
       Ub=p(0,0,1)
       ss=0.d0
@@ -323,16 +321,12 @@
         end do
         su=su+ssu*yt(j)*yt1(j)
       end do
-      Dpp=Ub-su/(Im*Kmm*ss)
+      call MPI_ALLREDUCE(su,sus,1,MPI_DOUBLE_PRECISION,MPI_SUM
+     >               ,MPI_COMM_WORLD,ier) 
+      Dpp=Ub-sus/(Imm*Kmm*ss)
       p(0,0,0)=Dpp
 *
-      do k=1,Kmm
-        do j=1,Jm
-          do i=1,Im
-            u(i,j,k)=u(i,j,k)+Dpp
-          end do
-        end do
-      end do  
+      call gradp(u,v,w,p,Imax,Jmax)
       return
       end
 *

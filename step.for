@@ -20,11 +20,14 @@
      >,w3(0:Imax,0:Jmax,0:*)
      >,p(0:Imax,0:Jmax,0:*)
      >,q(0:Imax,0:Jmax,0:*)
+     >,buf(*)
       common
      >/dimx/hx,Im,Imm,lx
      >/dimr/rt(0:128),rt1(0:128),yt(129),yt1(129),hr,Jm
      >/dimt/ht,Km,lt
      >/proc/Np,Npm
+     >/cf/cf
+     >/Dp/Dp
 *
       c12=1.d0/2.d0
       c13=1.d0/3.d0
@@ -48,9 +51,12 @@
       do k=1,Km
         do j=1,Jm
           do i=1,Im
-            u1(i,j,k)=dt23*u1(i,j,k)
-            v1(i,j,k)=dt23*v1(i,j,k)
-            w1(i,j,k)=dt23*w1(i,j,k)
+            ux=(u(i+1,j,k)-u(i-1,j,k))/(2.d0*hx)
+            vx=(v(i+1,j,k)-v(i-1,j,k))/(2.d0*hx)
+            wx=(w(i+1,j,k)-w(i-1,j,k))/(2.d0*hx)
+            u1(i,j,k)=dt23*(u1(i,j,k)+cf*ux)
+            v1(i,j,k)=dt23*(v1(i,j,k)+cf*vx)
+            w1(i,j,k)=dt23*(w1(i,j,k)+cf*wx)
           end do
         end do
       end do
@@ -71,9 +77,15 @@
       do k=1,Km
         do j=1,Jm
           do i=1,Im
-            u2(i,j,k)=dt13*u2(i,j,k)-(u1(i,j,k)-u(i,j,k))
-            v2(i,j,k)=dt13*v2(i,j,k)-(v1(i,j,k)-v(i,j,k))
-            w2(i,j,k)=dt13*w2(i,j,k)-(w1(i,j,k)-w(i,j,k))
+            ux=(u1(i+1,j,k)-u1(i-1,j,k))/(2.d0*hx)
+            vx=(v1(i+1,j,k)-v1(i-1,j,k))/(2.d0*hx)
+            wx=(w1(i+1,j,k)-w1(i-1,j,k))/(2.d0*hx)
+            u2(i,j,k)=dt13*(u2(i,j,k)+cf*ux)
+     >               -(u1(i,j,k)-u(i,j,k))
+            v2(i,j,k)=dt13*(v2(i,j,k)+cf*vx)
+     >               -(v1(i,j,k)-v(i,j,k))
+            w2(i,j,k)=dt13*(w2(i,j,k)+cf*wx)
+     >               -(w1(i,j,k)-w(i,j,k))
           end do
         end do
       end do
@@ -113,11 +125,14 @@
       do k=1,Km
         do j=1,Jm
           do i=1,Im
-            u1(i,j,k)=dt34*u1(i,j,k)
+            ux=(u2(i+1,j,k)-u2(i-1,j,k))/(2.d0*hx)
+            vx=(v2(i+1,j,k)-v2(i-1,j,k))/(2.d0*hx)
+            wx=(w2(i+1,j,k)-w2(i-1,j,k))/(2.d0*hx)
+            u1(i,j,k)=dt34*(u1(i,j,k)+cf*ux)
      >          -(u3(i,j,k)-c38*u2(i,j,k)-c58*u(i,j,k))
-            v1(i,j,k)=dt34*v1(i,j,k)
+            v1(i,j,k)=dt34*(v1(i,j,k)+cf*vx)
      >          -(v3(i,j,k)-c38*v2(i,j,k)-c58*v(i,j,k))
-            w1(i,j,k)=dt34*w1(i,j,k)
+            w1(i,j,k)=dt34*(w1(i,j,k)+cf*wx)
      >          -(w3(i,j,k)-c38*w2(i,j,k)-c58*w(i,j,k))
           end do
         end do
@@ -135,23 +150,23 @@
       q(0,0,1)=c12
       call pres(u1,v1,w1,q,buf,Imax,Jmax)
 * Accuracy estimation
-      err=0.
+      error=0.d0
       do k=1,Km
         do j=1,Jm
           do i=1,Im
             uu=u1(i,j,k)-u3(i,j,k)
             vv=v1(i,j,k)-v3(i,j,k)
             ww=w1(i,j,k)-w3(i,j,k)
-            err=max(err,abs(uu),abs(vv),abs(ww))
+            error=max(error,abs(uu),abs(vv),abs(ww))
           end do
         end do
       end do
-      call MPI_ALLREDUCE(err,error,1,MPI_DOUBLE_PRECISION,MPI_MAX
+      call MPI_ALLREDUCE(error,errors,1,MPI_DOUBLE_PRECISION,MPI_MAX
      >               ,MPI_COMM_WORLD,ier)
-      fac=(tol/error)**c13
+      fac=(tol/errors)**c13
       if(fac.lt.facmin) then
         dt=dt*fac
-        if(Np.eq.0)write(*,*)'  STEP:  fac=',fac,'  dt=',dt
+        if(Np.eq.0) write(*,*)'  STEP:  fac=',fac,'  dt=',dt
         call rp(t,u,v,w,u1,v1,w1,ox,or,ot,buf,Imax,Jmax)
         p(0,0,1)=0.d0
         call pres(u1,v1,w1,p,buf,Imax,Jmax)
@@ -172,5 +187,6 @@
       call rp(t,u,v,w,u1,v1,w1,ox,or,ot,buf,Imax,Jmax)
       p(0,0,1)=0.d0
       call pres(u1,v1,w1,p,buf,Imax,Jmax)
+      Dp=p(0,0,0)
       return
       end

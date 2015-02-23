@@ -39,7 +39,7 @@
         ro=j*hr
         rt(j)=rrt(ro,0)
         rt1(j)=rrt(ro,1)*hr
-        ro=(j+0.5)*hr
+        ro=(j+0.5d0)*hr
         yt(j+1)=rrt(ro,0)
         yt1(j+1)=rrt(ro,1)*hr
       end do
@@ -72,7 +72,6 @@
         cpw(j)=c/(rt(j)*rt1(j))
         bpw(j)=-apw(j)-cpw(j)
       end do
-100   format(10(1pe12.4))
 * rl
       do i=0,Imm/2
         rlx(i+1)=(2.d0/hx*sin(i*pi/Imm))**2
