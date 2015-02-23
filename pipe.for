@@ -54,8 +54,6 @@
       if(istop.ne.0) goto 333
       if(Np.eq.0)then
       read(9)t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,nsym
-           t=0.           
-          Re=1800.
       end if
 *
       call MPI_BCAST(tol,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
@@ -154,7 +152,6 @@
       lwrt=lwrt+1
       dt=min(dt,dtmax)
       call servis(t,u,v,w,ox,or,ot,p,0,Imax,Jmax)
-      if(Np.eq.0)write(*,*)'  t=',t,'  dt=',dt
       if(lprt.ge.nprt.or.t.ge.tmax) then
         lprt=0
         call servis(t,u,v,w,ox,or,ot,p,1,Imax,Jmax)

@@ -39,7 +39,7 @@
         ro=j*hr
         rt(j)=rrt(ro,0)
         rt1(j)=rrt(ro,1)*hr
-        ro=(j+0.5)*hr
+        ro=(j+0.5d0)*hr
         yt(j+1)=rrt(ro,0)
         yt1(j+1)=rrt(ro,1)*hr
       end do
@@ -82,7 +82,7 @@
         rlx(i1)=rlx(i+1)
       end do
       do k=0,Km-1
-        rlt(k+1)=(2.d0/ht*sin(0.5*k*pi/Km))**2
+        rlt(k+1)=(2.d0/ht*sin(0.5d0*k*pi/Km))**2
       end do
       return
       end
