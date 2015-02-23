@@ -54,8 +54,6 @@
       if(istop.ne.0) goto 333
       if(Np.eq.0)then
       read(9)t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,nsym
-           t=0.           
-          Re=1800.
       end if
 *
       call MPI_BCAST(tol,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)

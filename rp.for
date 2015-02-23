@@ -91,7 +91,7 @@
       end do
       do k=1,Km
         do i=1,Im
-          v(i,Jm,k)=0.
+          v(i,Jm,k)=0.d0
         end do
       end do
       do j=1,Jm
@@ -102,8 +102,8 @@
       end do
       do j=1,Jm
         do i=0,Im+1
-          w(i,j,0)=0.
-          w(i,j,Km)=0.
+          w(i,j,0)=0.d0
+          w(i,j,Km)=0.d0
         end do
       end do
       do k=0,Km
@@ -126,7 +126,7 @@
         end do
         j=0
           do k=0,Km
-            ox(i,j,k)=0.
+            ox(i,j,k)=0.d0
           end do
       end do
       do k=0,Km
