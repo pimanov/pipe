@@ -26,7 +26,7 @@
       do k=1,Km
         do j=1,Jm
           Ss=Ss+yt(j)*ht*yt1(j)
-          ubulk=ubulk+u(1,j,k)*yt(j)*ht*yt1(j)
+          ubulk=ubulk+u(Im,j,k)*yt(j)*ht*yt1(j)
           do i=1,Im
             uP=1.d0-yt(j)**2
             volume=volume+yt(j)*ht*yt1(j)*hx
