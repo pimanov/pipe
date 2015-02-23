@@ -13,7 +13,7 @@
      >,or(0:Imax,0:Jmax,0:*)
      >,ot(0:Imax,0:Jmax,0:*)
      >,buf(1:*)
-      integer nstat(MPI_STATUS_SIZE,10),nreq(10)
+      integer nstat(MPI_STATUS_SIZE,12),nreq(12)
       common
      >/dimx/hx,Im,Imm,lx
      >/dimr/rt(0:128),rt1(0:128),yt(129),yt1(129),hr,Jm
@@ -36,6 +36,7 @@
           buf(l+2*lng)=v(Im,j,k)
           buf(l+3*lng)=w(1,j,k)
           buf(l+4*lng)=w(Im,j,k)
+          buf(l+10*lng)=u(1,j,k)
         end do
       end do
       call MPI_ISEND(buf(1),lng,MPI_DOUBLE_PRECISION,Np1,1
@@ -48,6 +49,8 @@
      >              ,MPI_COMM_WORLD,nreq(4),ier)
       call MPI_ISEND(buf(1+4*lng),lng,MPI_DOUBLE_PRECISION,Np1,5
      >              ,MPI_COMM_WORLD,nreq(5),ier)
+      call MPI_ISEND(buf(1+10*lng),lng,MPI_DOUBLE_PRECISION,Np0,6
+     >              ,MPI_COMM_WORLD,nreq(11),ier)
 *
       call MPI_IRECV(buf(1+5*lng),lng,MPI_DOUBLE_PRECISION,Np0,1
      >              ,MPI_COMM_WORLD,nreq(6),ier)
@@ -59,8 +62,10 @@
      >              ,MPI_COMM_WORLD,nreq(9),ier)
       call MPI_IRECV(buf(1+9*lng),lng,MPI_DOUBLE_PRECISION,Np0,5
      >              ,MPI_COMM_WORLD,nreq(10),ier)
+      call MPI_IRECV(buf(1+11*lng),lng,MPI_DOUBLE_PRECISION,Np1,6
+     >              ,MPI_COMM_WORLD,nreq(12),ier)
 *
-      call MPI_WAITALL(10,nreq,nstat,ier)  
+      call MPI_WAITALL(12,nreq,nstat,ier)  
 *
       l=0
       do k=1,Km
@@ -71,6 +76,7 @@
           v(0,j,k)=buf(l+7*lng)
           w(Im+1,j,k)=buf(l+8*lng)
           w(0,j,k)=buf(l+9*lng)
+          u(Im+1,j,k)=buf(l+11*lng)
         end do
       end do
 *
