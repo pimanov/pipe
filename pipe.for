@@ -1,7 +1,7 @@
 *
 *     program an
       implicit real*8 (a-h,o-z)
-      parameter (Imax=1025, Jmax=65, Kmax=128)
+      parameter (Imax=1025, Jmax=65, Kmax=129)
       character*12 fncp,fndat
       dimension
      > u(0:Imax,0:Jmax,0:Kmax)
