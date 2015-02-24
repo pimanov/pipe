@@ -6,7 +6,7 @@
      >/dimx/hx,Im,lx
      >/dimr/rt(0:128),rt1(0:128),yt(129),yt1(129),hr,Jm
      >/dimt/ht,Km,lt
-     >/rl/rlx(0:256),rlt(0:128)
+     >/rl/rlx(0:1024),rlt(0:128)
      >/pry/apy(128),bpy(128),cpy(128)
      >/prr/apr(128),bpr(128),cpr(128)
      >/prv/apv(128),bpv(128),cpv(128)

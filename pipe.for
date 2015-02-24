@@ -52,7 +52,7 @@
      >' *  Xmax=',f6.2,' epsr=',f6.2,'  Im=',i3,'  Jm=',i3
      >,'  Km=',i3,'   *')
 *
-      if(Im.gt.Imax-1.or.Im.gt.4096) then
+      if(Im.gt.Imax-1.or.Im.gt.2048) then
         write(*,*)'  Im=',Im,'  is greater than   Imax-1=',Imax-1
         goto 55
       end if
