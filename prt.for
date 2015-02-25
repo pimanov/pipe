@@ -51,7 +51,7 @@
           do i=1,Im
             amp=amp+yt(j)*ht*yt1(j)*hx*(u(i,j,k)-u0)**2
      >             +rt(j)*ht*rt1(j)*hx*v(i,j,k)**2
-     >             +yt(j)*ht*yt1(j)*hx*v(i,j,k)**2
+     >             +yt(j)*ht*yt1(j)*hx*w(i,j,k)**2
           end do
         end do
       end do
