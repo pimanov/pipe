@@ -1,7 +1,7 @@
 *
       subroutine pres(u,v,w,p,Jmax)
       implicit real*8 (a-h,o-z)
-      complex*8 u,v,w,p,d,c0,ci
+      complex*8 u,v,w,p,d,c0,ci,Dp,Ub,su,ssu
       dimension
      > u(0:Jmax,0:*)
      >,v(0:Jmax,0:*)
@@ -80,34 +80,8 @@
         end do
       end do
 *
-* Boundary conditions
-      Np0=Np-1
-      if(Np.eq.0)Np0=Npm-1
-      Np1=Np+1
-      if(Np.eq.Npm-1)Np1=0
-      l=0
-      do k=1,Kmm
-        do j=1,Jm
-          l=l+1 
-          buf(l)=p(1,j,k)
-        end do
-      end do
-      lng=Jm*Kmm
-      call MPI_ISEND(buf(1),lng,MPI_DOUBLE_PRECISION,Np0,1
-     >              ,MPI_COMM_WORLD,nreq(1),ier)
-      call MPI_IRECV(buf(1+lng),lng,MPI_DOUBLE_PRECISION,Np1,1
-     >              ,MPI_COMM_WORLD,nreq(2),ier)
-      call MPI_WAITALL(2,nreq,nstat,ier)  
-      l=lng
-      do k=1,Kmm
-        do j=1,Jm
-          l=l+1
-          p(Im+1,j,k)=buf(l)
-        end do
-      end do
-*
 *  Mean pressure gradient
-      Ub=p(0,0,1)
+      Ub=p(0,1)
       ss=0.d0
       su=c0
       do j=1,Jm
@@ -119,7 +93,7 @@
         su=su+ssu*yt(j)*yt1(j)
       end do
       Dp=Ub-su/(Kmm*ss)
-      p(0,0,0)=Dp
+      p(0,0)=Dp
 *
       call gradp(u,v,w,p,Jmax)
       return
@@ -127,6 +101,7 @@
 *
       subroutine gradp(u,v,w,p,Jmax)
       implicit real*8 (a-h,o-z)
+      complex*8 u,v,w,p,ci,Dp
       dimension
      > u(0:Jmax,0:*)
      >,v(0:Jmax,0:*)
@@ -136,7 +111,7 @@
      >/dimr/rt(0:128),rt1(0:128),yt(129),yt1(129),hr,Jm
      >/dimt/ht,Km,lt
      >/alpha/alpha
-      Dp=p(0,0,0)
+      Dp=p(0,0)
       ci=(0.d0,1.d0)
       do k=1,Km
         do j=1,Jm

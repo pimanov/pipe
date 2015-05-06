@@ -1,7 +1,7 @@
 *
       subroutine prt(t,dt,u,v,w,p,Jmax)
       implicit real*8 (a-h,o-z)
-      complex*8 u,v,w,p,d,c0,ci
+      complex*8 u,v,w,p,d,c0,ci,ubulk,Dp
       dimension
      > u(0:Jmax,0:*)
      >,v(0:Jmax,0:*)
@@ -15,7 +15,7 @@
      >/cf/cf
      >/alpha/alpha
 *
-      Dp=p(0,0,0)
+      Dp=p(0,0)
       c0=(0.d0,0.d0)
       ci=(0.d0,1.d0)
 
@@ -44,7 +44,8 @@
      >             +yt(j)*ht*yt1(j)*hx*aimag(w(j,k))**2
         end do
       end do
-      amp=sqrt(amps*2*nsym)
+      amp1=sqrt(amp1*nsym)
+      amp2=sqrt(amp2*nsym)
 
       write(8,120)t,dt,amp1,amp2,real(Dp),aimag(Dp),cf,
      > real(ubulk),aimag(ubulk),dd

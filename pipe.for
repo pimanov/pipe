@@ -11,6 +11,9 @@
      >,obx(0:Jmax,0:Kmax)
      >,obr(0:Jmax,0:Kmax)
      >,obt(0:Jmax,0:Kmax)
+     >,u(0:Jmax,0:Kmax)
+     >,v(0:Jmax,0:Kmax)
+     >,w(0:Jmax,0:Kmax)
      >,u1(0:Jmax,0:Kmax)
      >,v1(0:Jmax,0:Kmax)
      >,w1(0:Jmax,0:Kmax)
@@ -73,7 +76,7 @@
       end do
       close(9)
 
-      open(9,file=fncp,format='unformatted',status='old',err=444)
+      open(9,file=fncp,form='unformatted',status='old',err=444)
       read(9)t,dt,Dp,Re,epsr1,Jm1,lt1,nsym1
       if(epsr1.ne.epsr) goto 555
       if(Jm1.ne.Jm) goto 555
@@ -97,7 +100,7 @@
       call rp_base(t,ub,vb,wb,obx,obr,obt,Jmax)
       call rp(t,ub,vb,wb,obx,obr,obt,u,v,w,u1,v1,w1,ox,or,ot,Jmax)
 
-      p(0,0,1)=c0
+      p(0,1)=c0
       call pres(u1,v1,w1,p,Imax)
 
       open(8,file=fndat,access='append')
@@ -122,7 +125,7 @@
         lwrt=0
         call servis(t,u,v,w,ox,or,ot,p,2,Jmax)
         open(9,file=fncp,form='unformatted')
-        Dp=p(0,0,0)
+        Dp=p(0,0)
         write(9)t,dt,Dp,Re,epsr,Jm,lt,nsym
         do k=1,Km
           write(9)(u(j,k),j=1,Jm)
@@ -144,7 +147,7 @@
       stop
 555   write(*,*)'  Grids are differ'
       stop
-333   continue
+111   continue
       stop
 100   format(10(1pe12.4))
       end

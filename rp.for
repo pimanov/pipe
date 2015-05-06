@@ -1,7 +1,8 @@
 * 
       subroutine rp(t,ub,vb,wb,obx,obr,obt,u,v,w,ut,vt,wt,ox,or,ot,Jmax)
       implicit real*8 (a-h,o-z)
-      complex*8 u,v,w,ut,vt,wt,ox,or,ot,c0,ci
+      complex*8 u,v,w,ut,vt,wt,ox,or,ot,c0,ci,cu0,cu1,cv0,cv1,cw0,cw1,
+     > cv,cw,cox0,cox1,cor0,cor1,cot0,cot1,cor,cot
       dimension
      > ub(0:Jmax,0:*)
      >,vb(0:Jmax,0:*)
@@ -157,31 +158,31 @@
 * Viscous terms -rot(om)/Re
       do j=1,Jm
         do k=1,Km
-          ot0=ot(j-1,k)
-          ot1=ot(j,k)
-          or0=or(j,k-1)
-          or1=or(j,k)
+          cot0=ot(j-1,k)
+          cot1=ot(j,k)
+          cor0=or(j,k-1)
+          cor1=or(j,k)
           ut(j,k)=ut(j,k)-
-     >             ((rt(j)*ot1-rt(j-1)*ot0)/yt1(j)
-     >             -(or1-or0)/ht)/yt(j)/Re
+     >             ((rt(j)*cot1-rt(j-1)*cot0)/yt1(j)
+     >             -(cor1-cor0)/ht)/yt(j)/Re
         end do
       end do
       do k=1,Km
         do j=1,Jm-1
-          ox0=ox(j,k-1)
-          ox1=ox(j,k)
+          cox0=ox(j,k-1)
+          cox1=ox(j,k)
+          cot=ot(j,k)
           vt(j,k)=vt(j,k) -
-     >       ((ox1-ox0) / (rt(j)*ht) - ci*alpha*ot(j,k))/Re
+     >       ( (cox1-cox0)/(rt(j)*ht) - ci*alpha*cot )/Re
         end do
       end do
       do k=1,Km
         do j=1,Jm
-          ox0=ox(j-1,k)
-          ox1=ox(j,k)
-          or0=or(j,k)
-          or1=or(j,k)
+          cox0=ox(j-1,k)
+          cox1=ox(j,k)
+          cor=or(j,k)
           wt(j,k)=wt(j,k) -
-     >        (ci*alpha*or(j,k) - (ox1-ox0) / yt1(j))/Re
+     >        ( ci*alpha*cor - (cox1-cox0)/yt1(j) )/Re
         end do
       end do
       return

@@ -2,7 +2,8 @@
       subroutine step(t,dt,tol,ub,vb,wb,obx,obr,obt,
      > u,v,w,u1,v1,w1,u2,v2,w2,u3,v3,w3,ox,or,ot,p,q,Jmax)
       implicit real*8 (a-h,o-z)
-      complex*8 u,v,w,u1,v1,w1,u2,v2,w2,u3,v3,w3,ox,or,ot,p,q,c0,ci
+      complex*8 u,v,w,u1,v1,w1,u2,v2,w2,u3,v3,w3,ox,or,ot,p,q,c0,ci,
+     > uu,vv,ww
       dimension
      > ub(0:Jmax,0:*)
      >,vb(0:Jmax,0:*)
@@ -72,7 +73,7 @@
 * 2-nd step
 *      call rp(t1,u1,v1,w1,u2,v2,w2,ox,or,ot,buf,Imax,Jmax)
       call rp(t1,ub,vb,wb,obx,obr,obt,u1,v1,w1,u2,v2,w2,ox,or,ot,Jmax)
-      p(0,0,1)=c0
+      p(0,1)=c0
       call pres(u2,v2,w2,p,Jmax)
       do k=1,Km
         do j=1,Jm
@@ -130,7 +131,7 @@
           w1(j,k)=w1(j,k)+c12*w3(j,k)+c34*w2(j,k)-c14*w(j,k)
         end do
       end do
-      q(0,0,1)=c0
+      q(0,1)=c0
       call pres(u1,v1,w1,q,Jmax)
 * Accuracy estimation
       error=0.d0
@@ -139,7 +140,7 @@
           uu=u1(j,k)-u3(j,k)
           vv=v1(j,k)-v3(j,k)
           ww=w1(j,k)-w3(j,k)
-          error=max(error,abs(uu),abs(vv),abs(ww))
+          error=max(error,cabs(uu),cabs(vv),cabs(ww))
         end do
       end do
       fac=(tol/error)**c13
@@ -148,7 +149,7 @@
         if(Np.eq.0)write(*,*)'  STEP:  fac=',fac,'  dt=',dt
 *        call rp(t,u,v,w,u1,v1,w1,ox,or,ot,buf,Imax,Jmax)
         call rp(t,ub,vb,wb,obx,obr,obt,u,v,w,u1,v1,w1,ox,or,ot,Jmax)
-        p(0,0,1)=c0
+        p(0,1)=c0
         call pres(u1,v1,w1,p,Jmax)
         goto 1
       end if
@@ -164,7 +165,7 @@
       dt=fac*dt
 *      call rp(t,u,v,w,u1,v1,w1,ox,or,ot,buf,Imax,Jmax)
       call rp(t,ub,vb,wb,obx,obr,obt,u,v,w,u1,v1,w1,ox,or,ot,Jmax)
-      p(0,0,1)=c0
+      p(0,1)=c0
       call pres(u1,v1,w1,p,Jmax)
       return
       end

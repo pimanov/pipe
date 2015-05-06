@@ -59,7 +59,7 @@
         call prog3(ap,bp,cp,d1,e1,Km-1)
         call prog3(ap,bp,cp,d2,e2,Km-1)
         do k=1,Km-1
-          w(i,j,k)=cmplx(e1(k),e2(k))
+          w(j,k)=cmplx(e1(k),e2(k))
         end do
       end do
 *
@@ -74,7 +74,7 @@
         call prog3(apy,bp,cpy,d1,e1,Jm)
         call prog3(apy,bp,cpy,d2,e2,Jm)
         do j=1,Jm
-          u(i,j,k)=cmplx(e1(j),e2(j))
+          u(j,k)=cmplx(e1(j),e2(j))
         end do
         do j=1,Jm-1
           bp(j)=bpv(j)-ct
@@ -84,7 +84,7 @@
         call prog3(apv,bp,cpv,d1,e1,Jm-1)
         call prog3(apv,bp,cpv,d2,e2,Jm-1)
         do j=1,Jm-1
-          v(i,j,k)=cmplx(e1(j),e2(j))/rt(j)
+          v(j,k)=cmplx(e1(j),e2(j))/rt(j)
         end do
         do j=1,Jm
           bp(j)=bpy(j)-ct
@@ -95,7 +95,7 @@
         call prog3(apy,bp,cpy,d1,e1,Jm)
         call prog3(apy,bp,cpy,d2,e2,Jm)
         do j=1,Jm
-          w(i,j,k)=cmplx(e1(j),e2(j))/yt(j)
+          w(j,k)=cmplx(e1(j),e2(j))/yt(j)
         end do
       end do
       return
