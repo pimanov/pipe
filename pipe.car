@@ -4,5 +4,7 @@
  10000.       - tmax
  0.05         - dtmax
  0.        - Cf
-tt.scp
+ 1.0       - alpha
+tt.scs
+base.scs
 a0.dat

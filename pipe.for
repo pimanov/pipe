@@ -1,43 +1,44 @@
 *
 *     program an
       implicit real*8 (a-h,o-z)
-      include 'mpif.h'
-      parameter (Imax=129, Jmax=129, Kmax=129)
-      character*12 fncp,fndat
+      parameter (Jmax=129, Kmax=129)
+      character*12 fncp,fnbcp,fndat
+      complex*8 u,v,w,u1,v1,w1,u2,v2,w2,ox,or,ot,p,q,c0,ci
       dimension
-     > u(0:Imax,0:Jmax,0:Kmax)
-     >,v(0:Imax,0:Jmax,0:Kmax)
-     >,w(0:Imax,0:Jmax,0:Kmax)
-     >,u1(0:Imax,0:Jmax,0:Kmax)
-     >,v1(0:Imax,0:Jmax,0:Kmax)
-     >,w1(0:Imax,0:Jmax,0:Kmax)
-     >,u2(0:Imax,0:Jmax,0:Kmax)
-     >,v2(0:Imax,0:Jmax,0:Kmax)
-     >,w2(0:Imax,0:Jmax,0:Kmax)
-     >,u3(0:Imax,0:Jmax,0:Kmax)
-     >,v3(0:Imax,0:Jmax,0:Kmax)
-     >,w3(0:Imax,0:Jmax,0:Kmax)
-     >,ox(0:Imax,0:Jmax,0:Kmax)
-     >,or(0:Imax,0:Jmax,0:Kmax)
-     >,ot(0:Imax,0:Jmax,0:Kmax)
-     >,p(0:Imax,0:Jmax,0:Kmax)
-     >,q(0:Imax,0:Jmax,0:Kmax)
-     >,buf(2*Imax*Jmax*Kmax)
+     > ub(0:Jmax,0:Kmax)
+     >,vb(0:Jmax,0:Kmax)
+     >,wb(0:Jmax,0:Kmax)
+     >,obx(0:Jmax,0:Kmax)
+     >,obr(0:Jmax,0:Kmax)
+     >,obt(0:Jmax,0:Kmax)
+     >,u1(0:Jmax,0:Kmax)
+     >,v1(0:Jmax,0:Kmax)
+     >,w1(0:Jmax,0:Kmax)
+     >,u2(0:Jmax,0:Kmax)
+     >,v2(0:Jmax,0:Kmax)
+     >,w2(0:Jmax,0:Kmax)
+     >,u3(0:Jmax,0:Kmax)
+     >,v3(0:Jmax,0:Kmax)
+     >,w3(0:Jmax,0:Kmax)
+     >,ox(0:Jmax,0:Kmax)
+     >,or(0:Jmax,0:Kmax)
+     >,ot(0:Jmax,0:Kmax)
+     >,p(0:Jmax,0:Kmax)
+     >,q(0:Jmax,0:Kmax)
+     >,buf(2*Jmax*Kmax)
       common
      >/dim/Xmax,epsr,nsym
      >/dimx/hx,Im,Imm,lx
      >/dimr/rt(0:128),rt1(0:128),yt(129),yt1(129),hr,Jm
      >/dimt/ht,Km,lt
      >/Re/Re
-     >/proc/Np,Npm
      >/cf/cf
+     >/alpha/alpha
+     >/proc/Np,Npm
 *
-      integer status(MPI_STATUS_SIZE)
-      call MPI_INIT(ier)
-      call MPI_COMM_SIZE(MPI_COMM_WORLD,Npm,ier)
-      call MPI_COMM_RANK(MPI_COMM_WORLD,Np,ier)
- 
-      if(Np.eq.0)then
+      c0=(0.d0,0.d0)
+      ci=(0.d0,0.d0)
+*
       open(5,file='pipe.car')
       read(5,*) tol
       read(5,*) nprt
@@ -45,175 +46,105 @@
       read(5,*) tmax
       read(5,*) dtmax
       read(5,*) cf
+      read(5,*) alpha
       read(5,*) fncp
+      read(5,*) fnbcp
       read(5,*) fndat
-      istop=0
-      open(9,file=fncp,form='unformatted',status='old',err=111)
-      end if
-222   call MPI_BCAST(istop,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
-      if(istop.ne.0) goto 333
-      if(Np.eq.0)then
-      read(9)t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,nsym
-      end if
-*
-      call MPI_BCAST(tol,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
-      call MPI_BCAST(nprt,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
-      call MPI_BCAST(nwrt,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
-      call MPI_BCAST(tmax,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
-      call MPI_BCAST(dtmax,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
-      call MPI_BCAST(cf,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
-*
-      call MPI_BCAST(t,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
-      call MPI_BCAST(dt,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
-      call MPI_BCAST(Re,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
-      call MPI_BCAST(Xmax,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
-      call MPI_BCAST(epsr,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
-      call MPI_BCAST(lx,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
-      call MPI_BCAST(Jm,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
-      call MPI_BCAST(lt,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
-      call MPI_BCAST(nsym,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
-*
+      close(5)
+     
+      open(9,file=fnbcp,form='unformatted',status='old',err=333)
+      read(9)epsr,Jm,lt,nsym
+      Xmax=1.0
+      lx=10
+      Npm=1
       call com
-      if(Np.eq.0) then      
-      write(*,*)' ***************************************************'
-      write(*,*)' *        Number of processors =',Npm,'          *'
-      write(*,200) t,dt,Dp,Re,Xmax,epsr,Imm,Jm,Km,nsym
-      write(*,*)' ***************************************************'
-200   format('    t=',1pe10.3,' dt=',e9.2,' Dp=',e9.2,/,
-     >'    Re=',e9.2,/,
-     >'    Xmax=',e9.2,/,
-     >'    epsr=',e9.2,' Im=',i4,' Jm=',i4,' Km=',i4,' Nsym=',i3)
-*
-      if(Im.gt.Imax-1.or.Im*Npm.gt.2048) then
-        write(*,*)'  Im=',Im,'  is greater than   Imax-1=',Imax-1
-        goto 333
-      end if
       if(Jm.gt.Jmax-1.or.Jm.gt.128) then
         write(*,*)'  Jm=',Jm,'  is greater than   Jmax-1=',Jmax-1
-        goto 333
+        goto 111
       end if
       if(Km.gt.Kmax-1.or.Km.gt.256) then
         write(*,*)'  Km=',Km,'  is greater than   Kmax=',Kmax
-        goto 333
+        goto 111
       end if
-      end if
-*
       do k=1,Km
-        do j=1,Jm
-          if(Np.eq.0) then
-            read(9)(buf(i),i=1,Imm)
-            read(9)(buf(i+Imm),i=1,Imm)
-            read(9)(buf(i+2*Imm),i=1,Imm)
-            do i=1,Im
-              u(i,j,k)=buf(i)
-              v(i,j,k)=buf(i+Imm)
-              w(i,j,k)=buf(i+2*Imm)
-            end do
-            do n=1,Npm-1
-              call MPI_SEND(buf(n*Im+1),Im,MPI_DOUBLE_PRECISION
-     >                     ,n,1,MPI_COMM_WORLD,ier)              
-              call MPI_SEND(buf(n*Im+1+Imm),Im,MPI_DOUBLE_PRECISION
-     >                     ,n,2,MPI_COMM_WORLD,ier)              
-              call MPI_SEND(buf(n*Im+1+2*Imm),Im,MPI_DOUBLE_PRECISION
-     >                     ,n,3,MPI_COMM_WORLD,ier)             
-            end do
-          else
-            call MPI_RECV(u(1,j,k),Im,MPI_DOUBLE_PRECISION,0,1
-     >                   ,MPI_COMM_WORLD,status,ier)
-            call MPI_RECV(v(1,j,k),Im,MPI_DOUBLE_PRECISION,0,2
-     >                   ,MPI_COMM_WORLD,status,ier)
-            call MPI_RECV(w(1,j,k),Im,MPI_DOUBLE_PRECISION,0,3
-     >                   ,MPI_COMM_WORLD,status,ier)
-          end if
-          call MPI_BARRIER(MPI_COMM_WORLD,ier)
-        end do
+        read(9)(ub(j,k),j=1,Jm)
+        read(9)(vb(j,k),j=1,Jm)
+        read(9)(wb(j,k),j=1,Jm)
       end do
-      if(Np.eq.0) close(9)
+      close(9)
+
+      open(9,file=fncp,format='unformatted',status='old',err=444)
+      read(9)t,dt,Dp,Re,epsr1,Jm1,lt1,nsym1
+      if(epsr1.ne.epsr) goto 555
+      if(Jm1.ne.Jm) goto 555
+      if(lt1.ne.lt) goto 555
+      if(nsym1.ne.nsym) goto 555
+      do k=1,Km
+        read(9)(u(j,k),j=1,Jm)
+        read(9)(v(j,k),j=1,Jm)
+        read(9)(w(j,k),j=1,Jm)
+      end do
+      close(9)
       dt=min(dt,dtmax)
+
+      write(*,*)' ***************************************************'
+      write(*,200) t,dt,Dp,Re,epsr,Jm,Km,nsym
+      write(*,*)' ***************************************************'
+200   format('    t=',1pe10.3,' dt=',e9.2,' Dp=',e9.2,/,
+     >'    Re=',e9.2,/,
+     >'    epsr=',e9.2,' Jm=',i4,' Km=',i4,' Nsym=',i3)
 *
-      call rp(t,u,v,w,u1,v1,w1,ox,or,ot,buf,Imax,Jmax)
-*
-      p(0,0,1)=0.d0
-      call pres(u1,v1,w1,p,buf,Imax,Jmax)
-*
-      if(Np.eq.0) open(8,file=fndat,access='append')
-*
-      call servis(t,u,v,w,ox,or,ot,p,0,Imax,Jmax)
-      call prt(t,dt,u,v,w,p,Imax,Jmax)
+      call rp_base(t,ub,vb,wb,obx,obr,obt,Jmax)
+      call rp(t,ub,vb,wb,obx,obr,obt,u,v,w,u1,v1,w1,ox,or,ot,Jmax)
+
+      p(0,0,1)=c0
+      call pres(u1,v1,w1,p,Imax)
+
+      open(8,file=fndat,access='append')
+
+      call servis(t,u,v,w,ox,or,ot,p,0,Jmax)
+      call prt(t,dt,u,v,w,p,Jmax)
       lprt=0
       lwrt=0
-      if(Np.eq.0) time0=MPI_WTIME()
 10    continue
-      call step(t,dt,tol
-     > ,u,v,w,u1,v1,w1,u2,v2,w2
-     > ,u3,v3,w3,ox,or,ot,p,q
-     > ,buf,Imax,Jmax)
+      call step(t,dt,tol,ub,vb,wb,obx,obr,obt,
+     > u,v,w,u1,v1,w1,u2,v2,w2,u3,v3,w3,ox,or,ot,p,q,Jmax)
       lprt=lprt+1
       lwrt=lwrt+1
       dt=min(dt,dtmax)
-      call servis(t,u,v,w,ox,or,ot,p,0,Imax,Jmax)
+      call servis(t,u,v,w,ox,or,ot,p,0,Jmax)
       if(lprt.ge.nprt.or.t.ge.tmax) then
         lprt=0
-        call servis(t,u,v,w,ox,or,ot,p,1,Imax,Jmax)
-        call prt(t,dt,u,v,w,p,Imax,Jmax)
+        call servis(t,u,v,w,ox,or,ot,p,1,Jmax)
+        call prt(t,dt,u,v,w,p,Jmax)
       end if
       if(lwrt.ge.nwrt.or.t+0.01*dt.ge.tmax) then
         lwrt=0
-        call servis(t,u,v,w,ox,or,ot,p,2,Imax,Jmax)
-        if(Np.eq.0) then
-          time1=MPI_WTIME()
+        call servis(t,u,v,w,ox,or,ot,p,2,Jmax)
         open(9,file=fncp,form='unformatted')
         Dp=p(0,0,0)
-        write(9)t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,nsym
-        end if
+        write(9)t,dt,Dp,Re,epsr,Jm,lt,nsym
         do k=1,Km
-          do j=1,Jm
-            if(Np.eq.0) then
-              do i=1,Im
-                buf(i)=u(i,j,k)
-                buf(i+Imm)=v(i,j,k)
-                buf(i+2*Imm)=w(i,j,k)
-              end do
-              do n=1,Npm-1
-                call MPI_RECV(buf(n*Im+1),Im,MPI_DOUBLE_PRECISION
-     >                     ,n,1,MPI_COMM_WORLD,status,ier)
-                call MPI_RECV(buf(n*Im+1+Imm),Im,MPI_DOUBLE_PRECISION
-     >                     ,n,2,MPI_COMM_WORLD,status,ier)
-                call MPI_RECV(buf(n*Im+1+2*Imm),Im,MPI_DOUBLE_PRECISION
-     >                     ,n,3,MPI_COMM_WORLD,status,ier)
-              end do
-              write(9)(buf(i),i=1,Imm)
-              write(9)(buf(i+Imm),i=1,Imm)
-              write(9)(buf(i+2*Imm),i=1,Imm)
-            else
-              call MPI_SEND(u(1,j,k),Im,MPI_DOUBLE_PRECISION,0,1
-     >                     ,MPI_COMM_WORLD,ier)              
-              call MPI_SEND(v(1,j,k),Im,MPI_DOUBLE_PRECISION,0,2
-     >                     ,MPI_COMM_WORLD,ier)              
-              call MPI_SEND(w(1,j,k),Im,MPI_DOUBLE_PRECISION,0,3
-     >                     ,MPI_COMM_WORLD,ier)   
-            end if
-            call MPI_BARRIER(MPI_COMM_WORLD,ier)
-          end do
+          write(9)(u(j,k),j=1,Jm)
+          write(9)(v(j,k),j=1,Jm)
+          write(9)(w(j,k),j=1,Jm)
         end do
-        if(Np.eq.0) then
-          close(9)
-          close(8)
-          write(*,*)'*************************************************'
-          write(*,*)'*               Control Point                   *'
-          write(*,*)'*      Npm=',Npm,'  time=',time1-time0,'         *' 
-          write(*,*)'*************************************************'
-          open(8,file=fndat,access='append')
-          time0=MPI_WTIME()
-        end if
+        close(9)
+        close(8)
+        write(*,*)'*************************************************'
+        write(*,*)'*               Control Point                   *'
+        write(*,*)'*************************************************'
+        open(8,file=fndat,access='append')
       end if 
       if(t+0.01*dt.lt.tmax) goto 10
 *
-333   continue
-      call MPI_FINALIZE(ier)
+333   write(*,*)'  File ',fnbcp,' was not found'
       stop
-111   write(*,*)'  File ',fncp,' was not found'
-      istop=1
-      goto 222
+444   write(*,*)'  File ',fncp,' was not found'
+      stop
+555   write(*,*)'  Grids are differ'
+      stop
+333   continue
+      stop
 100   format(10(1pe12.4))
       end
