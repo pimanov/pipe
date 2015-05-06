@@ -3,7 +3,7 @@
       implicit real*8 (a-h,o-z)
       parameter (Jmax=129, Kmax=129)
       character*12 fncp,fnbcp,fndat
-      complex*8 u,v,w,u1,v1,w1,u2,v2,w2,ox,or,ot,p,q,c0,ci
+      complex*16 u,v,w,u1,v1,w1,u2,v2,w2,ox,or,ot,p,q,c0,ci,Dp
       dimension
      > ub(0:Jmax,0:Kmax)
      >,vb(0:Jmax,0:Kmax)
@@ -28,7 +28,6 @@
      >,ot(0:Jmax,0:Kmax)
      >,p(0:Jmax,0:Kmax)
      >,q(0:Jmax,0:Kmax)
-     >,buf(2*Jmax*Kmax)
       common
      >/dim/Xmax,epsr,nsym
      >/dimx/hx,Im,Imm,lx
@@ -149,5 +148,4 @@
       stop
 111   continue
       stop
-100   format(10(1pe12.4))
       end

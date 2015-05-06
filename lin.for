@@ -1,7 +1,7 @@
 *
       subroutine lin(tau,u,v,w,Jmax)
       implicit real*8 (a-h,o-z)
-      complex*8 u,v,w
+      complex*16 u,v,w,ci
       dimension
      > u(0:Jmax,0:*)
      >,v(0:Jmax,0:*)
@@ -17,7 +17,7 @@
      >/Re/Re
       ct=Re/tau
 *
-
+      ci=(0.d0,1.d0)
 *
 * At
       do j=1,Jm
@@ -33,7 +33,7 @@
         call prog3(ap,bp,cp,d1,e1,Km)
         call prog3(ap,bp,cp,d2,e2,Km)
         do k=1,Km
-          u(j,k)=cmplx(e1(k),e2(k))
+          u(j,k)=e1(k)+ci*e2(k)
         end do
         do k=1,Km
           ap(k)=1.d0/ht**2
@@ -47,7 +47,7 @@
         call prog3(ap,bp,cp,d1,e1,Km)
         call prog3(ap,bp,cp,d2,e2,Km)
         do k=1,Km
-          v(j,k)=cmplx(e1(k),e2(k))
+          v(j,k)=e1(k)+ci*e2(k)
         end do
         do k=1,Km-1
           ap(k)=1.d0/ht**2
@@ -59,7 +59,7 @@
         call prog3(ap,bp,cp,d1,e1,Km-1)
         call prog3(ap,bp,cp,d2,e2,Km-1)
         do k=1,Km-1
-          w(j,k)=cmplx(e1(k),e2(k))
+          w(j,k)=e1(k)+ci*e2(k)
         end do
       end do
 *
@@ -74,7 +74,7 @@
         call prog3(apy,bp,cpy,d1,e1,Jm)
         call prog3(apy,bp,cpy,d2,e2,Jm)
         do j=1,Jm
-          u(j,k)=cmplx(e1(j),e2(j))
+          u(j,k)=e1(j)+ci*e2(j)
         end do
         do j=1,Jm-1
           bp(j)=bpv(j)-ct
@@ -84,7 +84,7 @@
         call prog3(apv,bp,cpv,d1,e1,Jm-1)
         call prog3(apv,bp,cpv,d2,e2,Jm-1)
         do j=1,Jm-1
-          v(j,k)=cmplx(e1(j),e2(j))/rt(j)
+          v(j,k)=(e1(j)+ci*e2(j))/rt(j)
         end do
         do j=1,Jm
           bp(j)=bpy(j)-ct
@@ -95,7 +95,7 @@
         call prog3(apy,bp,cpy,d1,e1,Jm)
         call prog3(apy,bp,cpy,d2,e2,Jm)
         do j=1,Jm
-          w(j,k)=cmplx(e1(j),e2(j))/yt(j)
+          w(j,k)=(e1(j)+ci*e2(j))/yt(j)
         end do
       end do
       return

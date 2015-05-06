@@ -2,8 +2,8 @@
       subroutine step(t,dt,tol,ub,vb,wb,obx,obr,obt,
      > u,v,w,u1,v1,w1,u2,v2,w2,u3,v3,w3,ox,or,ot,p,q,Jmax)
       implicit real*8 (a-h,o-z)
-      complex*8 u,v,w,u1,v1,w1,u2,v2,w2,u3,v3,w3,ox,or,ot,p,q,c0,ci,
-     > uu,vv,ww
+      complex*16 u,v,w,u1,v1,w1,u2,v2,w2,u3,v3,w3,ox,or,ot,p,q,c0,ci,
+     > uu,vv,ww,ux,vx,wx
       dimension
      > ub(0:Jmax,0:*)
      >,vb(0:Jmax,0:*)
@@ -140,13 +140,13 @@
           uu=u1(j,k)-u3(j,k)
           vv=v1(j,k)-v3(j,k)
           ww=w1(j,k)-w3(j,k)
-          error=max(error,cabs(uu),cabs(vv),cabs(ww))
+          error=max(error,abs(uu),abs(vv),abs(ww))
         end do
       end do
       fac=(tol/error)**c13
       if(fac.lt.facmin) then
         dt=dt*fac
-        if(Np.eq.0)write(*,*)'  STEP:  fac=',fac,'  dt=',dt
+        write(*,*)'  STEP:  fac=',fac,'  dt=',dt
 *        call rp(t,u,v,w,u1,v1,w1,ox,or,ot,buf,Imax,Jmax)
         call rp(t,ub,vb,wb,obx,obr,obt,u,v,w,u1,v1,w1,ox,or,ot,Jmax)
         p(0,1)=c0

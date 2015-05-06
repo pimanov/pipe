@@ -1,7 +1,7 @@
 * 
       subroutine rp(t,ub,vb,wb,obx,obr,obt,u,v,w,ut,vt,wt,ox,or,ot,Jmax)
       implicit real*8 (a-h,o-z)
-      complex*8 u,v,w,ut,vt,wt,ox,or,ot,c0,ci,cu0,cu1,cv0,cv1,cw0,cw1,
+      complex*16 u,v,w,ut,vt,wt,ox,or,ot,c0,ci,cu0,cu1,cv0,cv1,cw0,cw1,
      > cv,cw,cox0,cox1,cor0,cor1,cot0,cot1,cor,cot
       dimension
      > ub(0:Jmax,0:*)

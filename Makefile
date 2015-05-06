@@ -1,6 +1,6 @@
 CC=mpif90
 
-CFLAGS=-lm -lgfortran -m64 -Ofast
+CFLAGS=-lm -lgfortran -m64 -Ofast -Wall
 
 pipe.out: $(wildcard *.for)
 	$(LINK.c) -I. \
@@ -10,4 +10,4 @@ pipe.out: $(wildcard *.for)
 all:  pipe.out
 
 clean:
-	rm -rf pipe.out
+	rm -rf pipe.out *.o

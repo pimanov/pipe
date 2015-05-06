@@ -1,7 +1,7 @@
 *
       subroutine prt(t,dt,u,v,w,p,Jmax)
       implicit real*8 (a-h,o-z)
-      complex*8 u,v,w,p,d,c0,ci,ubulk,Dp
+      complex*16 u,v,w,p,d,c0,ci,ubulk,Dp
       dimension
      > u(0:Jmax,0:*)
      >,v(0:Jmax,0:*)
@@ -27,7 +27,7 @@
           Ss=Ss+yt(j)*ht*yt1(j)
           ubulk=ubulk+u(j,k)*yt(j)*ht*yt1(j)
           call div(j,k,u,v,w,d,Jmax)
-          dd=max(dd,cabs(d))
+          dd=max(dd,abs(d))
         end do
       end do
       ubulk=ubulk/Ss
@@ -36,12 +36,12 @@
       amp2=0.d0
       do j=1,Jm
         do k=1,Km
-          amp1=amp1+yt(j)*ht*yt1(j)*hx*real(u(j,k))**2
-     >             +rt(j)*ht*rt1(j)*hx*real(v(j,k))**2
-     >             +yt(j)*ht*yt1(j)*hx*real(w(j,k))**2
-          amp2=amp2+yt(j)*ht*yt1(j)*hx*aimag(u(j,k))**2
-     >             +rt(j)*ht*rt1(j)*hx*aimag(v(j,k))**2
-     >             +yt(j)*ht*yt1(j)*hx*aimag(w(j,k))**2
+          amp1=amp1+yt(j)*ht*yt1(j)*real(u(j,k))**2
+     >             +rt(j)*ht*rt1(j)*real(v(j,k))**2
+     >             +yt(j)*ht*yt1(j)*real(w(j,k))**2
+          amp2=amp2+yt(j)*ht*yt1(j)*aimag(u(j,k))**2
+     >             +rt(j)*ht*rt1(j)*aimag(v(j,k))**2
+     >             +yt(j)*ht*yt1(j)*aimag(w(j,k))**2
         end do
       end do
       amp1=sqrt(amp1*nsym)

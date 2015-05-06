@@ -1,7 +1,7 @@
 *
       subroutine com
       implicit real*8 (a-h,o-z)
-      include 'mpif.h'
+!      include 'mpif.h'
       common
      >/dim/Xmax,epsr,nsym
      >/dimx/hx,Im,Imm,lx
@@ -17,7 +17,7 @@
      >/servst/iserv
      >/pi/pi
      >/set/set0,set1,aset,bset,iset
-     >/proc/Np,Npm
+!     >/proc/Np,Npm
 *
       iserv=0
       one=1.d0
@@ -27,9 +27,9 @@
       Km=2**lt
       ht=pi/(nsym*Km)
 * dimx
-      Imm=2**lx
-      Im=Imm/Npm
-      hx=Xmax/Imm
+!      Imm=2**lx
+!      Im=Imm/Npm
+!      hx=Xmax/Imm
 * dimr
       iset=0
       set0=1.d0
@@ -72,7 +72,6 @@
         cpw(j)=c/(rt(j)*rt1(j))
         bpw(j)=-apw(j)-cpw(j)
       end do
-100   format(10(1pe12.4))
 * rl
       do i=0,Imm/2
         rlx(i+1)=(2.d0/hx*sin(i*pi/Imm))**2

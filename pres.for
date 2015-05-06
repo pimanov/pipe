@@ -1,7 +1,7 @@
 *
       subroutine pres(u,v,w,p,Jmax)
       implicit real*8 (a-h,o-z)
-      complex*8 u,v,w,p,d,c0,ci,Dp,Ub,su,ssu
+      complex*16 u,v,w,p,d,c0,ci,Dp,Ub,su,ssu
       dimension
      > u(0:Jmax,0:*)
      >,v(0:Jmax,0:*)
@@ -24,7 +24,7 @@
         w(j,0)=c0
         w(j,Km)=c0
       end do
-      do k=1,Kmm
+      do k=1,Km
         v(Jm,k)=c0
       end do
       do k=1,Km
@@ -43,7 +43,7 @@
         call ftc05d(a1,b1,lt)
         call ftc05d(a2,b2,lt)
         do k=1,Km
-          p(j,k)=cmplx(b1(k),b2(k))
+          p(j,k)=b1(k)+ci*b2(k)
         end do
       end do
 *
@@ -63,7 +63,7 @@
         call prog3(apy,bp,cpy,a1,b1,Jm1)
         call prog3(apy,bp,cpy,a2,b2,Jm1)
         do j=1,Jm
-          p(j,k)=cmplx(b1(j),b1(j))
+          p(j,k)=b1(j)+ci*b1(j)
         end do
       end do
 *
@@ -76,7 +76,7 @@
         call ftc05b(a1,b1,lt)
         call ftc05b(a2,b2,lt)
         do k=1,Km
-          p(j,k)=cmplx(b1(k),b2(k))
+          p(j,k)=b1(k)+ci*b2(k)
         end do
       end do
 *
@@ -87,12 +87,12 @@
       do j=1,Jm
         ss=ss+yt(j)*yt1(j)
         ssu=c0
-        do k=1,Kmm
+        do k=1,Km
           ssu=ssu+u(j,k)
         end do
         su=su+ssu*yt(j)*yt1(j)
       end do
-      Dp=Ub-su/(Kmm*ss)
+      Dp=Ub-su/(Km*ss)
       p(0,0)=Dp
 *
       call gradp(u,v,w,p,Jmax)
@@ -101,7 +101,7 @@
 *
       subroutine gradp(u,v,w,p,Jmax)
       implicit real*8 (a-h,o-z)
-      complex*8 u,v,w,p,ci,Dp
+      complex*16 u,v,w,p,ci,Dp
       dimension
      > u(0:Jmax,0:*)
      >,v(0:Jmax,0:*)
@@ -135,7 +135,7 @@
 *
       subroutine div(j,k,u,v,w,d,Jmax)
       implicit real*8 (a-h,o-z)
-      complex*8 u,v,w,d,ci
+      complex*16 u,v,w,d,ci
       dimension
      > u(0:Jmax,0:*)
      >,v(0:Jmax,0:*)

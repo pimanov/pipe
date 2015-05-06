@@ -1,7 +1,7 @@
 *
       subroutine servis(t,u,v,w,ox,or,ot,p,ii,Jmax)
       implicit real*8 (a-h,o-z)
-      complex*8 u,v,w,ox,or,ot,p
+      complex*16 u,v,w,ox,or,ot,p
       dimension
      > u(0:Jmax,0:*)
      >,v(0:Jmax,0:*)
