@@ -2,7 +2,8 @@
 *     program an
       implicit real*8 (a-h,o-z)
       parameter (Jmax=129, Kmax=129)
-      character*12 fncp,fnbcp,fndat
+      character*24 fncp,fnbcp,fndat
+      character*128 comment
       complex*16 u,v,w,u1,v1,w1,u2,v2,w2,ox,or,ot,p,q,c0,ci,Dp
       dimension
      > ub(0:Jmax,0:Kmax)
@@ -47,7 +48,6 @@
       read(5,*) tmax
       read(5,*) dtmax
       read(5,*) cf
-      read(5,*) alpha
       read(5,*) fncp
       read(5,*) fnbcp
       read(5,*) fndat
@@ -72,10 +72,12 @@
         read(9)(vb(j,k),j=1,Jm)
         read(9)(wb(j,k),j=1,Jm)
       end do
+      read(9) comment
+      write(*,*) comment
       close(9)
 
       open(9,file=fncp,form='unformatted',status='old',err=444)
-      read(9)t,dt,Dp,Re,epsr1,Jm1,lt1,nsym1
+      read(9)t,dt,Dp,Re,epsr1,Jm1,lt1,nsym1,alpha
       if(epsr1.ne.epsr) goto 555
       if(Jm1.ne.Jm) goto 555
       if(lt1.ne.lt) goto 555

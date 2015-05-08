@@ -78,7 +78,7 @@
       Dp=c0
       t=0.d0
       open(9,file=fncp,form='unformatted')
-      write(9)t,dt,Dp,Re,epsr,Jm,lt,nsym
+      write(9)t,dt,Dp,Re,epsr,Jm,lt,nsym,alpha
       do k=1,Km
         write(9)(u(j,k),j=1,Jm)
         write(9)(v(j,k),j=1,Jm)
