@@ -29,8 +29,7 @@
      >,p(0:Jmax,0:Kmax)
      >,q(0:Jmax,0:Kmax)
       common
-     >/dim/Xmax,epsr,nsym
-     >/dimx/hx,Im,Imm,lx
+     >/dim/epsr,nsym
      >/dimr/rt(0:128),rt1(0:128),yt(129),yt1(129),hr,Jm
      >/dimt/ht,Km,lt
      >/Re/Re

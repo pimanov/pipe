@@ -8,7 +8,7 @@
      >,w(0:Jmax,0:*)
      >,p(0:Jmax,0:*)
       common
-     >/dim/Xmax,epsr,nsym
+     >/dim/epsr,nsym
      >/dimr/rt(0:128),rt1(0:128),yt(129),yt1(129),hr,Jm
      >/dimt/ht,Km,lt
      >/Re/Re
