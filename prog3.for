@@ -1,6 +1,7 @@
 *
       subroutine prog3(a,b,c,d,x,m)
       implicit real*8 (a-h,o-z)
+      complex*16 d,x
       dimension a(m),b(m),c(m),d(m),x(m)
       if(m.le.0) return
       do j=2,m

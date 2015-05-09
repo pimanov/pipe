@@ -3,7 +3,7 @@
       implicit real*8 (a-h,o-z)
       parameter (Jmax=129, Kmax=129)
       character*12 fncp
-      complex*16 u,v,w,p,c0,ci,Dp
+      complex*16 u,v,w,p,c0,ci,Dp,d
       dimension
      > u(0:Jmax,0:Kmax)
      >,v(0:Jmax,0:Kmax)
@@ -17,7 +17,7 @@
      >/alpha/alpha
 *
       c0=(0.d0,0.d0)
-      ci=(0.d0,0.d0)
+      ci=(0.d0,1.d0)
 *
       open(5,file='init.car')
       read(5,*) Jm,epsr
@@ -48,27 +48,49 @@
      >'    epsr=',e9.2,' Jm=',i4,' Km=',i4,' Nsym=',i3)
 *
 
-      do j=1,Jm
-        do k=1,Km
-          u(j,k)=sin(2.0*j/Jm)+ci*cos(3.0*k/Km)
-          v(j,k)=sin(2.0*k/Km)+ci*sin(3.0*j/Jm)
-          w(j,k)=sin(3.0*j/Jm)*cos(3.0*k/Km)+ci*0.5
+      do k=1,Km
+        do j=1,Jm
+          u(j,k)=cos(0.04*k+3.0*j)+ci*sin(0.03*j+0.22*k)
+          v(j,k)=sin(0.01*j+2.0*k)+ci*cos(0.01*k+0.07*j)
+          w(j,k)=cos(j*0.5+0.1*k) +ci*sin(0.02*j+0.03*k)
         end do
       end do
 
-      p(0,1)=c0
-      call pres(u,v,w,p,Imax)
+      d1=0.d0
+      d2=0.d0
+      do k=1,Km
+        do j=1,Jm
+          call div(j,k,u,v,w,d,Jmax)
+          d1=max(d1,abs(real(d)))
+          d2=max(d2,abs(aimag(d)))
+        end do
+      end do
+      write(*,*) 'start (no bc) div=',d1,d2
 
-      do j=1,Jm
-        do k=1,Km
+      p(0,1)=c0
+      call pres(u,v,w,p,Jmax)
+
+      d1=0.d0
+      d2=0.d0
+      do k=1,Km
+        do j=1,Jm
+          call div(j,k,u,v,w,d,Jmax)
+          d1=max(d1,abs(real(d)))
+          d2=max(d2,abs(aimag(d)))
+        end do
+      end do
+      write(*,*) 'res div=',d1,d2
+
+      do k=1,Km
+        do j=1,Jm
           a=(abs(u(j,k))+abs(w(j,k)))*ht*yt(j)*yt1(j)
      >                   +abs(v(j,k))*ht*rt(j)*rt1(j)
         end do
       end do
       write(*,*) 'a=',a
 
-      do j=1,Jm
-        do k=1,Km
+      do k=1,Km
+        do j=1,Jm
           u(j,k)=u(j,k)*amp/a
           v(j,k)=v(j,k)*amp/a
           w(j,k)=w(j,k)*amp/a
