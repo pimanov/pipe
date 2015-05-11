@@ -55,6 +55,13 @@
           w(j,k)=cos(j*0.5+0.1*k) +ci*sin(0.02*j+0.03*k)
         end do
       end do
+      do j=1,Jm
+        w(j,0)=c0
+        w(j,Km)=c0
+      end do
+      do k=1,Km
+        v(Jm,k)=c0
+      end do
 
       d1=0.d0
       d2=0.d0
@@ -65,7 +72,7 @@
           d2=max(d2,abs(aimag(d)))
         end do
       end do
-      write(*,*) 'start (no bc) div=',d1,d2
+      write(*,*) 'str div=',d1,d2
 
       p(0,1)=c0
       call pres(u,v,w,p,Jmax)

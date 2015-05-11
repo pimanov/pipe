@@ -53,15 +53,14 @@
 *   Solution in wall-normal coordinate
       do k=1,Km
         do j=1,Jm
-          bp(j)=bpy(j)-alpha**2-rlt(k)/yt(j)**2
+          bp(j)=bpy(j)-rlt(k)/yt(j)**2-alpha**2
           aa(j)=p(j,k)
         end do
         bp(1)=bp(1)+apy(1)
         bp(Jm)=bp(Jm)+cpy(Jm)
         Jm1=Jm
-        b1(Jm)=0.d0
-        b2(Jm)=0.d0
-        if(rlt(k).eq.0.d0)Jm1=Jm-1
+        bb(Jm)=c0
+        if(rlt(k).eq.0.d0.and.alpha.eq.0.d0)Jm1=Jm-1
         call prog3(apy,bp,cpy,aa,bb,Jm1)
         do j=1,Jm
           p(j,k)=bb(j)
@@ -82,19 +81,19 @@
       end do
 *
 *  Mean pressure gradient
-      Ub=p(0,1)
-      ss=0.d0
-      su=c0
-      do j=1,Jm
-        ss=ss+yt(j)*yt1(j)
-        ssu=c0
-        do k=1,Km
-          ssu=ssu+u(j,k)
-        end do
-        su=su+ssu*yt(j)*yt1(j)
-      end do
-      Dp=Ub-su/(Km*ss)
-      p(0,0)=Dp
+!      Ub=p(0,1)
+!      ss=0.d0
+!      su=c0
+!      do j=1,Jm
+!        ss=ss+yt(j)*yt1(j)
+!        ssu=c0
+!        do k=1,Km
+!          ssu=ssu+u(j,k)
+!        end do
+!        su=su+ssu*yt(j)*yt1(j)
+!      end do
+!      Dp=Ub-su/(Km*ss)
+!      p(0,0)=Dp
 *
       call gradp(u,v,w,p,Jmax)
       return
