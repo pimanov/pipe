@@ -73,7 +73,6 @@
 * 2-nd step
 *      call rp(t1,u1,v1,w1,u2,v2,w2,ox,or,ot,buf,Imax,Jmax)
       call rp(t1,ub,vb,wb,obx,obr,obt,u1,v1,w1,u2,v2,w2,ox,or,ot,Jmax)
-      p(0,1)=c0
       call pres(u2,v2,w2,p,Jmax)
       do k=1,Km
         do j=1,Jm
@@ -131,7 +130,6 @@
           w1(j,k)=w1(j,k)+c12*w3(j,k)+c34*w2(j,k)-c14*w(j,k)
         end do
       end do
-      q(0,1)=c0
       call pres(u1,v1,w1,q,Jmax)
 * Accuracy estimation
       error=0.d0
@@ -149,7 +147,6 @@
         write(*,*)'  STEP:  fac=',fac,'  dt=',dt
 *        call rp(t,u,v,w,u1,v1,w1,ox,or,ot,buf,Imax,Jmax)
         call rp(t,ub,vb,wb,obx,obr,obt,u,v,w,u1,v1,w1,ox,or,ot,Jmax)
-        p(0,1)=c0
         call pres(u1,v1,w1,p,Jmax)
         goto 1
       end if
@@ -165,7 +162,6 @@
       dt=fac*dt
 *      call rp(t,u,v,w,u1,v1,w1,ox,or,ot,buf,Imax,Jmax)
       call rp(t,ub,vb,wb,obx,obr,obt,u,v,w,u1,v1,w1,ox,or,ot,Jmax)
-      p(0,1)=c0
       call pres(u1,v1,w1,p,Jmax)
       return
       end

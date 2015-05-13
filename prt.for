@@ -15,7 +15,6 @@
      >/cf/cf
      >/alpha/alpha
 *
-      Dp=p(0,0)
       c0=(0.d0,0.d0)
       ci=(0.d0,1.d0)
 
@@ -42,13 +41,10 @@
       end do
       amp=amp*nsym
 
-      write(8,120)t,dt,amp,real(Dp),aimag(Dp),cf,
-     > real(ubulk),aimag(ubulk),dd
-      write(*,110)t,dt,amp,real(Dp),aimag(Dp),cf,
-     > real(ubulk),aimag(ubulk),dd
+      write(8,120)t,dt,amp,cf,real(ubulk),aimag(ubulk),dd
+      write(*,110)t,dt,amp,cf,real(ubulk),aimag(ubulk),dd
       return
 120   format(15e25.15)
-110   format('t=',f10.4,',dt=',f10.4,',amp=',e12.4,
-     > ',Re(Dp)=',e12.4,',Im(Dp)=',e12.4,',cf=',e12.4,',Re(ub)=',e12.4,
-     > ',Im(ub)=',e12.4,',dd=',e12.4)
+110   format('t=',f10.4,',dt=',f10.4,',amp=',e12.4,',cf=',e12.4,
+     > ',Re(ub)=',e12.4,',Im(ub)=',e12.4,',dd=',e12.4)
       end

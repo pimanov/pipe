@@ -60,7 +60,8 @@
         bp(Jm)=bp(Jm)+cpy(Jm)
         Jm1=Jm
         bb(Jm)=c0
-        if(rlt(k).eq.0.d0.and.alpha.eq.0.d0)Jm1=Jm-1
+        if(alpha.eq.0.d0)
+          if(rlt(k).eq.0.d0) Jm1=Jm-1
         call prog3(apy,bp,cpy,aa,bb,Jm1)
         do j=1,Jm
           p(j,k)=bb(j)
@@ -81,19 +82,26 @@
       end do
 *
 *  Mean pressure gradient
-      Ub=p(0,1)
-      ss=0.d0
-      su=c0
-      do j=1,Jm
-        ss=ss+yt(j)*yt1(j)
-        ssu=c0
-        do k=1,Km
-          ssu=ssu+u(j,k)
+!  Ub = 0.0 in all cases
+      if(alpha.eq.0.d0) then
+        ss=0.d0
+        su=c0
+        do j=1,Jm
+          ss=ss+yt(j)*yt1(j)
+          ssu=c0
+          do k=1,Km
+            ssu=ssu+u(j,k)
+          end do
+          su=su+ssu*yt(j)*yt1(j)
         end do
-        su=su+ssu*yt(j)*yt1(j)
-      end do
-      Dp=Ub-su/(Km*ss)
-      p(0,0)=Dp
+        Dp=-su/(Km*ss)
+        write(*,*) Dp
+        do k=1,Km
+          do j=1,Jm
+            u(j,k)=u(j,k)+Dp
+          end do
+        end do
+      end if
 *
       call gradp(u,v,w,p,Jmax)
       return
@@ -101,7 +109,7 @@
 *
       subroutine gradp(u,v,w,p,Jmax)
       implicit real*8 (a-h,o-z)
-      complex*16 u,v,w,p,ci,Dp
+      complex*16 u,v,w,p,ci
       dimension
      > u(0:Jmax,0:*)
      >,v(0:Jmax,0:*)
@@ -111,11 +119,10 @@
      >/dimr/rt(0:128),rt1(0:128),yt(129),yt1(129),hr,Jm
      >/dimt/ht,Km,lt
      >/alpha/alpha
-      Dp=p(0,0)
       ci=(0.d0,1.d0)
       do k=1,Km
         do j=1,Jm
-          u(j,k)=u(j,k)-ci*alpha*p(j,k)+Dp
+          u(j,k)=u(j,k)-ci*alpha*p(j,k)
         end do
       end do
 *

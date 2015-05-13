@@ -91,8 +91,6 @@
 *
       call rp_base(t,ub,vb,wb,obx,obr,obt,Jmax)
       call rp(t,ub,vb,wb,obx,obr,obt,u,v,w,u1,v1,w1,ox,or,ot,Jmax)
-
-      p(0,1)=c0
       call pres(u1,v1,w1,p,Jmax)
 
       open(8,file=fndat,access='append')
