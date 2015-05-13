@@ -18,8 +18,5 @@ all: $(addsuffix .out, $(programs))
 	$(CC) -c $< $(compile_flags) -o $@
 
 
-#.PHONY: clean
-
-
 clean: 
 	rm -rf *.o *.out

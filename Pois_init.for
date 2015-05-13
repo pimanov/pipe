@@ -13,12 +13,11 @@
 *
       open(5,file='Pois_init.car')
       read(5,*) Jm,epsr
-      read(5,*) lt
+      read(5,*) lt,nsym
       read(5,*) fnscs
-      nsym=1
       call com
       write(*,*)' Jm=',Jm,',epsr=',epsr
-      write(*,*)' Km=',Km,',nsym doesn`t matter'
+      write(*,*)' Km=',Km,',nsym=',nsym
 *
       do j=1,Jm
         u(j)=1.0-yt(j)**2

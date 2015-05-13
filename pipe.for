@@ -36,10 +36,9 @@
      >/Re/Re
      >/cf/cf
      >/alpha/alpha
-     >/proc/Np,Npm
 *
       c0=(0.d0,0.d0)
-      ci=(0.d0,0.d0)
+      ci=(0.d0,1.d0)
 *
       open(5,file='pipe.car')
       read(5,*) tol
@@ -55,9 +54,6 @@
      
       open(9,file=fnbcp,form='unformatted',status='old',err=333)
       read(9)epsr,Jm,lt,nsym
-      Xmax=1.0
-      lx=10
-      Npm=1
       call com
       if(Jm.gt.Jmax-1.or.Jm.gt.128) then
         write(*,*)'  Jm=',Jm,'  is greater than   Jmax-1=',Jmax-1
@@ -72,8 +68,8 @@
         read(9)(vb(j,k),j=1,Jm)
         read(9)(wb(j,k),j=1,Jm)
       end do
-      read(9) comment
-      write(*,*) comment
+!      read(9) comment
+!      write(*,*) comment
       close(9)
 
       open(9,file=fncp,form='unformatted',status='old',err=444)
@@ -91,11 +87,10 @@
       dt=min(dt,dtmax)
 
       write(*,*)' ***************************************************'
-      write(*,200) t,dt,Dp,Re,epsr,Jm,Km,nsym
+      write(*,200) t,dt,Dp,Re,epsr,Jm,Km,nsym,alpha
       write(*,*)' ***************************************************'
-200   format('    t=',1pe10.3,' dt=',e9.2,' Dp=',e9.2,/,
-     >'    Re=',e9.2,/,
-     >'    epsr=',e9.2,' Jm=',i4,' Km=',i4,' Nsym=',i3)
+200   format('    t=',e10.3,' dt=',e9.2,' Dp=',e9.2,e9.2,' Re=',e9.2,/,
+     >'    epsr=',e9.2,' Jm=',i4,' Km=',i4,' Nsym=',i3,' alpha=',e9.3)
 *
       call rp_base(t,ub,vb,wb,obx,obr,obt,Jmax)
       call rp(t,ub,vb,wb,obx,obr,obt,u,v,w,u1,v1,w1,ox,or,ot,Jmax)
