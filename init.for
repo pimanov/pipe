@@ -87,12 +87,15 @@
       end do
       write(*,*) 'res div=',d1,d2
 
-      do k=1,Km
-        do j=1,Jm
-          a=(abs(u(j,k))+abs(w(j,k)))*ht*yt(j)*yt1(j)
-     >                   +abs(v(j,k))*ht*rt(j)*rt1(j)
+      a=0.d0
+      do j=1,Jm
+        do k=1,Km
+          a=a+yt(j)*ht*yt1(j)*abs(u(j,k))
+     >       +rt(j)*ht*rt1(j)*abs(v(j,k))
+     >       +yt(j)*ht*yt1(j)*abs(w(j,k))
         end do
       end do
+      a=a*nsym
       write(*,*) 'a=',a
 
       do k=1,Km
