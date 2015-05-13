@@ -2,7 +2,7 @@
 *     program an
       implicit real*8 (a-h,o-z)
       parameter (Jmax=65)
-      character*12 fnscp,fnscs
+      character*12 fnscs
       dimension
      > u(0:Jmax)
      >,v(0:Jmax)

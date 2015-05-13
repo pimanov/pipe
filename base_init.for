@@ -13,7 +13,7 @@
       read(5,*) ics
       read(5,*) fnscp
       read(5,*) fnscs
-      write(*,*)' ics=  ',isc
+      write(*,*)' ics=  ',ics
       write(*,*)' fnscp=',fnscp
       write(*,*)' fnscs=',fnscs
 *
@@ -21,6 +21,11 @@
       read(9)t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,nsym
       Im=2**lx
       Km=2**lt
+      if(ics.gt.Im)then
+        write(*,*) 'ics>Im, ics=',ics,', Im=',Im
+        close(9)
+        goto 2
+      endif 
       do k=1,Km
         do j=1,Jm
           read(9)(buf(i),i=1,Im)
@@ -33,10 +38,6 @@
       end do
       close(9)
 
-      if(ics.gt.Im)then
-        write(*,*) 'ics>Im, ics=',ics,', Im=',Im
-        goto 2
-      endif 
 
       open(9,file=fnscs,form='unformatted')
       write(9)epsr,Jm,lt,nsym
@@ -50,7 +51,7 @@
       close(9)
       
       stop
-1     write(*,*)'  File ',fncp,' already exists'
+1     write(*,*)'  File ',fnscp,' not found'
 2     stop
       end
 *
