@@ -42,9 +42,9 @@
 
 
       write(*,*)' ***************************************************'
-      write(*,200) dt,Re,epsr,Jm,Km,nsym
+      write(*,200) dt,Re,alpha,epsr,Jm,Km,nsym
       write(*,*)' ***************************************************'
-200   format('    dt=',e9.2,'    Re=',e9.2,/,
+200   format('    dt=',e9.2,'    Re=',e9.2,'   alpha=',e13.4,/,
      >'    epsr=',e9.2,' Jm=',i4,' Km=',i4,' Nsym=',i3)
 *
 
@@ -74,7 +74,6 @@
       end do
       write(*,*) 'str div=',d1,d2
 
-      p(0,1)=c0
       call pres(u,v,w,p,Jmax)
 
       d1=0.d0
@@ -104,10 +103,9 @@
         end do
       end do
 
-      Dp=c0
       t=0.d0
       open(9,file=fncp,form='unformatted')
-      write(9)t,dt,Dp,Re,epsr,Jm,lt,nsym,alpha
+      write(9)t,dt,Re,epsr,Jm,lt,nsym,alpha
       do k=1,Km
         write(9)(u(j,k),j=1,Jm)
         write(9)(v(j,k),j=1,Jm)

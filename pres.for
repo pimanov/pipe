@@ -1,7 +1,7 @@
 *
       subroutine pres(u,v,w,p,Jmax)
       implicit real*8 (a-h,o-z)
-      complex*16 u,v,w,p,d,c0,ci,Dp,Ub,su,ssu,aa,bb
+      complex*16 u,v,w,p,d,c0,ci,Dp,su,ssu,aa,bb
       dimension
      > u(0:Jmax,0:*)
      >,v(0:Jmax,0:*)
@@ -58,11 +58,12 @@
         end do
         bp(1)=bp(1)+apy(1)
         bp(Jm)=bp(Jm)+cpy(Jm)
-        Jm1=Jm
-        bb(Jm)=c0
-        if(alpha.eq.0.d0)
-          if(rlt(k).eq.0.d0) Jm1=Jm-1
-        call prog3(apy,bp,cpy,aa,bb,Jm1)
+        if(alpha.eq.0.d0.and.rlt(k).eq.0.d0) then
+          bb(Jm)=c0
+          call prog3(apy,bp,cpy,aa,bb,Jm-1)
+        else
+          call prog3(apy,bp,cpy,aa,bb,Jm)
+        endif
         do j=1,Jm
           p(j,k)=bb(j)
         end do
@@ -95,7 +96,6 @@
           su=su+ssu*yt(j)*yt1(j)
         end do
         Dp=-su/(Km*ss)
-        write(*,*) Dp
         do k=1,Km
           do j=1,Jm
             u(j,k)=u(j,k)+Dp

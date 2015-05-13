@@ -1,7 +1,7 @@
 *
       subroutine prt(t,dt,u,v,w,p,Jmax)
       implicit real*8 (a-h,o-z)
-      complex*16 u,v,w,p,d,c0,ci,ubulk,Dp
+      complex*16 u,v,w,p,d,c0,ci,ubulk
       dimension
      > u(0:Jmax,0:*)
      >,v(0:Jmax,0:*)

@@ -3,7 +3,7 @@
       implicit real*8 (a-h,o-z)
       parameter (Jmax=129, Kmax=129)
       character*24 fncp,fnbcp,fndat
-      complex*16 u,v,w,u1,v1,w1,u2,v2,w2,ox,or,ot,p,q,c0,ci,Dp
+      complex*16 u,v,w,u1,v1,w1,u2,v2,w2,ox,or,ot,p,q,c0,ci
       dimension
      > ub(0:Jmax,0:Kmax)
      >,vb(0:Jmax,0:Kmax)
@@ -70,7 +70,7 @@
       close(9)
 
       open(9,file=fncp,form='unformatted',status='old',err=444)
-      read(9)t,dt,Dp,Re,epsr1,Jm1,lt1,nsym1,alpha
+      read(9)t,dt,Re,epsr1,Jm1,lt1,nsym1,alpha
       if(epsr1.ne.epsr) goto 555
       if(Jm1.ne.Jm) goto 555
       if(lt1.ne.lt) goto 555
@@ -84,9 +84,9 @@
       dt=min(dt,dtmax)
 
       write(*,*)' ***************************************************'
-      write(*,200) t,dt,Dp,Re,epsr,Jm,Km,nsym,alpha
+      write(*,200) t,dt,Re,epsr,Jm,Km,nsym,alpha
       write(*,*)' ***************************************************'
-200   format('    t=',e10.3,' dt=',e9.2,' Dp=',e9.2,e9.2,' Re=',e9.2,/,
+200   format('    t=',e10.3,' dt=',e9.2,' Re=',e9.2,/,
      >'    epsr=',e9.2,' Jm=',i4,' Km=',i4,' Nsym=',i3,' alpha=',e9.3)
 *
       call rp_base(t,ub,vb,wb,obx,obr,obt,Jmax)
@@ -115,8 +115,7 @@
         lwrt=0
         call servis(t,u,v,w,ox,or,ot,p,2,Jmax)
         open(9,file=fncp,form='unformatted')
-        Dp=p(0,0)
-        write(9)t,dt,Dp,Re,epsr,Jm,lt,nsym,alpha
+        write(9)t,dt,Re,epsr,Jm,lt,nsym,alpha
         do k=1,Km
           write(9)(u(j,k),j=1,Jm)
           write(9)(v(j,k),j=1,Jm)
