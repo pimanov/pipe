@@ -81,19 +81,19 @@
       end do
 *
 *  Mean pressure gradient
-!      Ub=p(0,1)
-!      ss=0.d0
-!      su=c0
-!      do j=1,Jm
-!        ss=ss+yt(j)*yt1(j)
-!        ssu=c0
-!        do k=1,Km
-!          ssu=ssu+u(j,k)
-!        end do
-!        su=su+ssu*yt(j)*yt1(j)
-!      end do
-!      Dp=Ub-su/(Km*ss)
-!      p(0,0)=Dp
+      Ub=p(0,1)
+      ss=0.d0
+      su=c0
+      do j=1,Jm
+        ss=ss+yt(j)*yt1(j)
+        ssu=c0
+        do k=1,Km
+          ssu=ssu+u(j,k)
+        end do
+        su=su+ssu*yt(j)*yt1(j)
+      end do
+      Dp=Ub-su/(Km*ss)
+      p(0,0)=Dp
 *
       call gradp(u,v,w,p,Jmax)
       return

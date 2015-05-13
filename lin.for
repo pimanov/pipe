@@ -3,9 +3,9 @@
       implicit real*8 (a-h,o-z)
       complex*16 u,v,w,dp,ep
       dimension
-     > u(0:Imax,0:Jmax,0:*)
-     >,v(0:Imax,0:Jmax,0:*)
-     >,w(0:Imax,0:Jmax,0:*)
+     > u(0:Jmax,0:*)
+     >,v(0:Jmax,0:*)
+     >,w(0:Jmax,0:*)
      >,ap(256),bp(256),cp(256),dp(256),ep(256)
       common
      >/dimr/rt(0:128),rt1(0:128),yt(129),yt1(129),hr,Jm
