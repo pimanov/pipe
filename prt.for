@@ -32,28 +32,23 @@
       end do
       ubulk=ubulk/Ss
 
-      amp1=0.d0
-      amp2=0.d0
+      amp=0.d0
       do j=1,Jm
         do k=1,Km
-          amp1=amp1+yt(j)*ht*yt1(j)*real(u(j,k))**2
-     >             +rt(j)*ht*rt1(j)*real(v(j,k))**2
-     >             +yt(j)*ht*yt1(j)*real(w(j,k))**2
-          amp2=amp2+yt(j)*ht*yt1(j)*aimag(u(j,k))**2
-     >             +rt(j)*ht*rt1(j)*aimag(v(j,k))**2
-     >             +yt(j)*ht*yt1(j)*aimag(w(j,k))**2
+          amp=amp+yt(j)*ht*yt1(j)*abs(u(j,k))
+     >           +rt(j)*ht*rt1(j)*abs(v(j,k))
+     >           +yt(j)*ht*yt1(j)*abs(w(j,k))
         end do
       end do
-      amp1=sqrt(amp1*nsym)
-      amp2=sqrt(amp2*nsym)
+      amp=amp*nsym
 
-      write(8,120)t,dt,amp1,amp2,real(Dp),aimag(Dp),cf,
+      write(8,120)t,dt,amp,real(Dp),aimag(Dp),cf,
      > real(ubulk),aimag(ubulk),dd
-      write(*,110)t,dt,amp1,amp2,real(Dp),aimag(Dp),cf,
+      write(*,110)t,dt,amp,real(Dp),aimag(Dp),cf,
      > real(ubulk),aimag(ubulk),dd
       return
 120   format(15e25.15)
-110   format('t=',f10.4,',dt=',f10.4,',Re(amp)=',e12.4,',Im(amp)',e12.4,
+110   format('t=',f10.4,',dt=',f10.4,',amp=',e12.4,
      > ',Re(Dp)=',e12.4,',Im(Dp)=',e12.4,',cf=',e12.4,',Re(ub)=',e12.4,
      > ',Im(ub)=',e12.4,',dd=',e12.4)
       end

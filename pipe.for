@@ -3,7 +3,6 @@
       implicit real*8 (a-h,o-z)
       parameter (Jmax=129, Kmax=129)
       character*24 fncp,fnbcp,fndat
-      character*128 comment
       complex*16 u,v,w,u1,v1,w1,u2,v2,w2,ox,or,ot,p,q,c0,ci,Dp
       dimension
      > ub(0:Jmax,0:Kmax)
@@ -68,8 +67,6 @@
         read(9)(vb(j,k),j=1,Jm)
         read(9)(wb(j,k),j=1,Jm)
       end do
-!      read(9) comment
-!      write(*,*) comment
       close(9)
 
       open(9,file=fncp,form='unformatted',status='old',err=444)
@@ -96,7 +93,7 @@
       call rp(t,ub,vb,wb,obx,obr,obt,u,v,w,u1,v1,w1,ox,or,ot,Jmax)
 
       p(0,1)=c0
-      call pres(u1,v1,w1,p,Imax)
+      call pres(u1,v1,w1,p,Jmax)
 
       open(8,file=fndat,access='append')
 
@@ -121,7 +118,7 @@
         call servis(t,u,v,w,ox,or,ot,p,2,Jmax)
         open(9,file=fncp,form='unformatted')
         Dp=p(0,0)
-        write(9)t,dt,Dp,Re,epsr,Jm,lt,nsym
+        write(9)t,dt,Dp,Re,epsr,Jm,lt,nsym,alpha
         do k=1,Km
           write(9)(u(j,k),j=1,Jm)
           write(9)(v(j,k),j=1,Jm)
