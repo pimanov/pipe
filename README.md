@@ -23,3 +23,5 @@ Other branches are produced by primary branches with name like (primary_branch_n
 .scs - Symmtry cross section - контрольная точка однородного вдоль трубы течения (2D) с условиями симметрии. 
 .scp - Symmtry control point - контрольная точка трехмерного поля скорости (3D) с условиями симметрии. 
 .cp - Control point - котрольная точка трехмерного поля скорости (3D) в общем виде. 
+
+step: размерар шага контролируется теперь не из аобсолютной одибки, а из относительной. 

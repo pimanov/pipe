@@ -2,8 +2,8 @@
       subroutine step(t,dt,tol,ub,vb,wb,obx,obr,obt,
      > u,v,w,u1,v1,w1,u2,v2,w2,u3,v3,w3,ox,or,ot,p,q,Jmax)
       implicit real*8 (a-h,o-z)
-      complex*16 u,v,w,u1,v1,w1,u2,v2,w2,u3,v3,w3,ox,or,ot,p,q,c0,ci,
-     > uu,vv,ww,ux,vx,wx
+      complex*16 u,v,w,u1,v1,w1,u2,v2,w2,u3,v3,w3,ox,or,ot,p,q,
+     > c0,ci,ux,vx,wx
       dimension
      > ub(0:Jmax,0:*)
      >,vb(0:Jmax,0:*)
@@ -135,10 +135,10 @@
       error=0.d0
       do k=1,Km
         do j=1,Jm
-          uu=u1(j,k)-u3(j,k)
-          vv=v1(j,k)-v3(j,k)
-          ww=w1(j,k)-w3(j,k)
-          error=max(error,abs(uu),abs(vv),abs(ww))
+          uu=abs(u1(j,k)-u3(j,k))/abs(u1(j,k)+u2(j,k))
+          vv=abs(v1(j,k)-v3(j,k))/abs(v1(j,k)+v2(j,k))
+          ww=abs(w1(j,k)-w3(j,k))/abs(w1(j,k)+w2(j,k))
+          error=max(error,uu,vv,ww)
         end do
       end do
       fac=(tol/error)**c13

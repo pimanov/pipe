@@ -1,4 +1,4 @@
- 1.e-2    - tol
+ 2.e-2    - tol
  1        - kprt
  100       - kwrt
  10000.       - tmax
