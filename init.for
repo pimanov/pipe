@@ -3,7 +3,7 @@
       implicit real*8 (a-h,o-z)
       parameter (Jmax=129, Kmax=129)
       character*12 fncp
-      complex*16 u,v,w,p,c0,ci,Dp,d
+      complex*16 u,v,w,p,c0,ci,d
       dimension
      > u(0:Jmax,0:Kmax)
      >,v(0:Jmax,0:Kmax)

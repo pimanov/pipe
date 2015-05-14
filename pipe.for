@@ -130,6 +130,7 @@
       end if 
       if(t+0.01*dt.lt.tmax) goto 10
 *
+      stop
 333   write(*,*)'  File ',fnbcp,' was not found'
       stop
 444   write(*,*)'  File ',fncp,' was not found'
