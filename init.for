@@ -1,7 +1,7 @@
 *
 *     program an
       implicit real*8 (a-h,o-z)
-      parameter (Jmax=129, Kmax=129)
+      parameter (Jmax=257, Kmax=257)
       character*12 fncp
       complex*16 u,v,w,p,c0,ci,d
       dimension

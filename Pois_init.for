@@ -1,7 +1,7 @@
 *
 *     program an
       implicit real*8 (a-h,o-z)
-      parameter (Jmax=65)
+      parameter (Jmax=1025)
       character*12 fnscs
       dimension
      > u(0:Jmax)

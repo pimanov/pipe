@@ -1,7 +1,7 @@
 *
 *     program an
       implicit real*8 (a-h,o-z)
-      parameter (Jmax=129, Kmax=129)
+      parameter (Jmax=1025, Kmax=1025)
       character*24 fncp,fnbcp,fndat
       complex*16 u,v,w,u1,v1,w1,u2,v2,w2,ox,or,ot,p,q,c0,ci
       dimension
@@ -54,11 +54,11 @@
       open(9,file=fnbcp,form='unformatted',status='old',err=333)
       read(9)epsr,Jm,lt,nsym
       call com
-      if(Jm.gt.Jmax-1.or.Jm.gt.128) then
+      if(Jm.gt.Jmax-1) then
         write(*,*)'  Jm=',Jm,'  is greater than   Jmax-1=',Jmax-1
         goto 111
       end if
-      if(Km.gt.Kmax-1.or.Km.gt.256) then
+      if(Km.gt.Kmax-1.or.Km.gt.2048) then ! fft <= 2048
         write(*,*)'  Km=',Km,'  is greater than   Kmax=',Kmax
         goto 111
       end if
@@ -136,7 +136,5 @@
 444   write(*,*)'  File ',fncp,' was not found'
       stop
 555   write(*,*)'  Grids are differ'
-      stop
-111   continue
-      stop
+111   stop
       end
