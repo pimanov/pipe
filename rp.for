@@ -28,6 +28,7 @@
       c0=(0.d0,0.d0)
       ci=(0.d0,1.d0)
 *
+      t=t
 * Boundary conditions
       do j=1,Jm
         u(j,0)=u(j,1)

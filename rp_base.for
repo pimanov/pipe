@@ -12,6 +12,7 @@
      >/dimr/rt(0:128),rt1(0:128),yt(129),yt1(129),hr,Jm
      >/dimt/ht,Km,lt
 *
+      t=t
 * Boundary conditions
       do j=1,Jm
         u(j,0)=u(j,1)

@@ -15,6 +15,8 @@
      >/cf/cf
      >/alpha/alpha
 *
+      p(1,1)=p(1,1)
+*
       c0=(0.d0,0.d0)
       ci=(0.d0,1.d0)
 
@@ -45,6 +47,6 @@
       write(*,110)t,dt,amp,cf,real(ubulk),aimag(ubulk),dd
       return
 120   format(15e25.15)
-110   format('t=',f10.4,',dt=',f10.4,',amp=',e12.4,',cf=',e12.4,
-     > ',Re(ub)=',e12.4,',Im(ub)=',e12.4,',dd=',e12.4)
+110   format('t=',f10.4,',  dt=',f10.4,',  amp=',e12.4,',  cf=',e12.4,
+     > ',  Re(ub)=',e12.4,',  Im(ub)=',e12.4,',  dd=',e12.4)
       end
