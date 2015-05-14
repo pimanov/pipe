@@ -25,3 +25,5 @@ Other branches are produced by primary branches with name like (primary_branch_n
 .cp - Control point - котрольная точка трехмерного поля скорости (3D) в общем виде. 
 
 step: размерар шага контролируется теперь не из аобсолютной одибки, а из относительной. 
+
+На течени Пуазйля протестировано. 
