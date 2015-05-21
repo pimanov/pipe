@@ -96,7 +96,14 @@
       open(8,file=fndat,access='append')
 
       call servis(t,u,v,w,ox,or,ot,p,0,Jmax)
-      call prt(t,dt,u,v,w,p,Jmax)
+      amp=prt(t,dt,u,v,w,p,Jmax)
+      do k=1,Km
+        do j=1,Jm
+          u1(j,k)=u1(j,k)/amp
+          v1(j,k)=v1(j,k)/amp
+          w1(j,k)=w1(j,k)/amp
+        end do
+      end do
       lprt=0
       lwrt=0
 10    continue
@@ -109,7 +116,14 @@
       if(lprt.ge.nprt.or.t.ge.tmax) then
         lprt=0
         call servis(t,u,v,w,ox,or,ot,p,1,Jmax)
-        call prt(t,dt,u,v,w,p,Jmax)
+        amp=prt(t,dt,u,v,w,p,Jmax)
+        do k=1,Km
+          do j=1,Jm
+            u1(j,k)=u1(j,k)/amp
+            v1(j,k)=v1(j,k)/amp
+            w1(j,k)=w1(j,k)/amp
+          end do
+        end do
       end if
       if(lwrt.ge.nwrt.or.t+0.01*dt.ge.tmax) then
         lwrt=0
