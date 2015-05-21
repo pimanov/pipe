@@ -90,12 +90,12 @@
       a=0.d0
       do j=1,Jm
         do k=1,Km
-          a=a+yt(j)*ht*yt1(j)*abs(u(j,k))
-     >       +rt(j)*ht*rt1(j)*abs(v(j,k))
-     >       +yt(j)*ht*yt1(j)*abs(w(j,k))
+          a=a+yt(j)*ht*yt1(j)*abs(u(j,k))**2
+     >       +rt(j)*ht*rt1(j)*abs(v(j,k))**2
+     >       +yt(j)*ht*yt1(j)*abs(w(j,k))**2
         end do
       end do
-      a=a*nsym
+      a=sqrt(a*nsym)
       write(*,*) 'a=',a
 
       do k=1,Km
