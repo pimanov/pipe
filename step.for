@@ -1,6 +1,6 @@
 *
       subroutine step(t,dt,tol
-     > ,ub,vb,wb,bx,br,bt,
+     > ,ub,vb,wb,bx,br,bt
      > ,u,v,w,u1,v1,w1,u2,v2,w2
      > ,u3,v3,w3,ox,or,ot,p,q
      > ,buf,Imax,Jmax)
