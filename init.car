@@ -1,0 +1,7 @@
+120.0  10   - Xmax, lx
+40 0.25     - Jm, epsr 
+2 5         - nsym, lt
+2200        - Re
+1.0         - amp
+0.25        - dt
+run.scp	

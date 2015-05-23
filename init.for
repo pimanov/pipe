@@ -75,9 +75,9 @@
       do k=1,Km
         do j=1,Jm
           do i=1,Im
-            u(i,j,k)=0.1*i*sin(0.1*k)+cos(0.2*j)
-            v(i,j,k)=-0.2*i*cos(j*0.01)*sin(0.3*k)
-            w(i,j,k)=cos(i*0.02)*k*0.03*sin(0.01*j)
+            u(i,j,k)=0.1*i*sin(0.1*k)+cos(0.2*j)*cos(10.0*Np)
+            v(i,j,k)=-0.2*i*cos(j*0.01)*sin(0.3*k)*0.1*Np
+            w(i,j,k)=cos(i*0.02)*k*0.03*sin(0.01*j)*sin(10.0*Np)
           end do
         end do
       end do
@@ -99,7 +99,7 @@
      >               ,MPI_COMM_WORLD,ier)
       ss=ss*Npm*2
       amp=sqrt(amps/ss)
-      write(*,*) 'amp=',amp
+      if(Np.eq.0) write(*,*) 'amp=',amp
       do k=1,Km
         do j=1,Jm
           do i=1,Im
@@ -109,6 +109,8 @@
           end do
         end do
       end do
+      p(0,0,1)=0.d0
+      call pres(u,v,w,p,buf,Imax,Jmax)
       amp=0.0
       ss=0.0
       do k=1,Km
@@ -125,7 +127,20 @@
      >               ,MPI_COMM_WORLD,ier)
       ss=ss*Npm*2
       amp=sqrt(amps/ss)
-      write(*,*) 'amp=',amp
+      if(Np.eq.0) write(*,*) 'amp=',amp
+      
+      dd=0.0
+      do k=1,Km
+        do j=1,Jm
+          do i=1,Im
+            call div(i,j,k,u,v,w,d,Imax,Jmax)
+            dd=max(dd,abs(d))
+          end do
+        end do
+      end do
+      call MPI_ALLREDUCE(dd,dds,1,MPI_DOUBLE_PRECISION,MPI_MAX
+     >               ,MPI_COMM_WORLD,ier)
+      if(np.eq.0) write(*,*) 'central div=',dds
 *
       if(Np.eq.0) then
         open(9,file=fncp,form='unformatted')
