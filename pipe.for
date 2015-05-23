@@ -2,7 +2,7 @@
 *     program an
       implicit real*8 (a-h,o-z)
       include 'mpif.h'
-      parameter (Imax=129, Jmax=129, Kmax=129)
+      parameter (Imax=513, Jmax=129, Kmax=129)
       character*24 fncp,fndat,fnbcp
       character*256 comment
       dimension

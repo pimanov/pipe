@@ -15,6 +15,7 @@
      >/Re/Re
      >/proc/Np,Npm
      >/cf/cf
+     >/mem/tl,ampl
 *
       Dp=p(0,0,0)
 
@@ -46,7 +47,7 @@
       call MPI_ALLREDUCE(enrg,enrgs,1,MPI_DOUBLE_PRECISION,MPI_SUM
      >               ,MPI_COMM_WORLD,ier)
       enrg=enrgs*nsym
-      amp=enrg/volume
+      amp=sqrt(enrg/volume)
       call MPI_ALLREDUCE(dd,dds,1,MPI_DOUBLE_PRECISION,MPI_MAX
      >               ,MPI_COMM_WORLD,ier)
       dd=dds
@@ -61,13 +62,18 @@
       call MPI_ALLREDUCE(ucl,ucls,1,MPI_DOUBLE_PRECISION,MPI_SUM
      >               ,MPI_COMM_WORLD,ier)
       ucl=ucls/Npm
+
+      om=(log(amp)-log(ampl))/(t-tl)
+      ampl=amp
+      tl=t
 *
       if(Np.eq.0)then
-        write(8,120)t,dt,amp,enrg,ucl,Dp,cf,ubulk,dd
-        write(*,110)t,dt,amp,enrg,ucl,Dp,cf,ubulk,dd
+        write(8,120)t,dt,amp,enrg,ucl,Dp,cf,ubulk,dd,om
+        write(*,110)t,dt,amp,enrg,ucl,Dp,cf,ubulk,dd,om
       end if 
 120   format(15e25.15)
-110   format('t=',f10.4,',dt=',f10.4,',amp=',e12.4,',enr=',e12.4,',Ucl='
-     > ,e12.4,',Dp=',e12.4,',cf=',e12.4,',ub=',e12.4,',dd=',e12.4)
+110   format('t=',f10.4,', dt=',f10.4,', amp=',e12.4,', enr=',e12.4,
+     > ', Ucl=',e12.4,', Dp=',e12.4,', cf=',e12.4,', ub=',e12.4,
+     > ', dd=',e12.4,', om=',e12.4)
       return
       end
