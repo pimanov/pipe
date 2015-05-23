@@ -149,19 +149,27 @@
       call pres(u1,v1,w1,q,buf,Imax,Jmax)
 * Accuracy estimation
       error=0.d0
+      amp=0.d0
       do k=1,Km
         do j=1,Jm
           do i=1,Im
-            uu=(u1(i,j,k)-u3(i,j,k))/(u1(i,j,k)+u3(i,j,k))
-            vv=(v1(i,j,k)-v3(i,j,k))/(v1(i,j,k)+v3(i,j,k))
-            ww=(w1(i,j,k)-w3(i,j,k))/(w1(i,j,k)-w3(i,j,k))
+            uu=u1(i,j,k)-u3(i,j,k)
+            vv=v1(i,j,k)-v3(i,j,k)
+            ww=w1(i,j,k)-w3(i,j,k)
             error=max(error,abs(uu),abs(vv),abs(ww))
+            uu=u1(i,j,k)+u3(i,j,k)
+            vv=v1(i,j,k)+v3(i,j,k)
+            ww=w1(i,j,k)+w3(i,j,k)
+            amp=max(amp,abs(uu),abs(vv),abs(ww))
           end do
         end do
       end do
       call MPI_ALLREDUCE(error,errors,1,MPI_DOUBLE_PRECISION,MPI_MAX
      >               ,MPI_COMM_WORLD,ier)
-      fac=(tol/errors)**c13
+      call MPI_ALLREDUCE(amp,amps,1,MPI_DOUBLE_PRECISION,MPI_MAX
+     >               ,MPI_COMM_WORLD,ier)
+      error=errors/amps
+      fac=(tol/error)**c13
       if(fac.lt.facmin) then
         dt=dt*fac
         if(Np.eq.0)write(*,*)'  STEP:  fac=',fac,'  dt=',dt

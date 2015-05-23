@@ -3,7 +3,7 @@
       implicit real*8 (a-h,o-z)
       include 'mpif.h'
       parameter (Imax=129, Jmax=129, Kmax=129)
-      character*12 fncp,fndat
+      character*24 fncp,fndat,fnbcp
       character*256 comment
       dimension
      > ub(0:Imax,0:Jmax,0:Kmax)
@@ -66,7 +66,6 @@
       call MPI_BCAST(nwrt,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(tmax,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(dtmax,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
-      call MPI_BCAST(cf,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
 *
       call MPI_BCAST(t,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(dt,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
@@ -136,18 +135,20 @@
       if(Np.eq.0) then
         close(9)
         istop=0
-        open(9,file=fncp,form='unformatted',status='old',err=11)
+        open(9,file=fnbcp,form='unformatted',status='old',err=11)
       end if
 22    call MPI_BCAST(istop,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
       if(istop.ne.0) goto 333
-      if(Np.eq.0) read(9)cf,Xmax1,epsr1,lx1,Jm1,lt1,nsym1
-*
-      if(Xmax.ne.Xmax1) goto 555
-      if(epsr.ne.epsr1) goto 555
-      if(lx.ne.lx1) goto 555
-      if(Jm.ne.Jm1) goto 555
-      if(lt.ne.lt1) goto 555
-      if(nsym.ne.nsym1) goto 555
+      if(Np.eq.0) then
+        read(9)cf,Xmax1,epsr1,lx1,Jm1,lt1,nsym1
+        if(Xmax.ne.Xmax1) goto 555
+        if(epsr.ne.epsr1) goto 555
+        if(lx.ne.lx1) goto 555
+        if(Jm.ne.Jm1) goto 555
+        if(lt.ne.lt1) goto 555
+        if(nsym.ne.nsym1) goto 555
+      end if
+      call MPI_BCAST(cf,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
 *
       do k=1,Km
         do j=1,Jm
@@ -275,5 +276,5 @@
       goto 22
 555   write(*,*) 'grid is differ:',Xmax,Xmax1,epsr,epsr1,
      > lx,lx1,Jm,Jm1,lt,lt1,nsym,nsym1
-      stop
+      call MPI_ABORT()
       end
