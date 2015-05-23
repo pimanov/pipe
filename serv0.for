@@ -13,5 +13,14 @@
      >/dimt/ht,Km,lt
      >/servst/iserv
 *
+      a=t
+      a=u(0,0,0)
+      a=v(0,0,0)
+      a=w(0,0,0)
+      a=ox(0,0,0)
+      a=or(0,0,0)
+      a=ot(0,0,0)
+      a=p(0,0,0)
+      i=ii
       return
       end

@@ -276,5 +276,4 @@
 555   write(*,*) 'grid is differ:',Xmax,Xmax1,epsr,epsr1,
      > lx,lx1,Jm,Jm1,lt,lt1,nsym,nsym1
       stop
-100   format(10(1pe12.4))
       end

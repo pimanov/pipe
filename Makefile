@@ -1,13 +1,22 @@
-CC=mpif90
+CC = mpif90
+compile_flags = -Wall -Ofast
+link_flags = -Wall
 
-CFLAGS=-lm -lgfortran -m64 -Ofast
+programs = pipe init base_init 
+subprograms = com fft8 lin pres prog3 prt base_rp rp rrt8 serv0 step
+objects = $(addsuffix .o, $(subprograms))
 
-pipe.out: $(wildcard *.for)
-	$(LINK.c) -I. \
-	$^ $(LOADLIBS) $(LDLIBS) -o $@
-	@rm -f *.o
 
-all:  pipe.out
+all: $(addsuffix .out, $(programs))
 
-clean:
-	rm -rf pipe.out
+
+%.out: %.o $(objects) 
+	$(CC) $< $(objects) $(link_flags) -o $@
+
+
+%.o: %.for
+	$(CC) -c $< $(compile_flags) -o $@
+
+
+clean: 
+	rm -rf *.o *.out
