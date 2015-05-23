@@ -1,4 +1,8 @@
 *.swp
+*.dat
+*.scp
+*.cp
+*.acs
 
 # Compiled Object files
 *.slo
