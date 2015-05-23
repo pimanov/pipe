@@ -3,6 +3,7 @@
 *.scp
 *.cp
 *.acs
+*.bsp
 
 # Compiled Object files
 *.slo
