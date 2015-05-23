@@ -14,3 +14,14 @@ primary branches:
 Other branches are produced by primary branches with name like (primary_branch_name)-(feature) and contain some spetial cases of code.
 
   Expirements used code is supplied with tag
+
+
+# 
+
+branch pipeSymMPI-3Dlin
+Расчет эволюции малых возмущений, наложенных на базовое течение. 
+
+lin - не меняется, так как неявно решниется только вязкое слагаемое, а оно такое же, как и в общем случае. 
+step - меняется только в том смысле, что в него передаются новые параметры для rp, и расход теперь 0. 
+cf - определяется однозначно базовым течением - это скорость той системы отсчета, в которой оно покоется. 
+

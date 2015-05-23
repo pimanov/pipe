@@ -1,9 +1,16 @@
 *
-      subroutine rp(t,u,v,w,ut,vt,wt,ox,or,ot,buf,Imax,Jmax)
+      subroutine rp(t,ub,vb,wb,obx,obr,obt,
+     >     u,v,w,ut,vt,wt,ox,or,ot,buf,Imax,Jmax)
       implicit real*8 (a-h,o-z)
       include 'mpif.h'
       dimension
-     > u(0:Imax,0:Jmax,0:*)
+     > ub(0:Imax,0:Jmax,0:*)
+     >,vb(0:Imax,0:Jmax,0:*)
+     >,wb(0:Imax,0:Jmax,0:*)
+     >,obx(0:Imax,0:Jmax,0:*)
+     >,obr(0:Imax,0:Jmax,0:*)
+     >,obt(0:Imax,0:Jmax,0:*)
+     >,u(0:Imax,0:Jmax,0:*)
      >,v(0:Imax,0:Jmax,0:*)
      >,w(0:Imax,0:Jmax,0:*)
      >,ut(0:Imax,0:Jmax,0:*)
@@ -154,18 +161,18 @@
         end do
       end do
 *
-* Nonlinear terms
+* Nonlinear terms [u x OM]
       do i=1,Im
         do j=1,Jm
           do k=1,Km
             v0=0.5d0*(v(i,j-1,k)+v(i+1,j-1,k))
             v1=0.5d0*(v(i,j,k)+v(i+1,j,k))
-            ot0=rt(j-1)*rt1(j-1)*ot(i,j-1,k)
-            ot1=rt(j)*rt1(j)*ot(i,j,k)
+            ot0=rt(j-1)*rt1(j-1)*obt(i,j-1,k)
+            ot1=rt(j)*rt1(j)*obt(i,j,k)
             w0=0.5d0*(w(i,j,k-1)+w(i+1,j,k-1))
             w1=0.5d0*(w(i,j,k)+w(i+1,j,k))
-            or0=or(i,j,k-1)
-            or1=or(i,j,k)
+            or0=obr(i,j,k-1)
+            or1=obr(i,j,k)
             ut(i,j,k)=
      >           0.5d0*((v0*ot0+v1*ot1)/(yt(j)*yt1(j))
      >               -(w0*or0+w1*or1))
@@ -177,12 +184,12 @@
           do j=1,Jm-1
             w0=0.5d0*(w(i,j,k-1)+w(i,j+1,k-1))
             w1=0.5d0*(w(i,j,k)+w(i,j+1,k))
-            ox0=ox(i,j,k-1)
-            ox1=ox(i,j,k)
+            ox0=obx(i,j,k-1)
+            ox1=obx(i,j,k)
             u0=0.5d0*(u(i-1,j,k)+u(i-1,j+1,k))
             u1=0.5d0*(u(i,j,k)+u(i,j+1,k))
-            ot0=ot(i-1,j,k)
-            ot1=ot(i,j,k)
+            ot0=obt(i-1,j,k)
+            ot1=obt(i,j,k)
             vt(i,j,k)=
      >           0.5d0*((w0*ox0+w1*ox1)
      >                 -(u0*ot0+u1*ot1))
@@ -195,13 +202,67 @@
           do i=1,Im
             u0=0.5d0*(u(i-1,j,k)+u(i-1,j,k+1))
             u1=0.5d0*(u(i,j,k)+u(i,j,k+1))
-            or0=or(i-1,j,k)
-            or1=or(i,j,k)
+            or0=obr(i-1,j,k)
+            or1=obr(i,j,k)
             v0=0.5d0*(v(i,j-1,k)+v(i,j-1,k+1))
             v1=0.5d0*(v(i,j,k)+v(i,j,k+1))
+            ox0=rt(j-1)*rt1(j-1)*obx(i,j-1,k)
+            ox1=rt(j)*rt1(j)*obx(i,j,k)
+            wt(i,j,k)=
+     >           0.5d0*((u0*or0+u1*or1)
+     >                 -(v0*ox0+v1*ox1)/(yt(j)*yt1(j)))
+          end do
+        end do
+      end do
+*
+* Nonlinear terms [Ub x om]
+      do i=1,Im
+        do j=1,Jm
+          do k=1,Km
+            v0=0.5d0*(vb(i,j-1,k)+vb(i+1,j-1,k))
+            v1=0.5d0*(vb(i,j,k)+vb(i+1,j,k))
+            ot0=rt(j-1)*rt1(j-1)*ot(i,j-1,k)
+            ot1=rt(j)*rt1(j)*ot(i,j,k)
+            w0=0.5d0*(wb(i,j,k-1)+wb(i+1,j,k-1))
+            w1=0.5d0*(wb(i,j,k)+wb(i+1,j,k))
+            or0=or(i,j,k-1)
+            or1=or(i,j,k)
+            ut(i,j,k)=ut(i,j,k)+
+     >           0.5d0*((v0*ot0+v1*ot1)/(yt(j)*yt1(j))
+     >               -(w0*or0+w1*or1))
+          end do
+        end do
+      end do
+      do k=1,Km
+        do i=1,Im
+          do j=1,Jm-1
+            w0=0.5d0*(wb(i,j,k-1)+wb(i,j+1,k-1))
+            w1=0.5d0*(wb(i,j,k)+wb(i,j+1,k))
+            ox0=ox(i,j,k-1)
+            ox1=ox(i,j,k)
+            u0=0.5d0*(ub(i-1,j,k)+ub(i-1,j+1,k))
+            u1=0.5d0*(ub(i,j,k)+ub(i,j+1,k))
+            ot0=ot(i-1,j,k)
+            ot1=ot(i,j,k)
+            vt(i,j,k)=vt(i,j,k)+
+     >           0.5d0*((w0*ox0+w1*ox1)
+     >                 -(u0*ot0+u1*ot1))
+          end do
+          vt(i,Jm,k)=vt(i,j,k)+0.d0
+        end do
+      end do
+      do k=1,Km
+        do j=1,Jm
+          do i=1,Im
+            u0=0.5d0*(ub(i-1,j,k)+ub(i-1,j,k+1))
+            u1=0.5d0*(ub(i,j,k)+ub(i,j,k+1))
+            or0=or(i-1,j,k)
+            or1=or(i,j,k)
+            v0=0.5d0*(vb(i,j-1,k)+vb(i,j-1,k+1))
+            v1=0.5d0*(vb(i,j,k)+vb(i,j,k+1))
             ox0=rt(j-1)*rt1(j-1)*ox(i,j-1,k)
             ox1=rt(j)*rt1(j)*ox(i,j,k)
-            wt(i,j,k)=
+            wt(i,j,k)=wt(i,j,k)+
      >           0.5d0*((u0*or0+u1*or1)
      >                 -(v0*ox0+v1*ox1)/(yt(j)*yt1(j)))
           end do

@@ -28,53 +28,28 @@
           Ss=Ss+yt(j)*ht*yt1(j)
           ubulk=ubulk+u(1,j,k)*yt(j)*ht*yt1(j)
           do i=1,Im
-            uP=1.d0-yt(j)**2
             volume=volume+yt(j)*ht*yt1(j)*hx
-            enrg=enrg+(u(i,j,k)-uP)**2*yt(j)*ht*yt1(j)*hx
-     >                    +v(i,j,k)**2*rt(j)*ht*rt1(j)*hx
-     >                    +w(i,j,k)**2*yt(j)*ht*yt1(j)*hx
+            enrg=enrg+u(i,j,k)**2*yt(j)*ht*yt1(j)*hx
+     >               +v(i,j,k)**2*rt(j)*ht*rt1(j)*hx
+     >               +w(i,j,k)**2*yt(j)*ht*yt1(j)*hx
             call div(i,j,k,u,v,w,d,Imax,Jmax)
             dd=max(dd,abs(d))
           end do
         end do
       end do
       ubulk=ubulk/Ss
-      enrg=enrg/2
+      enrg=enrg
 
       call MPI_ALLREDUCE(volume,vols,1,MPI_DOUBLE_PRECISION,MPI_SUM
      >               ,MPI_COMM_WORLD,ier)
       volume=vols*2*nsym
       call MPI_ALLREDUCE(enrg,enrgs,1,MPI_DOUBLE_PRECISION,MPI_SUM
      >               ,MPI_COMM_WORLD,ier)
-      enrg=enrgs*2*nsym
+      enrg=enrgs*nsym
+      amp=enrg/volume
       call MPI_ALLREDUCE(dd,dds,1,MPI_DOUBLE_PRECISION,MPI_MAX
      >               ,MPI_COMM_WORLD,ier)
       dd=dds
-
-      amp=0.d0
-      do j=1,Jm
-        u0=0.d0
-        do k=1,Km
-          do i=1,Im
-            u0=u0+u(i,j,k)
-          end do
-        end do
-        u0=u0/(Im*Km)
-        call MPI_ALLREDUCE(u0,u0s,1,MPI_DOUBLE_PRECISION,MPI_SUM
-     >               ,MPI_COMM_WORLD,ier)
-        u0=u0s/Npm
-
-        do k=1,Km
-          do i=1,Im
-            amp=amp+yt(j)*ht*yt1(j)*hx*(u(i,j,k)-u0)**2
-     >             +rt(j)*ht*rt1(j)*hx*v(i,j,k)**2
-     >             +yt(j)*ht*yt1(j)*hx*w(i,j,k)**2
-          end do
-        end do
-      end do
-      call MPI_ALLREDUCE(amp,amps,1,MPI_DOUBLE_PRECISION,MPI_SUM
-     >               ,MPI_COMM_WORLD,ier)
-      amp=sqrt(amps*2*nsym)
 
       ucl=0.d0
       do k=1,Km
@@ -89,7 +64,7 @@
 *
       if(Np.eq.0)then
         write(8,120)t,dt,amp,enrg,ucl,Dp,cf,ubulk,dd
-!        write(*,110)t,dt,amp,enrg,ucl,Dp,cf,ubulk,dd
+        write(*,110)t,dt,amp,enrg,ucl,Dp,cf,ubulk,dd
       end if 
 120   format(15e25.15)
 110   format('t=',f10.4,',dt=',f10.4,',amp=',e12.4,',enr=',e12.4,',Ucl='
