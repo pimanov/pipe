@@ -26,12 +26,12 @@
  
       if(Np.eq.0)then
         open(5,file='init.car')
-        read(5,*) Xmax lx
-        read(5,*) epsr Jm
-        read(5,*) nsym lt
+        read(5,*) Xmax, lx
+        read(5,*) epsr, Jm
+        read(5,*) nsym, lt
         read(5,*) Re
         read(5,*) dt
-        read(5,*) amp
+        read(5,*) a
         read(5,*) fncp
         t=0.0
         close(5)
@@ -46,13 +46,13 @@
       call MPI_BCAST(Jm,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(lt,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(nsym,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
-      call MPI_BCAST(amp,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
+      call MPI_BCAST(a,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
 *
       call com
       if(Np.eq.0) then      
       write(*,*)' ***************************************************'
       write(*,*)' *        Number of processors =',Npm,'          *'
-      write(*,200) t,dt,amp,Re,Xmax,epsr,Imm,Jm,Km,nsym
+      write(*,200) t,dt,a,Re,Xmax,epsr,Imm,Jm,Km,nsym
       write(*,*)' ***************************************************'
 200   format('    t=',1pe10.3,' dt=',e9.2,' amp=',e9.2,/,
      >'    Re=',e9.2,/,
@@ -85,7 +85,90 @@
       p(0,0,1)=0.d0
       call pres(u,v,w,p,buf,Imax,Jmax)
 *
-      call prt(t,dt,u,v,w,p,Imax,Jmax)
+      dd=0.0
+      do k=2,Km-1
+        do j=2,Jm-1
+          do i=2,Im-1
+            call div(i,j,k,u,v,w,d,Imax,Jmax)
+            dd=max(dd,abs(d))
+          end do
+        end do
+      end do
+      call MPI_ALLREDUCE(dd,dds,1,MPI_DOUBLE_PRECISION,MPI_MAX,
+     >  MPI_COMM_WORLD,ier)
+      if(Np.eq.0) write(*,*) 'disturb central div = ',dds
+
+      amp=0.0
+      vol=0.0
+      do k=1,Km
+        do j=1,Jm
+          do i=1,Im
+            amp=amp+u(i,j,k)**2*yt(j)*yt1(j)*ht*hx 
+     >             +v(i,j,k)**2*rt(j)*rt1(j)*ht*hx 
+     >             +w(i,j,k)**2*yt(j)*yt1(j)*ht*hx 
+            vol=vol+yt(j)*yt1(j)*ht*hx
+          end do
+        end do
+      end do
+      call MPI_ALLREDUCE(amp,amps,1,MPI_DOUBLE_PRECISION,MPI_SUM,
+     >  MPI_COMM_WORLD,ier)
+      call MPI_ALLREDUCE(vol,vols,1,MPI_DOUBLE_PRECISION,MPI_SUM,
+     >  MPI_COMM_WORLD,ier)
+      amp=sqrt(amps/vols)
+      if(Np.eq.0) write(*,*) 'disturb amp = ', amp
+
+      do k=1,Km
+        do j=1,Jm
+          do i=1,Im
+            u(i,j,k)=u(i,j,k)/amp*a
+            v(i,j,k)=v(i,j,k)/amp*a
+            w(i,j,k)=w(i,j,k)/amp*a
+          end do
+        end do
+      end do
+
+      amp=0.0
+      vol=0.0
+      do k=1,Km
+        do j=1,Jm
+          do i=1,Im
+            amp=amp+u(i,j,k)**2*yt(j)*yt1(j)*ht*hx 
+     >             +v(i,j,k)**2*rt(j)*rt1(j)*ht*hx 
+     >             +w(i,j,k)**2*yt(j)*yt1(j)*ht*hx 
+            vol=vol+yt(j)*yt1(j)*ht*hx
+          end do
+        end do
+      end do
+      call MPI_ALLREDUCE(amp,amps,1,MPI_DOUBLE_PRECISION,MPI_SUM,
+     >  MPI_COMM_WORLD,ier)
+      call MPI_ALLREDUCE(vol,vols,1,MPI_DOUBLE_PRECISION,MPI_SUM,
+     >  MPI_COMM_WORLD,ier)
+      amp=sqrt(amps/vols)
+      if(Np.eq.0) write(*,*) 'disturb amp = ', amp
+
+      do k=1,Km
+        do j=1,Jm
+          do i=1,Im
+            u(i,j,k)=u(i,j,k)+1.0-yt(j)**2
+          end do
+        end do
+      end do
+      p(0,0,1)=0.5d0
+      call pres(u,v,w,p,buf,Imax,Jmax)
+
+      dd=0.0
+      do k=2,Km-1
+        do j=2,Jm-1
+          do i=2,Im-1
+            call div(i,j,k,u,v,w,d,Imax,Jmax)
+            dd=max(dd,abs(d))
+          end do
+        end do
+      end do
+      call MPI_ALLREDUCE(dd,dds,1,MPI_DOUBLE_PRECISION,MPI_MAX,
+     >  MPI_COMM_WORLD,ier)
+      if(Np.eq.0) write(*,*) 'Pois+dist central div = ',dds
+
 
       if(Np.eq.0) then
         open(9,file=fncp,form='unformatted')
