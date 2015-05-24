@@ -1,3 +1,9 @@
+*.swp
+*.scp
+*.cp
+*.bsp
+*.asp
+
 # Compiled Object files
 *.slo
 *.lo
