@@ -215,5 +215,4 @@
 111   write(*,*)'  File ',fncp,' was not found'
       istop=1
       goto 222
-100   format(10(1pe12.4))
       end
