@@ -72,7 +72,6 @@
         cpw(j)=c/(rt(j)*rt1(j))
         bpw(j)=-apw(j)-cpw(j)
       end do
-100   format(10(1pe12.4))
 * rl
       do i=0,Imm/2
         rlx(i+1)=(2.d0/hx*sin(i*pi/Imm))**2

@@ -33,7 +33,9 @@
       iset=1
 2     continue
       x2=x*x
-      if(i.eq.0)rrt=x*(1.d0+aset*(1.d0-x2)*(bset-x2))
-      if(i.eq.1)rrt=1.d0+aset*(bset-3.d0*x2*(1.d0+bset)+5.d0*x2*x2)
+      res=-1.0
+      if(i.eq.0)res=x*(1.d0+aset*(1.d0-x2)*(bset-x2))
+      if(i.eq.1)res=1.d0+aset*(bset-3.d0*x2*(1.d0+bset)+5.d0*x2*x2)
+      rrt=res
       return
       end

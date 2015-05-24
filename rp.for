@@ -21,6 +21,7 @@
      >/Re/Re
      >/proc/Np,Npm
 *
+      t=t
 * Boundary conditions
       Np0=Np-1
       if(Np.eq.0)Np0=Npm-1
