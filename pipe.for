@@ -2,7 +2,7 @@
 *     program an
       implicit real*8 (a-h,o-z)
       include 'mpif.h'
-      parameter (Imax=129, Jmax=129, Kmax=129)
+      parameter (Imax=513, Jmax=129, Kmax=129)
       character*12 fncp,fndat
       dimension
      > u(0:Imax,0:Jmax,0:Kmax)
