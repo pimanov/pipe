@@ -1,9 +1,13 @@
-*.scp
-*.cp
+build
 *.swp
+
+*.cp
+*.scp
 *.bcp
 *.bsp
 *.asp
+*.bss
+*.scs
 
 
 # Compiled Object files
