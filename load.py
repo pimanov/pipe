@@ -37,15 +37,15 @@ def nans(a):
 
 def fget_vfield(f,Im,Jm,Km):
 
-    u = nans((Im+2, Jm+2, Km+2))
-    v = nans((Im+2, Jm+2, Km+2))
-    w = nans((Im+2, Jm+2, Km+2))
+    u = nans((Km+2, Jm+2, Im+2))
+    v = nans((Km+2, Jm+2, Im+2))
+    w = nans((Km+2, Jm+2, Im+2))
 
-    for k in range(1,Km+1):
-        for j in range(1,Jm+1):
-            u[1:-1,j,k] = fget_dline(f,Im)
-            v[1:-1,j,k] = fget_dline(f,Im)
-            w[1:-1,j,k] = fget_dline(f,Im)
+    for u1,v1,w1 in zip(u,v,w)[1:-1]:
+        for u2,v2,w2 in zip(u1,v1,w1)[1:-1]:
+            u2[1:-1] = fget_dline(f,Im)
+            v2[1:-1] = fget_dline(f,Im)
+            w2[1:-1] = fget_dline(f,Im)
 
     return u,v,w
 
@@ -53,13 +53,13 @@ def fget_vfield(f,Im,Jm,Km):
 
 def fget_2Dvfield(f,Im,Jm):
 
-    u = nans((Im+2, Jm+2))
-    v = nans((Im+2, Jm+2))
-    w = nans((Im+2, Jm+2))
+    u = nans((Jm+2, Im+2))
+    v = nans((Jm+2, Im+2))
+    w = nans((Jm+2, Im+2))
 
-    for j in range(1,Jm+1):
-        u[1:-1,j] = fget_dline(f,Im)
-        v[1:-1,j] = fget_dline(f,Im)
-        w[1:-1,j] = fget_dline(f,Im)
+    for u1,v1,w1 in zip(u,v,w)[1:-1]:
+        u1[1:-1] = fget_dline(f,Im)
+        v1[1:-1] = fget_dline(f,Im)
+        w1[1:-1] = fget_dline(f,Im)
 
     return u,v,w
