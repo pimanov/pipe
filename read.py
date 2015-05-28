@@ -61,4 +61,27 @@ def bss_read( fn ):
 scs_read = bss_read
 
 
+def sas_read( fn ):
+    
+    with open( fn, "rb" ) as f:
+    
+        _, Re, Xmax, epsr, lx, Jm, kas, _ = i(f), d(f), d(f), d(f), i(f), i(f), i(f), i(f)
+    
+        Im = 2**lx
+        
+        res = []
+        while True:
+            s = f.read(4)
+            if not s: break
+            t, _ = d(f), i(f)
+            u = load.fget_2Dfield( f, Im, Jm )
+            res.append((t,u))
+            
+    
+    x = com.xgrid( Im, Xmax )
+    r = com.rgrid( Jm, epsr )
+    
+    return (x, r), res
+
+
     

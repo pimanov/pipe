@@ -63,3 +63,14 @@ def fget_2Dvfield(f,Im,Jm):
         w1[1:-1] = fget_dline(f,Im)
 
     return u,v,w
+
+
+
+def fget_2Dfield(f,Im,Jm):
+
+    u = nans((Jm+2, Im+2))
+
+    for u1 in u[1:-1]:
+        u1[1:-1] = fget_dline(f,Im)
+
+    return u
