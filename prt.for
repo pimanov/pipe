@@ -67,13 +67,15 @@
       ampl=amp
       tl=t
 *
+      u1=u(Im/2,Jm/2,Km/2)
+      v1=v(Im/3,Jm/3,Km/3)
       if(Np.eq.0)then
-        write(8,120)t,dt,amp,enrg,ucl,Dp,cf,ubulk,dd,om
-        write(*,110)t,dt,amp,enrg,ucl,Dp,cf,ubulk,dd,om
+        write(8,120)t,dt,amp,enrg,ucl,Dp,cf,ubulk,dd,om,u1,v1
+        write(*,110)t,dt,amp,enrg,ucl,Dp,cf,ubulk,dd,om,u1,v1
       end if 
 120   format(15e25.15)
 110   format('t=',f10.4,', dt=',f10.4,', amp=',e12.4,', enr=',e12.4,
      > ', Ucl=',e12.4,', Dp=',e12.4,', cf=',e12.4,', ub=',e12.4,
-     > ', dd=',e12.4,', om=',e12.4)
+     > ', dd=',e12.4,', om=',e12.4,', u=',e12.4,', v=',e12.4)
       return
       end
