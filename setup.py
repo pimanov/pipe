@@ -9,5 +9,5 @@ setup(name='pipe_pytools',
  author_email='pimanov-vladimir@yandex.ru',
  url='https://github.com/pimanov/pipe',
  install_requires=['numpy', 'scipy', 'math', 'os'],
- py_modules = ['read','com','load','polar_plot']
+ py_modules = ['read','com','load','polar_plot','tecplot']
 )
