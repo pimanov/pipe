@@ -27,6 +27,21 @@ def fget_dline(f,n):
     return dline
 
 
+def fget_cdline(f,n):
+    
+    line1 = np.zeros(n)
+    line2 = np.zeros(n)
+    
+    fget_i(f)
+    for i in range(n): 
+        line1[i] = fget_d(f)
+        line2[i] = fget_d(f)
+
+    fget_i(f)
+
+    return (line1, line2)
+
+
 
 def nans(a):
     res = np.zeros(a)
@@ -63,6 +78,23 @@ def fget_2Dvfield(f,Im,Jm):
         w1[1:-1] = fget_dline(f,Im)
 
     return u,v,w
+
+
+def fget_2Dcvfield(f,Im,Jm):
+
+    u1 = nans((Jm+2, Im+2))
+    v1 = nans((Jm+2, Im+2))
+    w1 = nans((Jm+2, Im+2))
+    u2 = nans((Jm+2, Im+2))
+    v2 = nans((Jm+2, Im+2))
+    w2 = nans((Jm+2, Im+2))
+
+    for du1,dv1,dw1,du2,dv2,dw2 in zip(u1,v1,w1,u2,v2,w2)[1:-1]:
+        du1[1:-1], du2[1:-1] = fget_cdline(f,Im)
+        dv1[1:-1], dv2[1:-1] = fget_cdline(f,Im)
+        dw1[1:-1], dw2[1:-1] = fget_cdline(f,Im)
+
+    return (u1, v1, w1), (u2, v2, w2)
 
 
 
