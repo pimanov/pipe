@@ -115,6 +115,6 @@ def bsp_read( fn ):
         r = com.rgrid( Jm, epsr )
         th = com.symthgrid( Km, nsym )
 
-        return (x, r, th), (u, v, w)
+        return cf, (x, r, th), (u, v, w)
 
 
