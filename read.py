@@ -118,3 +118,21 @@ def bsp_read( fn ):
         return cf, (x, r, th), (u, v, w)
 
 
+def msp_read( fn ):
+
+    with open( fn, "rb" ) as f:
+
+        _, t, dt, Dp, Re, Xmax, epsr, lx, Jm, lt, nsym, _ = i(f), d(f), d(f), d(f), d(f), d(f), d(f), i(f), i(f), i(f), i(f), i(f) 
+
+        Im = 2**lx
+        Km = 2**lt
+
+        (u, v, w) = load.fget_vfield( f, Im, Jm, Km )
+        (uu, vv, ww) = load.fget_vfield( f, Im, Jm, Km )
+        (uv, vw, wu) = load.fget_vfield( f, Im, Jm, Km )
+
+        x = com.xgrid( Im, Xmax )
+        r = com.rgrid( Jm, epsr )
+        th = com.symthgrid( Km, nsym )
+
+        return Re, (x,r,th), (u,v,w), (uu,vv,ww), (uv,vw,wu)
