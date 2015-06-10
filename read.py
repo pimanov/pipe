@@ -127,12 +127,12 @@ def msp_read( fn ):
         Im = 2**lx
         Km = 2**lt
 
-        (u, v, w) = load.fget_vfield( f, Im, Jm, Km )
-        (uu, vv, ww) = load.fget_vfield( f, Im, Jm, Km )
-        (uv, vw, wu) = load.fget_vfield( f, Im, Jm, Km )
+        vec1 = load.fget_vfield( f, Im, Jm, Km )
+        vec2 = load.fget_vfield( f, Im, Jm, Km )
+        vec3 = load.fget_vfield( f, Im, Jm, Km )
 
         x = com.xgrid( Im, Xmax )
         r = com.rgrid( Jm, epsr )
         th = com.symthgrid( Km, nsym )
-
-        return Re, (x,r,th), (u,v,w), (uu,vv,ww), (uv,vw,wu)
+        mesh = x,r,th
+        return Re, mesh, vec1, vec2, vec3
