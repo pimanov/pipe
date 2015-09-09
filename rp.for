@@ -1,7 +1,6 @@
 *
-      subroutine rp(t,u,v,w,ut,vt,wt,ox,or,ot,buf,Imax,Jmax)
+      subroutine rp(t,u,v,w,ut,vt,wt,ox,or,ot,Imax,Jmax)
       implicit real*8 (a-h,o-z)
-      include 'mpif.h'
       dimension
      > u(0:Imax,0:Jmax,0:*)
      >,v(0:Imax,0:Jmax,0:*)
@@ -12,72 +11,22 @@
      >,ox(0:Imax,0:Jmax,0:*)
      >,or(0:Imax,0:Jmax,0:*)
      >,ot(0:Imax,0:Jmax,0:*)
-     >,buf(1:*)
-      integer nstat(MPI_STATUS_SIZE,12),nreq(12)
       common
-     >/dimx/hx,Im,Imm,lx
+     >/dimx/hx,Im,lx
      >/dimr/rt(0:128),rt1(0:128),yt(129),yt1(129),hr,Jm
      >/dimt/ht,Km,lt
      >/Re/Re
-     >/proc/Np,Npm
 *
       t=t
 * Boundary conditions
-      Np0=Np-1
-      if(Np.eq.0)Np0=Npm-1
-      Np1=Np+1
-      if(Np.eq.Npm-1)Np1=0
-      lng=Jm*Km
-      l=0
       do k=1,Km
         do j=1,Jm
-          l=l+1
-          buf(l)=u(Im,j,k)
-          buf(l+lng)=v(1,j,k)
-          buf(l+2*lng)=v(Im,j,k)
-          buf(l+3*lng)=w(1,j,k)
-          buf(l+4*lng)=w(Im,j,k)
-          buf(l+10*lng)=u(1,j,k)
-        end do
-      end do
-      call MPI_ISEND(buf(1),lng,MPI_DOUBLE_PRECISION,Np1,1
-     >              ,MPI_COMM_WORLD,nreq(1),ier)
-      call MPI_ISEND(buf(1+lng),lng,MPI_DOUBLE_PRECISION,Np0,2
-     >              ,MPI_COMM_WORLD,nreq(2),ier)
-      call MPI_ISEND(buf(1+2*lng),lng,MPI_DOUBLE_PRECISION,Np1,3
-     >              ,MPI_COMM_WORLD,nreq(3),ier)
-      call MPI_ISEND(buf(1+3*lng),lng,MPI_DOUBLE_PRECISION,Np0,4
-     >              ,MPI_COMM_WORLD,nreq(4),ier)
-      call MPI_ISEND(buf(1+4*lng),lng,MPI_DOUBLE_PRECISION,Np1,5
-     >              ,MPI_COMM_WORLD,nreq(5),ier)
-      call MPI_ISEND(buf(1+10*lng),lng,MPI_DOUBLE_PRECISION,Np0,6
-     >              ,MPI_COMM_WORLD,nreq(11),ier)
-*
-      call MPI_IRECV(buf(1+5*lng),lng,MPI_DOUBLE_PRECISION,Np0,1
-     >              ,MPI_COMM_WORLD,nreq(6),ier)
-      call MPI_IRECV(buf(1+6*lng),lng,MPI_DOUBLE_PRECISION,Np1,2
-     >              ,MPI_COMM_WORLD,nreq(7),ier)
-      call MPI_IRECV(buf(1+7*lng),lng,MPI_DOUBLE_PRECISION,Np0,3
-     >              ,MPI_COMM_WORLD,nreq(8),ier)
-      call MPI_IRECV(buf(1+8*lng),lng,MPI_DOUBLE_PRECISION,Np1,4
-     >              ,MPI_COMM_WORLD,nreq(9),ier)
-      call MPI_IRECV(buf(1+9*lng),lng,MPI_DOUBLE_PRECISION,Np0,5
-     >              ,MPI_COMM_WORLD,nreq(10),ier)
-      call MPI_IRECV(buf(1+11*lng),lng,MPI_DOUBLE_PRECISION,Np1,6
-     >              ,MPI_COMM_WORLD,nreq(12),ier)
-*
-      call MPI_WAITALL(12,nreq,nstat,ier)  
-*
-      l=0
-      do k=1,Km
-        do j=1,Jm
-          l=l+1
-          u(0,j,k)=buf(l+5*lng)
-          v(Im+1,j,k)=buf(l+6*lng)
-          v(0,j,k)=buf(l+7*lng)
-          w(Im+1,j,k)=buf(l+8*lng)
-          w(0,j,k)=buf(l+9*lng)
-          u(Im+1,j,k)=buf(l+11*lng)
+          u(Im+1,j,k)=u(1, j,k)
+          u(0,   j,k)=u(Im,j,k)
+          v(Im+1,j,k)=v(1, j,k)
+          v(0,   j,k)=v(Im,j,k)
+          w(Im+1,j,k)=w(1, j,k)
+          w(0,   j,k)=w(Im,j,k)
         end do
       end do
 *

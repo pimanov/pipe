@@ -11,7 +11,7 @@
      >,p(0:Imax,0:Jmax,0:*)
       common
 *     >/dim/Xmax,epsr
-     >/dimx/hx,Im,Imm,lx
+     >/dimx/hx,Im,lx
      >/dimr/rt(0:128),rt1(0:128),yt(129),yt1(129),hr,Jm
      >/dimt/ht,Km,lt
      >/servst/iserv

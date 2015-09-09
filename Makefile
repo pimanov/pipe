@@ -1,4 +1,4 @@
-CC = mpif90
+FC = gfortran
 compile_flags = -Wall -Ofast
 link_flags = -Wall
 
@@ -11,11 +11,11 @@ all: $(addsuffix .out, $(programs))
 
 
 %.out: %.o $(objects) 
-	$(CC) $< $(objects) $(link_flags) -o $@
+	$(FC) $< $(objects) $(link_flags) -o $@
 
 
 %.o: %.for
-	$(CC) -c $< $(compile_flags) -o $@
+	$(FC) -c $< $(compile_flags) -o $@
 
 
 clean: 

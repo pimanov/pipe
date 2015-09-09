@@ -7,7 +7,7 @@
      >,w(0:Imax,0:Jmax,0:*)
      >,ap(256),bp(256),cp(256),dp(256),ep(256)
       common
-     >/dimx/hx,Im,Imm,lx
+     >/dimx/hx,Im,lx
      >/dimr/rt(0:128),rt1(0:128),yt(129),yt1(129),hr,Jm
      >/dimt/ht,Km,lt
      >/pry/apy(128),bpy(128),cpy(128)
