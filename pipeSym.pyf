@@ -81,7 +81,7 @@ python module pipeSym ! in
             common /dimx/ hx,Im,lx
             common /dimt/ ht,Km,lt
         end subroutine rp
-        subroutine step(t,dt,tol,u,v,w,u1,v1,w1,u2,v2,w2,u3,v3,w3,ox,or,ot,p,q,Imax,Jmax) ! in :pipeSym:step.for
+        subroutine step(t,dt,tol,u,v,w,u1,v1,w1,u2,v2,w2,u3,v3,w3,ox,or,ot,p,Imax,Jmax) ! in :pipeSym:step.for
             real*8, intent(inout) :: t
             real*8, intent(inout) :: dt
             real*8, intent(in) :: tol
@@ -101,7 +101,6 @@ python module pipeSym ! in
             real*8, intent(inout), dimension(Imax+1,Jmax+1,*), depend(Imax,Jmax) :: or
             real*8, intent(inout), dimension(Imax+1,Jmax+1,*), depend(Imax,Jmax) :: ot
             real*8, intent(inout), dimension(Imax+1,Jmax+1,*), depend(Imax,Jmax) :: p
-            real*8, intent(inout), dimension(Imax+1,Jmax+1,*), depend(Imax,Jmax) :: q
             integer, intent(hide), depend(u) :: Imax=(shape(u,0)-1)
             integer, intent(hide), depend(u) :: Jmax=(shape(u,1)-1)
             real*8 dimension(129) :: rt

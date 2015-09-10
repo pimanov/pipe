@@ -1,6 +1,6 @@
 *
       subroutine step(t,dt,tol,u,v,w,u1,v1,w1,u2,v2,w2
-     > ,u3,v3,w3,ox,or,ot,p,q,Imax,Jmax)
+     > ,u3,v3,w3,ox,or,ot,p,Imax,Jmax)
       implicit real*8 (a-h,o-z)
       dimension
      > u(0:Imax,0:Jmax,0:*)
@@ -16,7 +16,6 @@
      >,v3(0:Imax,0:Jmax,0:*)
      >,w3(0:Imax,0:Jmax,0:*)
      >,p(0:Imax,0:Jmax,0:*)
-     >,q(0:Imax,0:Jmax,0:*)
       common
      >/dimx/hx,Im,lx
      >/dimr/rt(0:128),rt1(0:128),yt(129),yt1(129),hr,Jm
@@ -137,7 +136,7 @@
           end do
         end do
       end do
-      call pres(u1,v1,w1,q,c12,Imax,Jmax)
+      call pres(u1,v1,w1,p,c12,Imax,Jmax)
 * Accuracy estimation
       error=0.d0
       do k=1,Km
