@@ -1,5 +1,5 @@
 *
-      function divmax(u,v,w,Imax,Jmax)
+      subroutine divmax(u,v,w,dd,Imax,Jmax)
       implicit real*8 (a-h,o-z)
       dimension
      > u(0:Imax,0:Jmax,0:*)
@@ -37,6 +37,5 @@
           end do
         end do
       end do
-      divmax=d
       return
       end

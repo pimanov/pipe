@@ -3,6 +3,14 @@
 
 python module pipeSym ! in 
     interface  ! in :pipeSym
+        subroutine divmax(u,v,w,dd,Imax,Jmax)
+            real*8, intent(inout), dimension(Imax+1, Jmax+1, *) :: u
+            real*8, intent(inout), dimension(Imax+1, Jmax+1, *), depend(Imax,Jmax) :: v
+            real*8, intent(inout), dimension(Imax+1, Jmax+1, *), depend(Imax,Jmax) :: w
+            real*8, intent(out,hide) :: dd
+            integer, intent(hide), depend(u) :: Imax=(shape(u,0)-1)
+            integer, intent(hide), depend(u) :: Jmax=(shape(u,1)-1)
+        end subroutine
         subroutine com ! in :pipeSym:com.for
             real*8 :: Xmax
             real*8 :: epsr
