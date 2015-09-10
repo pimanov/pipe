@@ -1,0 +1,128 @@
+!    -*- f90 -*-
+! Note: the context of this file is case sensitive.
+
+python module pipeSym ! in 
+    interface  ! in :pipeSym
+        subroutine com ! in :pipeSym:com.for
+            real*8 :: xmax
+            real*8 :: epsr
+            integer :: nsym
+            real*8 :: hx
+            integer :: im
+            integer :: lx
+            real*8 dimension(129) :: rt
+            real*8 dimension(129) :: rt1
+            real*8 dimension(129) :: yt
+            real*8 dimension(129) :: yt1
+            real*8 :: hr
+            integer :: jm
+            real*8 :: ht
+            integer :: km
+            integer :: lt
+            real*8 :: re
+            common /dim/ xmax,epsr,nsym
+            common /dimx/ hx,im,lx
+            common /dimr/ rt,rt1,yt,yt1,hr,jm
+            common /dimt/ ht,km,lt
+            common /re/ re
+        end subroutine com
+        subroutine pres(u,v,w,p,imax,jmax) ! in :pipeSym:pres.for
+            real*8, intent(inout), dimension(imax+1, jmax+1, *) :: u
+            real*8, intent(inout), dimension(imax+1, jmax+1, *), depend(imax,jmax) :: v
+            real*8, intent(inout), dimension(imax+1, jmax+1, *), depend(imax,jmax) :: w
+            real*8, intent(inout), dimension(imax+1, jmax+1, *), depend(imax,jmax) :: p
+            integer, intent(hide), depend(u) :: imax=(shape(u,0)-1)
+            integer, intent(hide), depend(u) :: jmax=(shape(u,1)-1)
+            real*8 :: hx
+            integer :: im
+            integer :: lx
+            real*8 dimension(129) :: rt
+            real*8 dimension(129) :: rt1
+            real*8 dimension(129) :: yt
+            real*8 dimension(129) :: yt1
+            real*8 :: hr
+            integer :: jm
+            real*8 :: ht
+            integer :: km
+            integer :: lt
+            common /dimx/ hx,im,lx
+            common /dimr/ rt,rt1,yt,yt1,hr,jm
+            common /dimt/ ht,km,lt
+        end subroutine pres
+        subroutine rp(t,u,v,w,ut,vt,wt,ox,or,ot,imax,jmax) ! in :pipeSym:rp.for
+            real*8, intent(inout) :: t
+            real*8, intent(inout), dimension(imax+1,jmax+1,*) :: u
+            real*8, intent(inout), dimension(imax+1,jmax+1,*), depend(imax,jmax) :: v
+            real*8, intent(inout), dimension(imax+1,jmax+1,*), depend(imax,jmax) :: w
+            real*8, intent(inout), dimension(imax+1,jmax+1,*), depend(imax,jmax) :: ut
+            real*8, intent(inout), dimension(imax+1,jmax+1,*), depend(imax,jmax) :: vt
+            real*8, intent(inout), dimension(imax+1,jmax+1,*), depend(imax,jmax) :: wt
+            real*8, intent(inout), dimension(imax+1,jmax+1,*), depend(imax,jmax) :: ox
+            real*8, intent(inout), dimension(imax+1,jmax+1,*), depend(imax,jmax) :: or
+            real*8, intent(inout), dimension(imax+1,jmax+1,*), depend(imax,jmax) :: ot
+            integer, intent(hide), depend(u) :: imax = (shape(u,0)-1)
+            integer, intent(hide), depend(u) :: jmax = (shape(u,1)-1)
+            real*8 dimension(129) :: rt
+            real*8 dimension(129) :: rt1
+            real*8 dimension(129) :: yt
+            real*8 dimension(129) :: yt1
+            real*8 :: hr
+            integer :: jm
+            real*8 :: re
+            real*8 :: hx
+            integer :: im
+            integer :: lx
+            real*8 :: ht
+            integer :: km
+            integer :: lt
+            common /dimr/ rt,rt1,yt,yt1,hr,jm
+            common /re/ re
+            common /dimx/ hx,im,lx
+            common /dimt/ ht,km,lt
+        end subroutine rp
+        subroutine step(t,dt,tol,u,v,w,u1,v1,w1,u2,v2,w2,u3,v3,w3,ox,or,ot,p,q,imax,jmax) ! in :pipeSym:step.for
+            real*8, intent(inout) :: t
+            real*8, intent(inout) :: dt
+            real*8, intent(in) :: tol
+            real*8, intent(inout), dimension(imax+1,jmax+1,*)  :: u
+            real*8, intent(inout), dimension(imax+1,jmax+1,*), depend(imax,jmax) :: v
+            real*8, intent(inout), dimension(imax+1,jmax+1,*), depend(imax,jmax) :: w
+            real*8, intent(inout), dimension(imax+1,jmax+1,*), depend(imax,jmax) :: u1
+            real*8, intent(inout), dimension(imax+1,jmax+1,*), depend(imax,jmax) :: v1
+            real*8, intent(inout), dimension(imax+1,jmax+1,*), depend(imax,jmax) :: w1
+            real*8, intent(inout), dimension(imax+1,jmax+1,*), depend(imax,jmax) :: u2
+            real*8, intent(inout), dimension(imax+1,jmax+1,*), depend(imax,jmax) :: v2
+            real*8, intent(inout), dimension(imax+1,jmax+1,*), depend(imax,jmax) :: w2
+            real*8, intent(inout), dimension(imax+1,jmax+1,*), depend(imax,jmax) :: u3
+            real*8, intent(inout), dimension(imax+1,jmax+1,*), depend(imax,jmax) :: v3
+            real*8, intent(inout), dimension(imax+1,jmax+1,*), depend(imax,jmax) :: w3
+            real*8, intent(inout), dimension(imax+1,jmax+1,*), depend(imax,jmax) :: ox
+            real*8, intent(inout), dimension(imax+1,jmax+1,*), depend(imax,jmax) :: or
+            real*8, intent(inout), dimension(imax+1,jmax+1,*), depend(imax,jmax) :: ot
+            real*8, intent(inout), dimension(imax+1,jmax+1,*), depend(imax,jmax) :: p
+            real*8, intent(inout), dimension(imax+1,jmax+1,*), depend(imax,jmax) :: q
+            integer, intent(hide), depend(u) :: imax=(shape(u,0)-1)
+            integer, intent(hide), depend(u) :: jmax=(shape(u,1)-1)
+            real*8 dimension(129) :: rt
+            real*8 dimension(129) :: rt1
+            real*8 dimension(129) :: yt
+            real*8 dimension(129) :: yt1
+            real*8 :: hr
+            integer :: jm
+            real*8 :: hx
+            integer :: im
+            integer :: lx
+            real*8 :: ht
+            integer :: km
+            integer :: lt
+            real*8 :: cf
+            common /dimr/ rt,rt1,yt,yt1,hr,jm
+            common /dimx/ hx,im,lx
+            common /dimt/ ht,km,lt
+            common /cf/ cf
+        end subroutine step
+    end interface 
+end python module pipeSym
+
+! This file was auto-generated with f2py (version:2).
+! See http://cens.ioc.ee/projects/f2py2e/
