@@ -1,6 +1,6 @@
 *
       subroutine step(t,dt,tol,u,v,w,u1,v1,w1,u2,v2,w2
-     > ,u3,v3,w3,ox,or,ot,p,Imax,Jmax)
+     > ,u3,v3,w3,ox,or,ot,p,cf,Imax,Jmax)
       implicit real*8 (a-h,o-z)
       dimension
      > u(0:Imax,0:Jmax,0:*)
@@ -20,7 +20,6 @@
      >/dimx/hx,Im,lx
      >/dimr/rt(0:128),rt1(0:128),yt(129),yt1(129),hr,Jm
      >/dimt/ht,Km,lt
-     >/cf/cf
 *
       c12=1.d0/2.d0
       c13=1.d0/3.d0
