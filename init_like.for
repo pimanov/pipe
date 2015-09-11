@@ -1,5 +1,5 @@
 *
-      subroutine init(fncp)
+      subroutine init_like(fncp)
       implicit real*8 (a-h,o-z)
       character*24 fncp
       common

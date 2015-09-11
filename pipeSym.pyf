@@ -68,7 +68,7 @@ python module pipeSym ! in
             common /dimt/ ht,Km,lt
             common /Re/ Re
         end subroutine load
-        subroutine init(fncp)
+        subroutine init_like(fncp)
             character*24, intent(in) :: fncp
             real*8 :: Xmax
             real*8 :: epsr
@@ -91,7 +91,7 @@ python module pipeSym ! in
             common /dimr/ rt,rt1,yt,yt1,hr,Jm
             common /dimt/ ht,Km,lt
             common /Re/ Re
-        end subroutine init
+        end subroutine init_like
         subroutine divmax(u,v,w,dd,Imax,Jmax)
             real*8, intent(inout), dimension(Imax+1, Jmax+1, *) :: u
             real*8, intent(inout), dimension(Imax+1, Jmax+1, *), depend(Imax,Jmax) :: v
