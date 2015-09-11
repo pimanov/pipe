@@ -3,7 +3,7 @@
 from numpy.distutils.core import Extension
 
 ext1 = Extension(name = 'pipeSym',
-                 sources = ['pipeSym.pyf', 
+                 sources = ['pipeSym.pyf', 'mean.for',
                             'com.for', 'divmax.for', 'fft8.for', 
                             'init_like.for', 'lin.for', 'load.for', 
                             'pres.for', 'prog3.for', 'rp.for', 
