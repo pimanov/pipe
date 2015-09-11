@@ -1,11 +1,11 @@
 *
-      subroutine load(fncp,u,v,w,t,dt,Dp,Imax,Jmax)
+      subroutine load(fncp,u,v,w,t,dt,Dp,Imax,Jmax,Kmax)
       implicit real*8 (a-h,o-z)
       character*24 fncp
       dimension
-     > u(0:Imax,0:Jmax,0:*)
-     >,v(0:Imax,0:Jmax,0:*)
-     >,w(0:Imax,0:Jmax,0:*)
+     > u(0:Imax,0:Jmax,0:Kmax)
+     >,v(0:Imax,0:Jmax,0:Kmax)
+     >,w(0:Imax,0:Jmax,0:Kmax)
       common
      >/dim/Xmax,epsr,nsym
      >/dimx/hx,Im,lx
@@ -13,15 +13,20 @@
      >/dimt/ht,Km,lt
      >/Re/Re
 *
+      if(Im.ge.Imax)    write(*,*) '(Im.ge.Imax)    '
+      if(Jm.ge.Jmax)    write(*,*) '(Jm.ge.Jmax)    '
+      if(Km.ge.Kmax)    write(*,*) '(Km.ge.Kmax)    '
+*
       open(9,file=fncp,form='unformatted',status='old',err=111)
       read(9)t,dt,Dp,Re,Xmax_,epsr_,lx_,Jm_,lt_,nsym_
 *
-      if(lt.ne.lt_)     stop '(lt.ne.lt_)    '
-      if(Jm.ne.Jm_)     stop '(Jm.ne.Jm_)    '
-      if(lx.ge.lx_)     stop '(lx.ge.lx_)    '
-      if(nsym.gt.nsym_) stop '(nsym.gt.nsym_)'
-      if(Xmax.ge.Xmax_) stop '(Xmax.ge.Xmax_)'
-      if(epsr.gt.epsr_) stop '(epsr.gt.epsr_)'
+      write(*,*)t,dt,Dp,Re,Xmax_,epsr_,lx_,Jm_,lt_,nsym_
+      if(lt.ne.lt_)     write(*,*) '(lt.ne.lt_)    '
+      if(Jm.ne.Jm_)     write(*,*) '(Jm.ne.Jm_)    '
+      if(lx.ne.lx_)     write(*,*) '(lx.ne.lx_)    '
+      if(nsym.ne.nsym_) write(*,*) '(nsym.ne.nsym_)'
+      if(Xmax.ne.Xmax_) write(*,*) '(Xmax.ne.Xmax_)'
+      if(epsr.ne.epsr_) write(*,*) '(epsr.ne.epsr_)'
 *
       do k=1,Km
         do j=1,Jm
@@ -32,6 +37,7 @@
       end do
       close(9)
       return
-111   stop 'file.scp was not found'
+111   write(*,*) 'file.scp was not found'
+      return
       end
 *

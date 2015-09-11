@@ -35,16 +35,17 @@ python module pipeSym ! in
             common /dimt/ ht,Km,lt
             common /Re/ Re
         end subroutine down
-        subroutine load(fncp,u,v,w,t,dt,Dp,Imax,Jmax)
+        subroutine load(fncp,u,v,w,t,dt,Dp,Imax,Jmax,Kmax)
             character*24, intent(in) :: fncp
-            real*8, intent(inout), dimension(Imax+1, Jmax+1, *) :: u
-            real*8, intent(inout), dimension(Imax+1, Jmax+1, *), depend(Imax,Jmax) :: v
-            real*8, intent(inout), dimension(Imax+1, Jmax+1, *), depend(Imax,Jmax) :: w
-            real*8, intent(out,hide) :: t
-            real*8, intent(out,hide) :: dt
-            real*8, intent(out,hide) :: Dp
+            real*8, intent(inout), dimension(Imax+1, Jmax+1, Kmax+1) :: u
+            real*8, intent(inout), dimension(Imax+1, Jmax+1, Kmax+1), depend(Imax,Jmax,Kmax) :: v
+            real*8, intent(inout), dimension(Imax+1, Jmax+1, Kmax+1), depend(Imax,Jmax,Kmax) :: w
+            real*8, intent(out) :: t
+            real*8, intent(out) :: dt
+            real*8, intent(out) :: Dp
             integer, intent(hide), depend(u) :: Imax=(shape(u,0)-1)
             integer, intent(hide), depend(u) :: Jmax=(shape(u,1)-1)
+            integer, intent(hide), depend(u) :: Kmax=(shape(u,2)-1)
             real*8 :: Xmax
             real*8 :: epsr
             integer :: nsym
