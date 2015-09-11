@@ -28,7 +28,7 @@
         end do
       end do
 *
-      dd=0.d0
+      dd=-1.d0
       do k=1,Km
         do j=1,Jm
           do i=1,Im
