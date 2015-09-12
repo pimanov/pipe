@@ -154,7 +154,7 @@ python module pipeSym ! in
             common /dimt/ ht,Km,lt
         end subroutine pres
         subroutine rp(t,u,v,w,ut,vt,wt,ox,or,ot,Imax,Jmax) ! in :pipeSym:rp.for
-            real*8, intent(inout) :: t
+            real*8, intent(in) :: t
             real*8, intent(inout), dimension(Imax+1,Jmax+1,*) :: u
             real*8, intent(inout), dimension(Imax+1,Jmax+1,*), depend(Imax,Jmax) :: v
             real*8, intent(inout), dimension(Imax+1,Jmax+1,*), depend(Imax,Jmax) :: w
@@ -185,8 +185,8 @@ python module pipeSym ! in
             common /dimt/ ht,Km,lt
         end subroutine rp
         subroutine step(t,dt,tol,u,v,w,ut,vt,wt,u2,v2,w2,u3,v3,w3,ox,or,ot,p,cf,Imax,Jmax) ! in :pipeSym:step.for
-            real*8, intent(inout) :: t
-            real*8, intent(inout) :: dt
+            real*8, intent(in,out) :: t
+            real*8, intent(in,out) :: dt
             real*8, intent(in) :: tol
             real*8, intent(inout), dimension(Imax+1,Jmax+1,*)  :: u
             real*8, intent(inout), dimension(Imax+1,Jmax+1,*), depend(Imax,Jmax) :: v
