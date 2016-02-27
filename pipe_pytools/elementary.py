@@ -1,6 +1,5 @@
-import numpy as np
-import com
-
+import numpy as _np
+import grid as _grid
 
 def get_ucl(u):
     return u[1:-1,1,:].mean(0)
@@ -25,16 +24,16 @@ def get_vPois((X,R,Th)):
 
 
 def _get_uPois(lx, Xmax, Jm, epsr, lt, nsym):
-    X = com.X(2**lx, Xmax)
-    R = com.R(Jm, epsr)
-    Th = com.Th(2**lt, nsym)
+    X = _grid.X(2**lx, Xmax)
+    R = _grid.R(Jm, epsr)
+    Th = _grid.Th(2**lt, nsym)
     return get_uPois((X,R,Th))
     
 
 def _get_vPois(lx, Xmax, Jm, epsr, lt, nsym):
-    X = com.X(2**lx, Xmax)
-    R = com.R(Jm, epsr)
-    Th = com.Th(2**lt, nsym)
+    X = _grid.X(2**lx, Xmax)
+    R = _grid.R(Jm, epsr)
+    Th = _grid.Th(2**lt, nsym)
     return get_vPois((X,R,Th))
 
 
@@ -58,17 +57,15 @@ def pipe_mean(u, (X,R,Th)):
 
 
 def _cs_mean(u, Jm, epsr, lt, nsym):
-    R = com.R(Jm, epsr)
-    Th = com.Th(2**lt, nsym)
+    R = _grid.R(Jm, epsr)
+    Th = _grid.Th(2**lt, nsym)
     return cs_mean(u, (R,Th))
 
 
 def _pipe_mean(u, lx, Xmax, Jm, epsr, lt, nsym):
-    X = com.X(2**lx, Xmax)
-    R = com.R(Jm, epsr)
-    Th = com.Th(2**lt, nsym)
+    X = _grid.X(2**lx, Xmax)
+    R = _grid.R(Jm, epsr)
+    Th = _grid.Th(2**lt, nsym)
     return pipe_mean(u, (X,R,Th))
     
 
-del com
-del np

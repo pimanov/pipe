@@ -1,13 +1,13 @@
-import math
-import numpy as np
+import math as _math
+import numpy as _np
 
 class _Rrt:
 
     def __init__(self, y0, y01):
-        yp = lambda a,b: 0.01 * math.sqrt( 0.3*(b+1) ) * (a*(58.*b-21.-21.*b*b)+100.)
+        yp = lambda a,b: 0.01 * _math.sqrt( 0.3*(b+1) ) * (a*(58.*b-21.-21.*b*b)+100.)
         y1p = lambda a,b: 1. + a * ( b - 0.45 * (b+1.)**2 )
-        dyda = lambda a,b: 0.01 * math.sqrt( 0.3*(b+1) ) * ( 58.*b - 21. - 21.*b*b )
-        dydb = lambda a,b: 0.01 * math.sqrt( 0.3*(b+1) ) * ( 0.5 * ( a * (58.*b - 21. - 21.*b*b) + 100. ) / (b+1) + a*(58.-42*b) )
+        dyda = lambda a,b: 0.01 * _math.sqrt( 0.3*(b+1) ) * ( 58.*b - 21. - 21.*b*b )
+        dydb = lambda a,b: 0.01 * _math.sqrt( 0.3*(b+1) ) * ( 0.5 * ( a * (58.*b - 21. - 21.*b*b) + 100. ) / (b+1) + a*(58.-42*b) )
         dy1da = lambda a,b: b - 0.45 * (b+1.)**2
         dy1db = lambda a,b: a * ( 1. - 0.9*(b+1.) )
 
@@ -43,8 +43,8 @@ class X:
     def __init__(self,N,L):
         self.m = N
         self.h = L / self.m
-        self.node = np.array( [ i*self.h for i in range(0, self.m+2) ] )
-        self.face = np.array( [ (i-0.5)*self.h for i in range(0, self.m+2) ] )
+        self.n = _np.array([i*self.h for i in range(0, self.m+2)])
+        self.f = _np.array([(i-0.5)*self.h for i in range(0, self.m+2)])
 
         
         
@@ -53,15 +53,15 @@ class R:
     def __init__(self,N,epsr):
         self.m = N
         h = 1. / self.m
-        rrt = _Rrt( 1.0, epsr )
+        rrt = _Rrt(1.0, epsr)
 
-        ros = np.array( [ j*h for j in range( 0, self.m+2 ) ] )
-        self.node = np.array( [ rrt.i0(ro) for ro in ros ] )
-        self.node1 = np.array( [ rrt.i1(ro)*h for ro in ros ] )
+        ros = [j*h for j in range(0, self.m+2)]
+        self.n = _np.array([rrt.i0(ro) for ro in ros])
+        self.n1 = _np.array([rrt.i1(ro)*h for ro in ros])
 
-        ros = np.array( [ (j-0.5)*h for j in range( 0, self.m+2 ) ] )
-        self.face = np.array( [ rrt.i0(ro) for ro in ros ] )
-        self.face1 = np.array( [ rrt.i1(ro)*h for ro in ros ] )
+        ros = [(j-0.5)*h for j in range(0, self.m+2)]
+        self.f = _np.array([rrt.i0(ro) for ro in ros])
+        self.f1 = _np.array([rrt.i1(ro)*h for ro in ros])
 
         
         
@@ -69,10 +69,8 @@ class Th:
     
     def __init__(self,N,nsym = 0.5):
         self.m = N
-        self.h = math.pi / (nsym * self.m)
-        self.node = np.array( [ k*self.h for k in range(0, self.m+2) ] )
-        self.face = np.array( [ (k-0.5)*self.h for k in range(0, self.m+2) ] )
+        self.h = _math.pi / (nsym * self.m)
+        self.n = _np.array([k*self.h for k in range(0, self.m+2)])
+        self.f = _np.array([(k-0.5)*self.h for k in range(0, self.m+2)])
 
 
-del math
-del np

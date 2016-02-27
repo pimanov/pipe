@@ -1,9 +1,9 @@
-import numpy as np
+import numpy as _np
 import forio as _io
 
 
 def _read_vfield(f, Im, Jm, Km):
-    vel = np.zeros((3, Km+2, Jm+2, Im+2), order='C')
+    vel = _np.zeros((3, Km+2, Jm+2, Im+2), order='C')
     
     for k in range(1,Km+1):
         for j in range(1,Jm+1):
@@ -66,4 +66,3 @@ def put_car(cf, dtmax, tmax, kwrt=10000, kprt=10, tol=1.e-2, cpfn="tmp.cp", datf
     f.close()
     return
 
-del np
