@@ -38,7 +38,7 @@ class _Rrt:
 
     
     
-class xgrid:
+class X:
     
     def __init__(self,N,L):
         self.m = N
@@ -48,7 +48,7 @@ class xgrid:
 
         
         
-class rgrid:
+class R:
     
     def __init__(self,N,epsr):
         self.m = N
@@ -65,7 +65,7 @@ class rgrid:
 
         
         
-class thgrid:
+class Th:
     
     def __init__(self,N,nsym = 0.5):
         self.m = N
@@ -73,3 +73,6 @@ class thgrid:
         self.node = np.array( [ k*self.h for k in range(0, self.m+2) ] )
         self.face = np.array( [ (k-0.5)*self.h for k in range(0, self.m+2) ] )
 
+
+del math
+del np

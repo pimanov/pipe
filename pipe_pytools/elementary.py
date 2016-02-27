@@ -2,6 +2,10 @@ import numpy as np
 import com
 
 
+def get_ucl(u):
+    return u[1:-1,1,:].mean(0)
+
+
 def get_uPois((X,R,Th)):
     u = np.zeros((Th.m+2, R.m+2, X.m+2), order='C')
     for k in xrange(1, Th.m+1):
@@ -21,16 +25,16 @@ def get_vPois((X,R,Th)):
 
 
 def _get_uPois(lx, Xmax, Jm, epsr, lt, nsym):
-    X = com.xgrid(2**lx, Xmax)
-    R = com.rgrid(Jm, epsr)
-    Th = com.symthgrid(2**lt, nsym)
+    X = com.X(2**lx, Xmax)
+    R = com.R(Jm, epsr)
+    Th = com.Th(2**lt, nsym)
     return get_uPois((X,R,Th))
     
 
 def _get_vPois(lx, Xmax, Jm, epsr, lt, nsym):
-    X = com.xgrid(2**lx, Xmax)
-    R = com.rgrid(Jm, epsr)
-    Th = com.symthgrid(2**lt, nsym)
+    X = com.X(2**lx, Xmax)
+    R = com.R(Jm, epsr)
+    Th = com.Th(2**lt, nsym)
     return get_vPois((X,R,Th))
 
 
@@ -54,16 +58,17 @@ def pipe_mean(u, (X,R,Th)):
 
 
 def _cs_mean(u, Jm, epsr, lt, nsym):
-    R = com.rgrid(Jm, epsr)
-    Th = com.symthgrid(2**lt, nsym)
+    R = com.R(Jm, epsr)
+    Th = com.Th(2**lt, nsym)
     return cs_mean(u, (R,Th))
 
 
 def _pipe_mean(u, lx, Xmax, Jm, epsr, lt, nsym):
-    X = com.xgrid(2**lx, Xmax)
-    R = com.rgrid(Jm, epsr)
-    Th = com.symthgrid(2**lt, nsym)
+    X = com.X(2**lx, Xmax)
+    R = com.R(Jm, epsr)
+    Th = com.Th(2**lt, nsym)
     return pipe_mean(u, (X,R,Th))
     
 
-
+del com
+del np

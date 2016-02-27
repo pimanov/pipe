@@ -1,10 +1,10 @@
 import struct
-import numpy as np
 
 
 _dtsize = {'i': 4, 'd': 8}
 def _read(f, dtype): return struct.unpack(dtype, f.read(dtsize[dtype]))[0]
 def _write(f, dtype, value): f.write(struct.pack(dtype, value))
+del struct
 
 
 def read_list(f, fmt):

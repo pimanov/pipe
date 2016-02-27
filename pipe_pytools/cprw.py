@@ -65,3 +65,5 @@ def put_car(cf, dtmax, tmax, kwrt=10000, kprt=10, tol=1.e-2, cpfn="tmp.cp", datf
     f.write("%s\n" % datfn)
     f.close()
     return
+
+del np
