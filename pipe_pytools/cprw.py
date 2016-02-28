@@ -32,6 +32,7 @@ def get_scp(fname):
     f.close()
     return (t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,nsym), vel
 
+
 def get_cp(fname):
     f = open(fn, "rb")
     t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt = _io.read_list(f, "ddddddiii")
@@ -44,7 +45,8 @@ def put_scp(fn, t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,nsym, vel):
     f = open(fn,"wb")
     _io.write_list(f, "ddddddiiii", (t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,nsym))
     _write_vfield(f, vel)
-    f.close()    
+    f.close()
+
 
 def put_cp(fn, t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt, vel):
     f = open(fn,"wb")

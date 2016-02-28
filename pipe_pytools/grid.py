@@ -41,8 +41,9 @@ class _Rrt:
 class X:
     
     def __init__(self,N,L):
+        self.L = L
         self.m = N
-        self.h = L / self.m
+        self.h = self.L / self.m
         self.n = _np.array([i*self.h for i in range(0, self.m+2)])
         self.f = _np.array([(i-0.5)*self.h for i in range(0, self.m+2)])
 
@@ -51,9 +52,10 @@ class X:
 class R:
     
     def __init__(self,N,epsr):
+        self.eps = epsr
         self.m = N
         h = 1. / self.m
-        rrt = _Rrt(1.0, epsr)
+        rrt = _Rrt(1.0, self.eps)
 
         ros = [j*h for j in range(0, self.m+2)]
         self.n = _np.array([rrt.i0(ro) for ro in ros])
@@ -67,7 +69,8 @@ class R:
         
 class Th:
     
-    def __init__(self,N,nsym = 0.5):
+    def __init__(self, N, nsym=0.5):
+        self.nsym = nsym
         self.m = N
         self.h = _math.pi / (nsym * self.m)
         self.n = _np.array([k*self.h for k in range(0, self.m+2)])
