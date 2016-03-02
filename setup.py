@@ -1,4 +1,4 @@
-# python setup.py install
+#!/usr/bin/env python2 
 
 from numpy.distutils.core import Extension
 
