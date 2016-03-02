@@ -26,9 +26,9 @@ def _write_vfield(f, vel):
 
 
 def get_scp(fname):
-    f = open(fn, "rb")
+    f = open(fname, "rb")
     t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,nsym = _io.read_list(f, "ddddddiiii")
-    _read_vfield(f, 2**lx, Jm, 2**lt)
+    vel = _read_vfield(f, 2**lx, Jm, 2**lt)
     f.close()
     return (t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,nsym), vel
 
@@ -61,7 +61,7 @@ def put_car(cf, dtmax, tmax, kwrt=10000, kprt=10, tol=1.e-2, cpfn="tmp.cp", datf
     f.write("%i         -kprt\n" % kprt)
     f.write("%i         -kwrt\n" % kwrt)
     f.write("%22.15f    -tmax\n" % tmax)
-    f.write("%18.15f    -dtmax\n" % dt)
+    f.write("%18.15f    -dtmax\n" % dtmax)
     f.write("%18.15f    -cf\n" % cf)
     f.write("%s\n" % cpfn)
     f.write("%s\n" % datfn)

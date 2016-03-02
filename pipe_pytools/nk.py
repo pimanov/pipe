@@ -25,7 +25,7 @@ def get_scp(fname, cf):
     return vel
 	
 def dot(v1, v2):
-    if (v1[0,0,0,3:9] != v2[0,0,0,3:9]): return 0.0/0.0
+    if (v1[0,0,0,3:9] != v2[0,0,0,3:9]).any(): return 0.0/0.0
     Xmax,epsr,lx,Jm,lt,nsym = v1[0,0,0,3:9]
     return _el._pipe_mean((v1*v2).sum(0), Xmax,epsr,lx,Jm,lt,nsym)
 
