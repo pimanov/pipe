@@ -6,7 +6,7 @@ def get_ucl(u):
 
 
 def get_uPois((X,R,Th)):
-    u = np.zeros((Th.m+2, R.m+2, X.m+2), order='C')
+    u = _np.zeros((Th.m+2, R.m+2, X.m+2), order='C')
     for k in xrange(1, Th.m+1):
         for j in xrange(1, R.m+1):
             for i in xrange(1, X.m+1):
@@ -15,7 +15,7 @@ def get_uPois((X,R,Th)):
 
 
 def get_vPois((X,R,Th)):
-    vel = np.zeros((3, Th.m+2, R.m+2, X.m+2), order='C')
+    vel = _np.zeros((3, Th.m+2, R.m+2, X.m+2), order='C')
     for k in xrange(1, Th.m+1):
         for j in xrange(1, R.m+1):
             for i in xrange(1, X.m+1):
