@@ -1,7 +1,7 @@
 !    -*- f90 -*-
 ! Note: the context of this file is case sensitive.
 
-python module pipeSym ! in 
+python module pipeSym_wrapper ! in 
     interface  ! in :pipeSym
         subroutine down(fncp,u,v,w,t,dt,Dp,Imax,Jmax)
             character*24, intent(in) :: fncp
@@ -123,11 +123,15 @@ python module pipeSym ! in
             integer :: Km
             integer :: lt
             real*8 :: Re
+            real*8 dimension(2048) :: rlx
+            real*8 dimension(256) :: rlt
             common /dim/ Xmax,epsr,nsym
             common /dimx/ hx,Im,lx
             common /dimr/ rt,rt1,yt,yt1,hr,Jm
             common /dimt/ ht,Km,lt
             common /Re/ Re
+            common /rlx/ rlx
+            common /rlt/ rlt
         end subroutine com
         subroutine pres(u,v,w,p,ub,Imax,Jmax) ! in :pipeSym:pres.for
             real*8, intent(inout), dimension(Imax+1, Jmax+1, *) :: u
@@ -149,9 +153,13 @@ python module pipeSym ! in
             real*8 :: ht
             integer :: Km
             integer :: lt
+            real*8 dimension(2048) :: rlx
+            real*8 dimension(256) :: rlt
             common /dimx/ hx,Im,lx
             common /dimr/ rt,rt1,yt,yt1,hr,Jm
             common /dimt/ ht,Km,lt
+            common /rlx/ rlx
+            common /rlt/ rlt
         end subroutine pres
         subroutine rp(t,u,v,w,ut,vt,wt,ox,or,ot,Imax,Jmax) ! in :pipeSym:rp.for
             real*8, intent(in) :: t
