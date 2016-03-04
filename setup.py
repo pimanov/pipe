@@ -19,5 +19,14 @@ if __name__ == "__main__":
           author_email      = "pimanov-vladimir@yandex.ru",
           ext_modules = [ext1]
          )
-# End of setup.py
+     
+    setup(name='pipeSym',
+        version='0.1',
+        description='suiteble wrappers for pipeSym_wrapper',
+        author='Vladimir Pimanov',
+        author_email='pimanov-vladimir@yandex.ru',
+        url='https://github.com/pimanov/pipe',
+        py_modules = ['pipeSym']
+    )
 
+# End of setup.py
