@@ -8,6 +8,12 @@ import numpy as _np
 import math as _math
 
 
+def look():
+    print "Xmax=%f, epsr=%f, nsym=%d" % (wr.dim.Xmax, wr.dim.epsr, wr.dim.nsym)
+    print "Im=%d, Jm=%d, Km=%d", (wr.dimx.Im, wr.dimr.Jm, wr.dimt.Km)
+    print "hx=%f, ht=%f, real_nsym" % (wr.dimx.hx, wr.dimt.ht, wr.dimt.Km * wr.dimt.ht)
+    print "Re=%f" % (wr.Re.Re)
+
 # In[13]:
 
 def new_z_vfield(Im = None, Jm = None, Km = None):
