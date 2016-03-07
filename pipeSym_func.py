@@ -171,15 +171,23 @@ def calc(vel, dtmax, cf=0.0, Re=None, velt=None, om=None, p=None, maxnstep=None,
                 print "Planned break! tmax reached"
                 break
     
-        time, dt1, vel, velt, om, p = step(time, dt, vel, velt, om, p, cf, tol)
+        time1, dt1, vel, velt, om, p = step(time, dt, vel, velt, om, p, cf, tol)
         
         if(const_dt_chec == True):
-            if(dt1 != dt): 
-                print "###Forced break! dt has changed"
+            if(dt != dtmax):
+                print "###Forced break! dt != dtmax"
                 break
-        else: 
+
+            if(time1 != time + dt): 
+                print "###Forced break! dt has changed in step()"
+                break
+
+            time = time1
+
+        else:
             dt = min(dt1, dtmax)
-        
+            time = time1
+
         if(prt != None): 
             amp = prt(time, dt, vel, velt, om, p, cf)
             
