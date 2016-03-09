@@ -189,7 +189,7 @@ def calc(vel, dtmax, cf=0.0, Re=None, velt=None, om=None, p=None, maxnstep=None,
             time = time1
 
         if(prt != None): 
-            amp = prt(time, dt, vel, velt, om, p, cf)
+            amp = prt(nstep, time, dt, vel, velt, om, p, cf)
             
             if(ampmax != None): 
                 break_cond_chec = True
