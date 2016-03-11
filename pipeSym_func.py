@@ -145,6 +145,10 @@ def pres(vel, p, ub):
 
 def calc(vel, dtmax, cf=0.0, Re=None, velt=None, om=None, p=None, maxnstep=None, tmax=None, ht=None, hx=None, 
          tol=0.01, time=0.0, dt=None, prt=None, ampmax=None, ampmin=None, const_dt_chec=False):    
+    """
+    amp = prt(nstep, time, dt, vel, velt, om, p, cf)
+    return time, dt, vel, velt, om, p
+    """
         
     if(hx != None): update_hx(hx)
     if(ht != None): update_ht(ht)
