@@ -1,5 +1,6 @@
 import numpy as np
 import tools
+import os
 
     
 def chec_lam(vel, turb_vel):
@@ -21,14 +22,14 @@ def check_scp_lam_tend(sname, vel, al):
         tools.put_scp("tmp.scp",time,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,nsym, al_vel)
         tools.put_car(tmax, dt, cf, "tmp.scp")
         
-        !rm -f a0.dat
-        ! mpirun -np 4 ./pipe.out
+        _ = os.execv('rm', ['-f', 'a0.dat'])
+        _ = os.execv('mpirun', ['-np', '4', './pipe.out'])
         
         time,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,nsym,vel_al = tools.get_scp("tmp.scp")
         tend = chec_lam(vel_al, vel)
         
     a_name = sname + "_prt/a%s.dat" % str(n).zfill(3)
-    !mv a0.dat $a_name
+    os.execv('mv', ['a0.dat', a_name])
     
     return 0 if tend == -1 else 1
     

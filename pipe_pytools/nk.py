@@ -57,11 +57,6 @@ class grid:
 	      return grid.calc(vel, 200) - vel
 	      
 	      
-class ...:
-    self.F(x)
-    self.norm(x)
-    self.dot(x,y)
-    
 class NewtonKrylow:
     """
     
