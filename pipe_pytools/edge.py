@@ -35,7 +35,7 @@ def check_scp_lam_tend(sname, vel, al):
     
     
 def init(sname, n=0, al=1.0, dal=1.0, lam_tend=0):
-    f = open(sname,"a")
+    f = open(sname+".txt","a")
     f.write("%3d %25.22f %25.22f %d\n" % (n,al,dal,lam_tend))
     f.close()
     
