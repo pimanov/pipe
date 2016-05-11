@@ -42,7 +42,7 @@ def init(sname, n=0, al=1.0, dal=1.0, lam_tend=0):
     
 def step(sname, vel, check_lam_tend):
         
-    n, al, dal, lam_tend = np.loadtxt(sname+".txt", usecols=range(4), unpuck=False)[-1]
+    n, al, dal, lam_tend = np.loadtxt(sname+".txt", usecols=range(4), unpack=False)[-1]
     print sname+".txt[-1]:", n, al, dal, lam_tend
     
     n += 1
