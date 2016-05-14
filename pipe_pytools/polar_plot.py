@@ -6,7 +6,7 @@ import math
 import com
 
 
-def polar_contourf(r, th, u, amp, cmap_param="jet"):
+def polar_contourf(r, th, u, amp, cmap="jet"):
     (umin, umax) =amp
     
     radius = r
@@ -19,7 +19,7 @@ def polar_contourf(r, th, u, amp, cmap_param="jet"):
     z = u.flatten()
     
     levels = MaxNLocator(nbins=16).tick_values(umin, umax)
-    scmap = plt.get_cmap(cmap_param)
+    scmap = plt.get_cmap(cmap)
 
     plt.gca().set_aspect('equal')
     plt.tricontourf( triang, z, levels = levels, cmap = scmap)
@@ -32,7 +32,7 @@ def polar_contourf(r, th, u, amp, cmap_param="jet"):
     return
     
     
-def polar_contour(r, th, u, amp, ampmax=None, nlines=1, line_param='-k'):
+def polar_contour(r, th, u, amp, ampmax=None, nlines=1, line_param='k'):
 
     if type(ampmax) == type(None): 
         ampmax = amp
