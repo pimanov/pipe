@@ -112,11 +112,13 @@ def put_scp_header(f,t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,nsym):
     f.write(struct.pack("i",m))
     return
 
-def put_scp(fn,t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,nsym,vel):
+def put_scp(fn,t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,nsym,vel,comm="comment"):
     
     with open(fn,"wb") as f:
         put_scp_header(f,t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,nsym)
         put_vfield(f,vel)
+        f.write(comm)
+        f.close()
     
     return
 
@@ -134,11 +136,13 @@ def put_bcp_header(f,cf,Xmax,epsr,lx,Jm,lt,nsym):
     f.write(struct.pack("i",m))
     return
 
-def put_bcp(fn,cf,Xmax,epsr,lx,Jm,lt,nsym,vel):
+def put_bcp(fn,cf,Xmax,epsr,lx,Jm,lt,nsym,vel,comm="comment"):
     
     with open(fn,"wb") as f:
         put_bcp_header(f,cf,Xmax,epsr,lx,Jm,lt,nsym)
         put_vfield(f,vel)
+        f.write(comm)
+        f.close()
     
     return
 
