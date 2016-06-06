@@ -64,6 +64,17 @@ def get_cp(fn):
     return t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,vel
 
 
+def get_bcp(fn):
+    i = _get_i
+    d = _get_d
+
+    with open(fn, "rb") as f:
+        _,cf,Xmax,epsr,lx,Jm,lt,nsym,_ = i(f),d(f),d(f),d(f),i(f),i(f),i(f),i(f),i(f)
+        vel = get_vfield(f, 2**lx, Jm, 2**lt)
+
+    return cf,Xmax,epsr,lx,Jm,lt,nsym,vel
+
+
 def put_line(f,line):
     n = line.shape[0]
     f.write(struct.pack("i",n*8))
@@ -109,6 +120,27 @@ def put_scp(fn,t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,nsym,vel):
     
     return
 
+
+def put_bcp_header(f,cf,Xmax,epsr,lx,Jm,lt,nsym):
+    m = 4*4+3*8
+    f.write(struct.pack("i",m))
+    f.write(struct.pack("d",cf))
+    f.write(struct.pack("d",Xmax))
+    f.write(struct.pack("d",epsr))
+    f.write(struct.pack("i",lx))
+    f.write(struct.pack("i",Jm))
+    f.write(struct.pack("i",lt))
+    f.write(struct.pack("i",nsym))
+    f.write(struct.pack("i",m))
+    return
+
+def put_bcp(fn,cf,Xmax,epsr,lx,Jm,lt,nsym,vel):
+    
+    with open(fn,"wb") as f:
+        put_bcp_header(f,cf,Xmax,epsr,lx,Jm,lt,nsym)
+        put_vfield(f,vel)
+    
+    return
 
 
 def put_dcp_header(f,t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,nsym):
@@ -160,19 +192,33 @@ def put_cp(fn,t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,vel):
     return
 
 
-
-def put_car(tmax,dt,cf,cpfn):
+def put_car(tmax, dtmax, cf, cpfn, tol=0.01, kprt=10, kwrt=100000, prtfn="a0.dat"):
     f = open("pipe.car","w")
-    f.write("1.e-2         -tol\n")
-    f.write("10         -kprt\n")
-    f.write("10000         -kwrt\n")
-    f.write("%22.15f         -tmax\n" % tmax)
-    f.write("%18.15f         -dtmax\n" % dt)
-    f.write("%18.15f         -cf\n" % cf)
+    f.write("%f - tol\n" % tol)
+    f.write("%d - kprt\n" % kprt)
+    f.write("%d - kwrt\n" % kwrt)
+    f.write("%22.15f - tmax\n" % tmax)
+    f.write("%18.15f - dtmax\n" % dtmax)
+    f.write("%18.15f - cf\n" % cf)
     f.write("%s\n" % cpfn)
-    f.write("a0.dat")
+    f.write("%s" % prtfn)
     f.close()
     return
 
+
+
+
+def put_bcar(tmax, dt, bcpfn, cpfn, tol=0.01, kprt=10, kwrt=100000, prtfn="a0.dat"):
+    f = open("pipe.car","w")
+    f.write("%f - tol\n" % tol)
+    f.write("%d - kprt\n" % kprt)
+    f.write("%d - kwrt\n" % kwrt)
+    f.write("%22.15f - tmax\n" % tmax)
+    f.write("%18.15f - dtmax\n" % dtmax)
+    f.write("%s\n" % bcpfn)
+    f.write("%s\n" % cpfn)
+    f.write("%s" % prtfn)
+    f.close()
+    return
 
 
