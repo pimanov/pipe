@@ -8,7 +8,7 @@
      >,ap(256),bp(256),cp(256),dp(256),ep(256)
       common
      >/dimx/hx,Im,lx
-     >/dimr/rt(0:128),rt1(0:128),yt(0:129),yt1(0:129),hr,Jm
+     >/dimr/rt(0:129),rt1(0:129),yt(0:129),yt1(0:129),hr,Jm
      >/dimt/ht,Km,lt
      >/pry/apy(128),bpy(128),cpy(128)
      >/prv/apv(128),bpv(128),cpv(128)

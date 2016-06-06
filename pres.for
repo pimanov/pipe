@@ -11,7 +11,7 @@
      >,bp(2048),dp(2048),ep(2048)
       common
      >/dimx/hx,Im,lx
-     >/dimr/rt(0:128),rt1(0:128),yt(0:129),yt1(0:129),hr,Jm
+     >/dimr/rt(0:129),rt1(0:129),yt(0:129),yt1(0:129),hr,Jm
      >/dimt/ht,Km,lt
      >/rlx/rlx(2048)
      >/rlt/rlt(256)
@@ -171,7 +171,7 @@
      >,p(0:Imax,0:Jmax,0:*)
       common
      >/dimx/hx,Im,lx
-     >/dimr/rt(0:128),rt1(0:128),yt(0:129),yt1(0:129),hr,Jm
+     >/dimr/rt(0:129),rt1(0:129),yt(0:129),yt1(0:129),hr,Jm
      >/dimt/ht,Km,lt
       Dp=p(0,0,0)
       do k=1,Km
@@ -208,7 +208,7 @@
      >,w(0:Imax,0:Jmax,0:*)
       common
      >/dimx/hx,Im,lx
-     >/dimr/rt(0:128),rt1(0:128),yt(0:129),yt1(0:129),hr,Jm
+     >/dimr/rt(0:129),rt1(0:129),yt(0:129),yt1(0:129),hr,Jm
      >/dimt/ht,Km,lt
       d=(u(i,j,k)-u(i-1,j,k))/hx
      > +(rt(j)*v(i,j,k)-rt(j-1)*v(i,j-1,k))/(yt(j)*yt1(j))

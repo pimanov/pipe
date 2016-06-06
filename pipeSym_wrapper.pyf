@@ -19,10 +19,10 @@ python module pipeSym_wrapper ! in
             real*8 :: hx
             integer :: Im
             integer :: lx
-            real*8 dimension(129) :: rt
-            real*8 dimension(129) :: rt1
-            real*8 dimension(129) :: yt
-            real*8 dimension(129) :: yt1
+            real*8 dimension(130) :: rt
+            real*8 dimension(130) :: rt1
+            real*8 dimension(130) :: yt
+            real*8 dimension(130) :: yt1
             real*8 :: hr
             integer :: Jm
             real*8 :: ht
@@ -52,10 +52,10 @@ python module pipeSym_wrapper ! in
             real*8 :: hx
             integer :: Im
             integer :: lx
-            real*8 dimension(129) :: rt
-            real*8 dimension(129) :: rt1
-            real*8 dimension(129) :: yt
-            real*8 dimension(129) :: yt1
+            real*8 dimension(130) :: rt
+            real*8 dimension(130) :: rt1
+            real*8 dimension(130) :: yt
+            real*8 dimension(130) :: yt1
             real*8 :: hr
             integer :: Jm
             real*8 :: ht
@@ -76,10 +76,10 @@ python module pipeSym_wrapper ! in
             real*8 :: hx
             integer :: Im
             integer :: lx
-            real*8 dimension(129) :: rt
-            real*8 dimension(129) :: rt1
-            real*8 dimension(129) :: yt
-            real*8 dimension(129) :: yt1
+            real*8 dimension(130) :: rt
+            real*8 dimension(130) :: rt1
+            real*8 dimension(130) :: yt
+            real*8 dimension(130) :: yt1
             real*8 :: hr
             integer :: Jm
             real*8 :: ht
@@ -113,10 +113,10 @@ python module pipeSym_wrapper ! in
             real*8 :: hx
             integer :: Im
             integer :: lx
-            real*8 dimension(129) :: rt
-            real*8 dimension(129) :: rt1
-            real*8 dimension(129) :: yt
-            real*8 dimension(129) :: yt1
+            real*8 dimension(130) :: rt
+            real*8 dimension(130) :: rt1
+            real*8 dimension(130) :: yt
+            real*8 dimension(130) :: yt1
             real*8 :: hr
             integer :: Jm
             real*8 :: ht
@@ -144,10 +144,10 @@ python module pipeSym_wrapper ! in
             real*8 :: hx
             integer :: Im
             integer :: lx
-            real*8 dimension(129) :: rt
-            real*8 dimension(129) :: rt1
-            real*8 dimension(129) :: yt
-            real*8 dimension(129) :: yt1
+            real*8 dimension(130) :: rt
+            real*8 dimension(130) :: rt1
+            real*8 dimension(130) :: yt
+            real*8 dimension(130) :: yt1
             real*8 :: hr
             integer :: Jm
             real*8 :: ht
@@ -174,10 +174,10 @@ python module pipeSym_wrapper ! in
             real*8, intent(inout), dimension(Imax+1,Jmax+1,*), depend(Imax,Jmax) :: ot
             integer, intent(hide), depend(u) :: Imax = (shape(u,0)-1)
             integer, intent(hide), depend(u) :: Jmax = (shape(u,1)-1)
-            real*8 dimension(129) :: rt
-            real*8 dimension(129) :: rt1
-            real*8 dimension(129) :: yt
-            real*8 dimension(129) :: yt1
+            real*8 dimension(130) :: rt
+            real*8 dimension(130) :: rt1
+            real*8 dimension(130) :: yt
+            real*8 dimension(130) :: yt1
             real*8 :: hr
             integer :: Jm
             real*8 :: Re
@@ -215,10 +215,10 @@ python module pipeSym_wrapper ! in
             real*8, intent(in) :: cf
             integer, intent(hide), depend(u) :: Imax=(shape(u,0)-1)
             integer, intent(hide), depend(u) :: Jmax=(shape(u,1)-1)
-            real*8 dimension(129) :: rt
-            real*8 dimension(129) :: rt1
-            real*8 dimension(129) :: yt
-            real*8 dimension(129) :: yt1
+            real*8 dimension(130) :: rt
+            real*8 dimension(130) :: rt1
+            real*8 dimension(130) :: yt
+            real*8 dimension(130) :: yt1
             real*8 :: hr
             integer :: Jm
             real*8 :: hx

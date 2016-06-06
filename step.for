@@ -18,7 +18,7 @@
      >,p(0:Imax,0:Jmax,0:*)
       common
      >/dimx/hx,Im,lx
-     >/dimr/rt(0:128),rt1(0:128),yt(0:129),yt1(0:129),hr,Jm
+     >/dimr/rt(0:129),rt1(0:129),yt(0:129),yt1(0:129),hr,Jm
      >/dimt/ht,Km,lt
 *
       c12=1.d0/2.d0
