@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 import matplotlib.tri as tri
 import numpy as np
 import math
-import com
 
 
 def polar_contourf(r, th, u, amp, cmap="jet"):
