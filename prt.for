@@ -2,6 +2,7 @@
       subroutine prt(t,dt,u,v,w,p,Imax,Jmax)
       implicit real*8 (a-h,o-z)
       include 'mpif.h'
+      real*8 nsym
       dimension
      > u(0:Imax,0:Jmax,0:*)
      >,v(0:Imax,0:Jmax,0:*)

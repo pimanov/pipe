@@ -2,6 +2,7 @@
       subroutine com
       implicit real*8 (a-h,o-z)
       include 'mpif.h'
+      real*8 nsym
       common
      >/dim/Xmax,epsr,nsym
      >/dimx/hx,Im,Imm,lx

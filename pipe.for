@@ -4,6 +4,7 @@
       include 'mpif.h'
       parameter (Imax=513, Jmax=129, Kmax=129)
       character*12 fncp,fndat
+      real*8 nsym
       dimension
      > u(0:Imax,0:Jmax,0:Kmax)
      >,v(0:Imax,0:Jmax,0:Kmax)
@@ -71,7 +72,7 @@
       call MPI_BCAST(lx,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(Jm,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(lt,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
-      call MPI_BCAST(nsym,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
+      call MPI_BCAST(nsym,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
 *
       call com
       if(Np.eq.0) then      
@@ -82,7 +83,7 @@
 200   format('    t=',1pe10.3,' dt=',e9.2,' Dp=',e9.2,/,
      >'    Re=',e9.2,/,
      >'    Xmax=',e9.2,/,
-     >'    epsr=',e9.2,' Im=',i4,' Jm=',i4,' Km=',i4,' Nsym=',i3)
+     >'    epsr=',e9.2,' Im=',i4,' Jm=',i4,' Km=',i4,' Nsym=',e9.2)
 *
       if(Im.gt.Imax-1.or.Im*Npm.gt.2048) then
         write(*,*)'  Im=',Im,'  is greater than   Imax-1=',Imax-1
