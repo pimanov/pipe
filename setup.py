@@ -5,9 +5,9 @@ from numpy.distutils.core import Extension
 ext1 = Extension(name = 'pipeSym_wrapper',
                  sources = ['pipeSym_wrapper.pyf', 'mean.for',
                             'com.for', 'divmax.for', 'fft8.for', 
-                            'init_like.for', 'lin.for', 'load.for', 
+                            'init_like.for', 'lin.for', 'read.for', 
                             'pres.for', 'prog3.for', 'rp.for', 
-                            'rrt8.for', 'down.for', 'step.for'
+                            'rrt8.for', 'write.for', 'step.for'
                            ]
                 )
 

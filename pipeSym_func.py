@@ -4,14 +4,14 @@
 # In[2]:
 
 import pipeSym_wrapper as wr
-import numpy as _np
-import math as _math
+import numpy as np
+import math
 
 
 def look():
-    print "Xmax=%f, epsr=%f, nsym=%d" % (wr.dim.Xmax, wr.dim.epsr, wr.dim.nsym)
+    print "Xmax=%f, epsr=%f, dsym=%f" % (wr.dim.Xmax, wr.dim.epsr, wr.dim.dsym)
     print "Im=%d, Jm=%d, Km=%d" % (wr.dimx.Im, wr.dimr.Jm, wr.dimt.Km)
-    print "hx=%f, ht=%f, real_nsym=%f" % (wr.dimx.hx, wr.dimt.ht, _math.pi / (wr.dimt.Km * wr.dimt.ht))
+    print "hx=%f, ht=%f" % (wr.dimx.hx, wr.dimt.ht)
     print "Re=%f" % (wr.Re.Re)
 
 # In[13]:
@@ -20,7 +20,7 @@ def new_z_vfield(Im = None, Jm = None, Km = None):
     if(Im == None): Im = wr.dimx.Im
     if(Jm == None): Jm = wr.dimr.Jm
     if(Km == None): Km = wr.dimt.Km
-    return _np.zeros((3,Km+2, Jm+2, Im+2), order='C')
+    return np.zeros((3,Km+2, Jm+2, Im+2), order='C')
 
 
 # In[12]:
@@ -29,7 +29,7 @@ def new_z_pfield(Im = None, Jm = None, Km = None):
     if(Im == None): Im = wr.dimx.Im
     if(Jm == None): Jm = wr.dimr.Jm
     if(Km == None): Km = wr.dimt.Km
-    return _np.zeros((Km+2, Jm+2, Im+2), order='C')
+    return np.zeros((Km+2, Jm+2, Im+2), order='C')
 
 
 # In[4]:
@@ -37,9 +37,10 @@ def new_z_pfield(Im = None, Jm = None, Km = None):
 def update_ht(ht):
     wr.dimt.ht = ht
     Km = wr.dimt.Km
+    wr.dim.dsym = math.pi / (ht*Km)
         
     for k in range(0,Km):
-        wr.rlt.rlt[k] = (2.0 / ht * _math.sin(0.5 * k * _math.pi / Km))**2
+        wr.rlt.rlt[k] = (2.0 / ht * math.sin(0.5 * k * math.pi / Km))**2
 
 
 # In[6]:
@@ -50,7 +51,7 @@ def update_hx(hx):
     wr.dim.Xmax = wr.dimx.hx * Im
 
     for i in xrange(0, Im/2 +1):
-        wr.rlx.rlx[i] = (2.0 / hx * _math.sin(i * _math.pi / Im))**2
+        wr.rlx.rlx[i] = (2.0 / hx * math.sin(i * math.pi / Im))**2
 
     for i in range(1, Im/2):
         i1 = Im - i
@@ -72,20 +73,13 @@ def ffmean(u):
 
 # In[18]:
 
-def init(Xmax=None, epsr=None, nsym=None, lx=None, Jm=None, lt=None, Im=None, Km=None, 
+def init(Xmax=None, epsr=None, dsym=None, lx=None, Jm=None, lt=None, Im=None, Km=None, 
          vel=None, hx=None, ht=None, Re=None):
     
     if(Re != None): wr.Re.Re = Re
     if(Xmax != None): wr.dim.Xmax = Xmax
     if(epsr != None): wr.dim.epsr = epsr
-        
-    if(nsym != None):
-        if(nsym % 1.0 == 0.0):
-            wr.dim.nsym = nsym
-            calc_ht = False
-        else:
-            wr.dim.nsym = 2.0
-            calc_ht = True
+    if(dsym != None): wr.dim.dsym = dsym
         
     if(vel != None): 
         Im = vel.shape[1] - 2
@@ -93,13 +87,13 @@ def init(Xmax=None, epsr=None, nsym=None, lx=None, Jm=None, lt=None, Im=None, Km
         Km = vel.shape[3] - 2
         
     if(Im != None): 
-        lx = _math.log(Im,2)
+        lx = int(round(math.log(Im,2)))
         if(2**lx != Im):
             print "###Error! Im != 2**n"
             return
             
     if(Km != None): 
-        lt = _math.log(Km,2)
+        lt = int(round(math.log(Km,2)))
         if(2**lt != Km):
             print "###Error! Km != 2**n"
             return
@@ -109,9 +103,7 @@ def init(Xmax=None, epsr=None, nsym=None, lx=None, Jm=None, lt=None, Im=None, Km
     if(lt != None): wr.dimt.lt = lt
         
     wr.com()
-    
-    if(calc_ht == True): ht = _math.pi / (nsym * wr.dimt.Km)
-    
+        
     if(ht != None): update_ht(ht)
     if(hx != None): update_hx(hx)
         
@@ -224,24 +216,35 @@ def calc(vel, dtmax, cf=0.0, Re=None, velt=None, om=None, p=None, maxnstep=None,
 
 # In[14]:
 
-def read_vel(fname):
+def read_scp_vel(fname):
     vel = new_z_vfield()
-    t, dt, Dp = wr.load(fname, vel[0].T, vel[1].T, vel[2].T)
+    t, dt, Dp = wr.read_scp(fname, vel[0].T, vel[1].T, vel[2].T)
+    Re = wr.Re.Re
+    return t, dt, Dp, Re, vel
+
+
+def read_dcp_vel(fname):
+    vel = new_z_vfield()
+    t, dt, Dp = wr.read_dcp(fname, vel[0].T, vel[1].T, vel[2].T)
     Re = wr.Re.Re
     return t, dt, Dp, Re, vel
 
 
 # In[60]:
 
-def read_cp(fname):
-    wr.init_like(fname)
-    return read_vel(fname)
+def read_scp(fname):
+    wr.init_like_scp(fname)
+    return read_scp_vel(fname)
 
+
+def read_dcp(fname):
+    wr.init_like_dcp(fname)
+    return read_dcp_vel(fname)
 
 # In[15]:
 
-def fullread(fname):
-    t, dt, Dp, Re, vel = read_cp(fname)
+def fullread_scp(fname):
+    t, dt, Dp, Re, vel = read_scp(fname)
 
     velt = new_z_vfield()
     om = new_z_vfield()
@@ -253,12 +256,28 @@ def fullread(fname):
     return t, dt, Dp, Re, vel, velt, om, p
 
 
+def fullread_dcp(fname):
+    t, dt, Dp, Re, vel = read_dcp(fname)
+
+    velt = new_z_vfield()
+    om = new_z_vfield()
+    p = new_z_pfield()
+
+    rp(time, vel, velt, om)
+    pres(velt, p, 0.0)    
+    
+    return t, dt, Dp, Re, vel, velt, om, p
+
 # In[16]:
 
-def write_cp(fname, vel, t=0.0, dt=0.1, Dp=0.0, Re=None):
+def write_scp(fname, vel, t=0.0, dt=0.1, Dp=0.0, Re=None):
     if(Re != None): wr.Re.Re = Re
-    wr.down(fname, vel[0].T, vel[1].T, vel[2].T, t, dt, Dp)
+    wr.write_scp(fname, vel[0].T, vel[1].T, vel[2].T, t, dt, Dp)
 
+
+def write_dcp(fname, vel, t=0.0, dt=0.1, Dp=0.0, Re=None):
+    if(Re != None): wr.Re.Re = Re
+    wr.write_dcp(fname, vel[0].T, vel[1].T, vel[2].T, t, dt, Dp)
 
 # In[ ]:
 
