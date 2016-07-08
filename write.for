@@ -15,7 +15,7 @@
 *
       open(9,file=fncp,form='unformatted')
       nsym = dsym
-      if (nsym.ne.dsym) write(*,*) 'Warning! nsym = ', dsym, ' isn`t Int'
+      if (nsym.ne.dsym) write(*,*) 'Warning! dsym=',dsym,' isn`t Int'
       write(9)t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,nsym
       do k=1,Km
         do j=1,Jm
