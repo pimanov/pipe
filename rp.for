@@ -111,7 +111,7 @@
       end do
       do k=0,Km
         do i=1,Im
-          w(i,0,k)=-w(i,1,k)*yt(1)/yt(0)
+          w(i,0,k)=w(i,1,k)*yt(1)/yt(0)
           w(i,Jm+1,k)=-w(i,Jm,k)*yt(Jm)/yt(Jm+1)
         end do
       end do
@@ -192,6 +192,7 @@
      >                 -(u0*ot0+u1*ot1))
           end do
           vt(i,Jm,k)=0.d0
+          vt(i,0,k)=0.d0
         end do
       end do
       do k=1,Km

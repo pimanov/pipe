@@ -59,6 +59,7 @@
         end do
         do k=1,Kmm
           v(i,Jm,k)=0.d0
+          v(i,0,k)=0.d0
           do j=1,Jm
             call div(i,j,k,u,v,w,d,Imax,Jmax)
             p(i,j,k)=d
