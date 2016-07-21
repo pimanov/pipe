@@ -142,7 +142,7 @@
           end do
         end do
       end do
-      q(0,0,1)=c12
+      q(0,0,1)=1.d0
       call pres(u1,v1,w1,q,buf,Imax,Jmax)
 * Accuracy estimation
       error=0.d0

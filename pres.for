@@ -301,7 +301,7 @@
       end do
 *
 *  Mean pressure gradient
-      Ub=p(0,0,1)
+      Ub=p(0,0,1)*(0.5+curv/6.d0) 
       ss=0.d0
       su=0.d0
       do j=1,Jm
