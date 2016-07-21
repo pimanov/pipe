@@ -5,7 +5,7 @@
       common
      >/dim/Xmax,epsr,nsym
      >/dimx/hx,Im,Imm,lx
-     >/dimr/rt(0:128),rt1(0:128),yt(129),yt1(129),hr,Jm
+     >/dimr/rt(0:129),rt1(0:129),yt(0:129),yt1(0:129),hr,Jm
      >/dimt/ht,Km,lt
      >/Re/Re
      >/rlx/rlx(2048)
