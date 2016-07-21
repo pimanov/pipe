@@ -53,7 +53,7 @@
 222   call MPI_BCAST(istop,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
       if(istop.ne.0) goto 333
       if(Np.eq.0)then
-      read(9)t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,dsym
+      read(9)t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,dsym,curv
       end if
 *
       call MPI_BCAST(tol,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
@@ -72,17 +72,17 @@
       call MPI_BCAST(Jm,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(lt,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(dsym,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
+      call MPI_BCAST(curv,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
 *
       call com
       if(Np.eq.0) then      
       write(*,*)' ***************************************************'
       write(*,*)' *        Number of processors =',Npm,'          *'
-      write(*,200) t,dt,Dp,Re,Xmax,epsr,Imm,Jm,Km,dsym
+      write(*,200) t,dt,Dp,Re,Xmax,epsr,Imm,Jm,Km,dsym,curv
       write(*,*)' ***************************************************'
 200   format('    t=',1pe10.3,' dt=',e9.2,' Dp=',e9.2,/,
-     >'    Re=',e9.2,/,
-     >'    Xmax=',e9.2,/,
-     >'    epsr=',e9.2,' Im=',i4,' Jm=',i4,' Km=',i4,' Nsym=',e9.2)
+     >'    Re=',e9.2,' Xmax=',e9.2,' epsr=',e9.2,/,
+     >'    Im=',i4,' Jm=',i4,' Km=',i4,' Nsym=',e9.2,' curv=',e9.2)
 *
       if(Im.gt.Imax-1.or.Im*Npm.gt.2048) then
         write(*,*)'  Im=',Im,'  is greater than   Imax-1=',Imax-1
@@ -164,7 +164,7 @@
           time1=MPI_WTIME()
         open(9,file=fncp,form='unformatted')
         Dp=p(0,0,0)
-        write(9)t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,dsym
+        write(9)t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,dsym,curv
         end if
         do k=1,Km
           do j=1,Jm
