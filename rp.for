@@ -118,7 +118,11 @@
 *
 * Vorticities
       do i=1,Im
-        do j=0,Jm
+        j=0
+          do k=0,Km
+            ox(i,j,k)=0.d0
+          end do
+        do j=1,Jm
           do k=0,Km
             w0=w(i,j,k)
             w1=w(i,j+1,k)
@@ -129,11 +133,6 @@
           end do
         end do
       end do
-!        j=0
-!          do k=0,Km
-!            ox(i,j,k)=0.d0
-!          end do
-!      end do
       do k=0,Km
         do j=1,Jm
           do i=0,Im
