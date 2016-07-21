@@ -35,13 +35,13 @@
       set0=1.d0
       set1=epsr
       hr=1.d0/Jm
-      do j=0,Jm
+      do j=0,Jm+1
         ro=j*hr
         rt(j)=rrt(ro,0)
         rt1(j)=rrt(ro,1)*hr
-        ro=(j+0.5d0)*hr
-        yt(j+1)=rrt(ro,0)
-        yt1(j+1)=rrt(ro,1)*hr
+        ro=(j-0.5d0)*hr
+        yt(j)=rrt(ro,0)
+        yt1(j)=rrt(ro,1)*hr
       end do
       do j=1,Jm
         c=1.d0/(yt(j)*yt1(j))
