@@ -43,6 +43,11 @@
         yt(j)=rrt(ro,0)
         yt1(j)=rrt(ro,1)*hr
       end do
+* yt,rt modif
+      do j=0,Jm+1
+        rt(j)=curv+rt(j)*(1.d0-curv)
+        yt(j)=curv+yt(j)*(1.d0-curv)
+      end do
       do j=1,Jm
         c=1.d0/(yt(j)*yt1(j))
         apy(j)=c*rt(j-1)/rt1(j-1)
