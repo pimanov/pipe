@@ -24,7 +24,7 @@
      >,q(0:Imax,0:Jmax,0:Kmax)
      >,buf(2*Imax*Jmax*Kmax)
       common
-     >/dim/Xmax,epsr,dsym
+     >/dim/Xmax,epsr,dsym,curv
      >/dimx/hx,Im,Imm,lx
      >/dimr/rt(0:129),rt1(0:129),yt(0:129),yt1(0:129),hr,Jm
      >/dimt/ht,Km,lt
