@@ -41,6 +41,16 @@ def get_scp(fn):
     return t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,nsym,vel
 
 
+def get_ccp(fn):
+    i = _get_i
+    d = _get_d
+
+    with open(fn, "rb") as f:
+        _,t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,nsym,curv,_ = i(f),d(f),d(f),d(f),d(f),d(f),d(f),i(f),i(f),i(f),d(f),d(f),i(f)
+        vel = get_vfield(f, 2**lx, Jm, 2**lt)
+
+    return t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,nsym,curv,vel
+
 
 def get_dcp(fn):
     i = _get_i
@@ -226,3 +236,28 @@ def put_bcar(tmax, dtmax, bcpfn, cpfn, tol=0.01, kprt=10, kwrt=100000, prtfn="a0
     return
 
 
+
+def put_ccp_header(f,t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,nsym,curv):
+    m = 3*4+8*8
+    f.write(struct.pack("i",m))
+    f.write(struct.pack("d",t))
+    f.write(struct.pack("d",dt))
+    f.write(struct.pack("d",Dp))
+    f.write(struct.pack("d",Re))
+    f.write(struct.pack("d",Xmax))
+    f.write(struct.pack("d",epsr))
+    f.write(struct.pack("i",lx))
+    f.write(struct.pack("i",Jm))
+    f.write(struct.pack("i",lt))
+    f.write(struct.pack("d",nsym))
+    f.write(struct.pack("d",curv))
+    f.write(struct.pack("i",m))
+    return
+
+def put_ccp(fn,t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,nsym,curv,vel):
+    
+    with open(fn,"wb") as f:
+        put_ccp_header(f,t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,nsym,curv)
+        put_vfield(f,vel)
+    
+    return
