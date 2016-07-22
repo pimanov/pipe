@@ -13,6 +13,7 @@
      >,bp(2048),dp(2048),ep(2048)
       integer nstat(MPI_STATUS_SIZE,2048),nreq(2048)
       common
+     >/dim/Xmax,epsr,dsym,curv
      >/dimx/hx,Im,Imm,lx
      >/dimr/rt(0:129),rt1(0:129),yt(0:129),yt1(0:129),hr,Jm
      >/dimt/ht,Kmm,lt
