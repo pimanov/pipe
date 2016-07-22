@@ -1,8 +1,6 @@
 *
-      subroutine step(t,dt,tol
-     > ,u,v,w,u1,v1,w1,u2,v2,w2
-     > ,u3,v3,w3,ox,or,ot,p,q
-     > ,buf,Imax,Jmax)
+      subroutine step(t,dt,tol,u,v,w,u1,v1,w1,u2,v2,w2
+     > ,u3,v3,w3,ox,or,ot,p,q,buf,Imax,Jmax)
       implicit real*8 (a-h,o-z)
       include 'mpif.h'
       dimension
@@ -22,7 +20,7 @@
      >,q(0:Imax,0:Jmax,0:*)
       common
      >/dimx/hx,Im,Imm,lx
-     >/dimr/rt(0:129),rt1(0:129),yt(0:129),yt1(0:129),hr,Jm
+     >/dimr/rt1(0:129),yt1(0:129),hr,Jm
      >/dimt/ht,Km,lt
      >/proc/Np,Npm
      >/cf/cf
@@ -142,7 +140,7 @@
           end do
         end do
       end do
-      q(0,0,1)=1.d0
+      q(0,0,1)=c23
       call pres(u1,v1,w1,q,buf,Imax,Jmax)
 * Accuracy estimation
       error=0.d0

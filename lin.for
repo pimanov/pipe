@@ -8,7 +8,7 @@
      >,ap(256),bp(256),cp(256),dp(256),ep(256)
       common
      >/dimx/hx,Im,Imm,lx
-     >/dimr/rt(0:129),rt1(0:129),yt(0:129),yt1(0:129),hr,Jm
+     >/dimr/rt1(0:129),yt1(0:129),hr,Jm
      >/dimt/ht,Km,lt
      >/pry/apy(128),bpy(128),cpy(128)
      >/prv/apv(128),bpv(128),cpv(128)
@@ -24,8 +24,8 @@
           do k=1,Km
             ap(k)=1.d0/ht**2
             cp(k)=ap(k)
-            bp(k)=-ap(k)-cp(k)-ct*yt(j)**2
-            dp(k)=-ct*u(i,j,k)*yt(j)**2
+            bp(k)=-ap(k)-cp(k)-ct
+            dp(k)=-ct*u(i,j,k)
           end do
             bp(1)=bp(1)+ap(1)
             bp(Km)=bp(Km)+cp(Km)
@@ -36,8 +36,8 @@
           do k=1,Km
             ap(k)=1.d0/ht**2
             cp(k)=ap(k)
-            bp(k)=-ap(k)-cp(k)-ct*yt(j)**2
-            dp(k)=-ct*v(i,j,k)*yt(j)**2
+            bp(k)=-ap(k)-cp(k)-ct
+            dp(k)=-ct*v(i,j,k)
           end do
             bp(1)=bp(1)+ap(1)
             bp(Km)=bp(Km)+cp(Km)
@@ -48,8 +48,8 @@
           do k=1,Km-1
             ap(k)=1.d0/ht**2
             cp(k)=ap(k)
-            bp(k)=-ap(k)-cp(k)-ct*yt(j)**2
-            dp(k)=-ct*w(i,j,k)*yt(j)**2
+            bp(k)=-ap(k)-cp(k)-ct
+            dp(k)=-ct*w(i,j,k)
           end do
           call prog3(ap,bp,cp,dp,ep,Km-1)
           do k=1,Km-1
@@ -72,20 +72,20 @@
           end do
           do j=1,Jm-1
             bp(j)=bpv(j)-ct
-            dp(j)=-ct*rt(j)*v(i,j,k)
+            dp(j)=-ct*v(i,j,k)
           end do
           call prog3(apv,bp,cpv,dp,ep,Jm-1)
           do j=1,Jm-1
-            v(i,j,k)=ep(j)/rt(j)
+            v(i,j,k)=ep(j)
           end do
           do j=1,Jm
             bp(j)=bpy(j)-ct
-            dp(j)=-ct*yt(j)*w(i,j,k)
+            dp(j)=-ct*w(i,j,k)
           end do
           bp(Jm)=bp(Jm)-cpy(Jm)
           call prog3(apy,bp,cpy,dp,ep,Jm)
           do j=1,Jm
-            w(i,j,k)=ep(j)/yt(j)
+            w(i,j,k)=ep(j)
           end do
         end do
       end do

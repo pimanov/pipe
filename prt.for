@@ -8,9 +8,9 @@
      >,w(0:Imax,0:Jmax,0:*)
      >,p(0:Imax,0:Jmax,0:*)
       common
-     >/dim/Xmax,epsr,dsym,curv
+     >/dim/Xmax,epsr,dsym
      >/dimx/hx,Im,Imm,lx
-     >/dimr/rt(0:129),rt1(0:129),yt(0:129),yt1(0:129),hr,Jm
+     >/dimr/rt1(0:129),yt1(0:129),hr,Jm
      >/dimt/ht,Km,lt
      >/Re/Re
      >/proc/Np,Npm
@@ -25,14 +25,14 @@
       dd=0.d0
       do k=1,Km
         do j=1,Jm
-          Ss=Ss+yt(j)*ht*yt1(j)
-          ubulk=ubulk+u(1,j,k)*yt(j)*ht*yt1(j)
+          Ss=Ss+ht*yt1(j)
+          ubulk=ubulk+u(1,j,k)*ht*yt1(j)
           do i=1,Im
-            uP=1.d0-yt(j)**2
-            volume=volume+yt(j)*ht*yt1(j)*hx
-            enrg=enrg+(u(i,j,k)-uP)**2*yt(j)*ht*yt1(j)*hx
-     >                    +v(i,j,k)**2*rt(j)*ht*rt1(j)*hx
-     >                    +w(i,j,k)**2*yt(j)*ht*yt1(j)*hx
+            uP=0.d0
+            volume=volume+ht*yt1(j)*hx
+            enrg=enrg+(u(i,j,k)-uP)**2*ht*yt1(j)*hx
+     >                    +v(i,j,k)**2*ht*rt1(j)*hx
+     >                    +w(i,j,k)**2*ht*yt1(j)*hx
             call div(i,j,k,u,v,w,d,Imax,Jmax)
             dd=max(dd,abs(d))
           end do
@@ -66,9 +66,9 @@
 
         do k=1,Km
           do i=1,Im
-            amp=amp+yt(j)*ht*yt1(j)*hx*(u(i,j,k)-u0)**2
-     >             +rt(j)*ht*rt1(j)*hx*v(i,j,k)**2
-     >             +yt(j)*ht*yt1(j)*hx*w(i,j,k)**2
+            amp=amp+ht*yt1(j)*hx*(u(i,j,k)-u0)**2
+     >             +ht*rt1(j)*hx*v(i,j,k)**2
+     >             +ht*yt1(j)*hx*w(i,j,k)**2
           end do
         end do
       end do

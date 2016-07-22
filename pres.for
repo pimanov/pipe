@@ -13,9 +13,9 @@
      >,bp(2048),dp(2048),ep(2048)
       integer nstat(MPI_STATUS_SIZE,2048),nreq(2048)
       common
-     >/dim/Xmax,epsr,dsym,curv
+     >/dim/Xmax,epsr,dsym
      >/dimx/hx,Im,Imm,lx
-     >/dimr/rt(0:129),rt1(0:129),yt(0:129),yt1(0:129),hr,Jm
+     >/dimr/rt1(0:129),yt1(0:129),hr,Jm
      >/dimt/ht,Kmm,lt
      >/rlx/rlx(2048)
      >/rlt/rlt(256)
@@ -168,7 +168,7 @@
           do i=1,Im
             il=n*Im+i
             do j=1,Jm
-              bp(j)=bpy(j)-rlx(il)-rlt(kl)/yt(j)**2
+              bp(j)=bpy(j)-rlx(il)-rlt(kl)
               dp(j)=p(i,j,k1)
             end do
             bp(1)=bp(1)+apy(1)
@@ -303,18 +303,18 @@
       end do
 *
 *  Mean pressure gradient
-      Ub=p(0,0,1)*(0.5+curv/6.d0) 
+      Ub=p(0,0,1) 
       ss=0.d0
       su=0.d0
       do j=1,Jm
-        ss=ss+yt(j)*yt1(j)
+        ss=ss+yt1(j)
         ssu=0.d0
         do k=1,Kmm
           do i=1,Im
             ssu=ssu+u(i,j,k)
           end do
         end do
-        su=su+ssu*yt(j)*yt1(j)
+        su=su+ssu*yt1(j)
       end do
       call MPI_ALLREDUCE(su,sus,1,MPI_DOUBLE_PRECISION,MPI_SUM
      >               ,MPI_COMM_WORLD,ier)
@@ -334,7 +334,7 @@
      >,p(0:Imax,0:Jmax,0:*)
       common
      >/dimx/hx,Im,Imm,lx
-     >/dimr/rt(0:129),rt1(0:129),yt(0:129),yt1(0:129),hr,Jm
+     >/dimr/rt1(0:129),yt1(0:129),hr,Jm
      >/dimt/ht,Km,lt
       Dp=p(0,0,0)
       do k=1,Km
@@ -356,7 +356,7 @@
       do j=1,Jm
         do i=1,Im
           do k=1,Km-1
-            w(i,j,k)=w(i,j,k)-(p(i,j,k+1)-p(i,j,k))/(yt(j)*ht)
+            w(i,j,k)=w(i,j,k)-(p(i,j,k+1)-p(i,j,k))/ht
           end do
         end do
       end do
@@ -371,10 +371,10 @@
      >,w(0:Imax,0:Jmax,0:*)
       common
      >/dimx/hx,Im,Imm,lx
-     >/dimr/rt(0:129),rt1(0:129),yt(0:129),yt1(0:129),hr,Jm
+     >/dimr/rt1(0:129),yt1(0:129),hr,Jm
      >/dimt/ht,Km,lt
       d=(u(i,j,k)-u(i-1,j,k))/hx
-     > +(rt(j)*v(i,j,k)-rt(j-1)*v(i,j-1,k))/(yt(j)*yt1(j))
-     > +(w(i,j,k)-w(i,j,k-1))/(yt(j)*ht)
+     > +(v(i,j,k)-v(i,j-1,k))/yt1(j)
+     > +(w(i,j,k)-w(i,j,k-1))/ht
       return
       end
