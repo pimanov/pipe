@@ -25,7 +25,7 @@
 *
 * dimt
       Km=2**lt
-      ht=(pi*(1-curv)+2*curv)/(dsym*Km)
+      ht=(pi*(1-curv)+2.4*curv)/(dsym*Km)
 * dimx
       Imm=2**lx
       Im=Imm/Npm
