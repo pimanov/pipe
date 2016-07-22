@@ -7,17 +7,15 @@
      >,w(0:Imax,0:Jmax,0:*)
      >,ap(256),bp(256),cp(256),dp(256),ep(256)
       common
-     >/dimx/hx,Im,Imm,lx
+     >/dimx/hx,Im,lx
      >/dimr/rt1(0:129),yt1(0:129),hr,Jm
      >/dimt/ht,Km,lt
      >/pry/apy(128),bpy(128),cpy(128)
      >/prv/apv(128),bpv(128),cpv(128)
      >/prw/apw(128),bpw(128),cpw(128)
      >/Re/Re
+*
       ct=Re/tau
-*
-
-*
 * At
       do i=1,Im
         do j=1,Jm
@@ -89,5 +87,6 @@
           end do
         end do
       end do
+*
       return
       end
