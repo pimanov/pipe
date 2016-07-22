@@ -38,7 +38,7 @@
       call MPI_COMM_RANK(MPI_COMM_WORLD,Np,ier)
  
       if(Np.eq.0)then
-        open(5,file='pipe.car')
+        open(5,file='duct.car')
         read(5,*) tol
         read(5,*) nprt
         read(5,*) nwrt

@@ -2,7 +2,7 @@ CC = mpif90
 compile_flags = -Wall -Ofast
 link_flags = -Wall
 
-programs = pipe
+programs = duct
 subprograms = com fft8 lin pres prog3 prt rp rrt8 serv0 step
 objects = $(addsuffix .o, $(subprograms))
 
