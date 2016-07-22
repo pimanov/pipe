@@ -125,7 +125,7 @@ def put_scp_header(f,t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,nsym):
 def put_scp(fn,t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,nsym,vel,comm="comment"):
     
     with open(fn,"wb") as f:
-        put_scp_header(f,t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,nsym)
+        put_scp_header(f,t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,round(nsym))
         put_vfield(f,vel)
         f.write(comm)
         f.close()
