@@ -3,7 +3,7 @@ compile_flags = -Wall -Ofast
 link_flags = -Wall
 
 programs = init pipe
-subprograms = com fft8 lin pres prog3 prt rp rrt8 serv0 step
+subprograms = com fft8 lin pres prog3 prt rp rrt8 serv0 step bc_om add_nl visc
 objects = $(addsuffix .o, $(subprograms))
 
 
