@@ -69,7 +69,7 @@ def init(Xmax=None, epsr=None, dsym=None, lx=None, Jm=None, lt=None, Re=None, Im
     if(lt != None): wr.dimt.lt = lt
         
     wr.com()
-    return 
+    return
 
 
 # In[9]:
@@ -84,8 +84,8 @@ def step(t, dt, vel, velt, om, p, cf, tol=0.01):
 # In[10]:
 
 def rp(vel, t=0.0, velt=None, om=None):
-    in type(velt) == type(None): velt = new_z_vfield()
-    in type(om) == type(None): om = new_z_vfield()
+    if type(velt) == type(None): velt = new_z_vfield()
+    if type(om) == type(None): om = new_z_vfield()
     wr.rp(t, vel[0].T, vel[1].T, vel[2].T, velt[0].T, velt[1].T, velt[2].T, om[0].T, om[1].T, om[2].T)
     return velt, om
 
@@ -96,7 +96,8 @@ def pres(vel, ub, inplace=False, p=None):
     if not inplace:
         vel = vel.copy()
 
-    in type(p) == type(None): p = new_z_pfield()
+    if type(p) == type(None): p = new_z_pfield()
+
     wr.pres(vel[0].T, vel[1].T, vel[2].T, p.T, ub)
     return vel, p
 
