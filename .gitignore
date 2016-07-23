@@ -3,6 +3,7 @@
 *.cp
 *.bsp
 *.asp
+build
 
 # Compiled Object files
 *.slo
