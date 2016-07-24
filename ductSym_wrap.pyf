@@ -118,13 +118,14 @@ python module ductSym_wrap ! in
             common /dimt/ ht,Km,lt
             common /dimx/ hx,Im,lx
         end subroutine init_like_dcp
-        subroutine pres(u,v,w,p,Imax,Jmax) ! in :ductSym_wrap:pres.for
+        subroutine pres(u,v,w,p,Ub,Imax,Jmax) ! in :ductSym_wrap:pres.for
             real*8 intent(inout),dimension(Imax + 1,Jmax + 1,*) :: u
             real*8 intent(inout),dimension(Imax + 1,Jmax + 1,*),depend(Imax,Jmax) :: v
             real*8 intent(inout),dimension(Imax + 1,Jmax + 1,*),depend(Imax,Jmax) :: w
             real*8 intent(inout),dimension(Imax + 1,Jmax + 1,*),depend(Imax,Jmax) :: p
             integer, optional,check((shape(u,0)-1)==Imax),depend(u) :: Imax=(shape(u,0)-1)
             integer, optional,check((shape(u,1)-1)==Jmax),depend(u) :: Jmax=(shape(u,1)-1)
+            real*8 :: Ub
             real*8 :: Xmax
             real*8 :: epsr
             real*8 :: dsym

@@ -1,5 +1,5 @@
 *
-      subroutine pres(u,v,w,p,Imax,Jmax)
+      subroutine pres(u,v,w,p,Ub,Imax,Jmax)
       implicit real*8 (a-h,o-z)
       dimension
      > u(0:Imax,0:Jmax,0:*)
@@ -142,7 +142,6 @@
       end do
 *
 *  Mean pressure gradient
-      Ub=p(0,0,1) 
       ss=0.d0
       su=0.d0
       do j=1,Jm
