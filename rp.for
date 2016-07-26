@@ -82,35 +82,35 @@
       end do
 *
       do i=0,Im
-        do j=1,Jm
+        do j=0,Jm+1
           u(i,j,0)=u(i,j,1)
           u(i,j,Km+1)=u(i,j,Km)
         end do
-        do k=1,Km
+        do k=0,Km+1
           u(i,0,k)=u(i,1,k)
           u(i,Jm+1,k)=-u(i,Jm,k)
         end do
       end do
-      do k=1,Km
-        do i=1,Im
+      do k=0,Km+1
+        do i=0,Im+1
           v(i,Jm,k)=0.d0
           v(i,0,k)=0.d0
         end do
       end do
-      do j=1,Jm
-        do i=1,Im
+      do j=0,Jm
+        do i=0,Im+1
           v(i,j,0)=v(i,j,1)
           v(i,j,Km+1)=v(i,j,Km)
         end do
       end do
-      do j=1,Jm
+      do j=0,Jm+1
         do i=0,Im+1
           w(i,j,0)=0.d0
           w(i,j,Km)=0.d0
         end do
       end do
       do k=0,Km
-        do i=1,Im
+        do i=0,Im+1
           w(i,0,k)=w(i,1,k)
           w(i,Jm+1,k)=-w(i,Jm,k)
         end do
@@ -118,11 +118,7 @@
 *
 * Vorticities
       do i=1,Im
-        j=0
-          do k=0,Km
-            ox(i,j,k)=0.d0
-          end do
-        do j=1,Jm
+        do j=0,Jm
           do k=0,Km
             w0=w(i,j,k)
             w1=w(i,j+1,k)
@@ -144,7 +140,7 @@
         end do
       end do
       do k=1,Km
-        do j=1,Jm
+        do j=0,Jm
           do i=0,Im
             u0=u(i,j,k)
             u1=u(i,j+1,k)
