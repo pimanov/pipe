@@ -32,6 +32,9 @@
      >/proc/Np,Npm
      >/cf/cf
 *
+      c0=0.d0
+      c23=2.d0/3.d0
+*
       call MPI_INIT(ier)
       call MPI_COMM_SIZE(MPI_COMM_WORLD,Npm,ier)
       call MPI_COMM_RANK(MPI_COMM_WORLD,Np,ier)
@@ -69,8 +72,7 @@
 *
       dt=min(dt,dtmax)
       call rp(t,u,v,w,u1,v1,w1,ox,or,ot,buf,Imax,Jmax)
-      p(0,0,1)=0.d0
-      call pres(u1,v1,w1,p,buf,Imax,Jmax)
+      call pres(u1,v1,w1,p,c0,buf,Imax,Jmax)
 *
       if(Np.eq.0) open(8,file=fndat,access='append')
       call servis(t,u,v,w,ox,or,ot,p,0,Imax,Jmax)

@@ -25,6 +25,7 @@
      >/proc/Np,Npm
      >/cf/cf
 *
+      c0=0.d0
       c12=1.d0/2.d0
       c13=1.d0/3.d0
       c23=2.d0/3.d0
@@ -68,8 +69,7 @@
       end do
 * 2-nd step
       call rp(t1,u1,v1,w1,u2,v2,w2,ox,or,ot,buf,Imax,Jmax)
-      p(0,0,1)=0.d0
-      call pres(u2,v2,w2,p,buf,Imax,Jmax)
+      call pres(u2,v2,w2,p,c0,buf,Imax,Jmax)
       do k=1,Km
         do j=1,Jm
           do i=1,Im
@@ -140,8 +140,7 @@
           end do
         end do
       end do
-      q(0,0,1)=c23
-      call pres(u1,v1,w1,q,buf,Imax,Jmax)
+      call pres(u1,v1,w1,q,c23,buf,Imax,Jmax)
 * Accuracy estimation
       error=0.d0
       do k=1,Km
@@ -161,8 +160,7 @@
         dt=dt*fac
         if(Np.eq.0)write(*,*)'  STEP:  fac=',fac,'  dt=',dt
         call rp(t,u,v,w,u1,v1,w1,ox,or,ot,buf,Imax,Jmax)
-        p(0,0,1)=0.d0
-        call pres(u1,v1,w1,p,buf,Imax,Jmax)
+        call pres(u1,v1,w1,p,c0,buf,Imax,Jmax)
         goto 1
       end if
       fac=min(fac,facmax)
@@ -178,7 +176,6 @@
       t=t+dt
       dt=fac*dt
       call rp(t,u,v,w,u1,v1,w1,ox,or,ot,buf,Imax,Jmax)
-      p(0,0,1)=0.d0
-      call pres(u1,v1,w1,p,buf,Imax,Jmax)
+      call pres(u1,v1,w1,p,c0,buf,Imax,Jmax)
       return
       end

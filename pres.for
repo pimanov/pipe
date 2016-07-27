@@ -1,5 +1,5 @@
 *
-      subroutine pres(u,v,w,p,buf,Imax,Jmax)
+      subroutine pres(u,v,w,p,Ub,buf,Imax,Jmax)
       implicit real*8 (a-h,o-z)
       include 'mpif.h'
       dimension
@@ -303,7 +303,6 @@
       end do
 *
 *  Mean pressure gradient
-      Ub=p(0,0,1) 
       ss=0.d0
       su=0.d0
       do j=1,Jm
