@@ -1,6 +1,6 @@
 *
 *
-      subroutine init_cp(fncp,t,dt,u,v,w,buf,Imax,Jmax)
+      subroutine init_cp(fncp,t,dt,u,v,w,buf,Imax,Jmax,Kmax)
       implicit real*8 (a-h,o-z)
       include 'mpif.h'
       integer status(MPI_STATUS_SIZE)

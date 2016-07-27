@@ -55,7 +55,7 @@
       call MPI_BCAST(dtmax,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(cf,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
 *
-      call init_cp(fncp,t,dt,u,v,w,buf,Imax,Jmax)
+      call init_cp(fncp,t,dt,u,v,w,buf,Imax,Jmax,Kmax)
 *
       if(Np.eq.0)then
         write(*,*)' ***************************************************'
