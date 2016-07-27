@@ -49,8 +49,8 @@
         read(5,*) cf
         read(5,*) fncp
         read(5,*) fndat
+        close(5)
       end if
-*
       call MPI_BCAST(tol,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(nprt,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(nwrt,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
@@ -73,12 +73,12 @@
       dt=min(dt,dtmax)
       call rp(t,u,v,w,u1,v1,w1,ox,or,ot,buf,Imax,Jmax)
       call pres(u1,v1,w1,p,c0,buf,Imax,Jmax)
-*
       if(Np.eq.0) open(8,file=fndat,access='append')
       call servis(t,u,v,w,ox,or,ot,p,0,Imax,Jmax)
       call prt(t,dt,u,v,w,p,Imax,Jmax)
       lprt=0
       lwrt=0
+*
 10    continue
         call step(t,dt,tol,u,v,w,u1,v1,w1,u2,v2,w2
      >   ,u3,v3,w3,ox,or,ot,p,q,buf,Imax,Jmax)
@@ -86,7 +86,7 @@
         lwrt=lwrt+1
         dt=min(dt,dtmax)
         call servis(t,u,v,w,ox,or,ot,p,0,Imax,Jmax)
-        if(lprt.ge.nprt.or.t.ge.tmax) then
+        if(lprt.ge.nprt.or.t+0.01*dt.ge.tmax) then
           lprt=0
           call servis(t,u,v,w,ox,or,ot,p,1,Imax,Jmax)
           call prt(t,dt,u,v,w,p,Imax,Jmax)

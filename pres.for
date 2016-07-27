@@ -22,7 +22,10 @@
      >/pry/apy(128),bpy(128),cpy(128)
      >/proc/Np,Npm
 *
+      c0=0.d0
       Km=Kmm/Npm
+      Im2=Imm/2
+      cik=4.d0/(Im2*Kmm)
 *
 * Boundary conditions
       Np0=Np-1
@@ -49,19 +52,22 @@
           u(0,j,k)=buf(l)
         end do
       end do
-*
-      Im2=Imm/2
-      cik=4.d0/(Im2*Kmm)
-*
-      do i=1,Im
-        do j=1,Jm
-          w(i,j,0)=0.d0
-          w(i,j,Kmm)=0.d0
+      do j=1,Jm
+        do i=1,Im
+          w(i,j,0)=c0
+          w(i,j,Kmm)=c0
         end do
-        do k=1,Kmm
-          v(i,Jm,k)=0.d0
-          v(i,0,k)=0.d0
-          do j=1,Jm
+      end do
+      do k=1,Kmm
+        do i=1,Im
+          v(i,Jm,k)=c0
+          v(i,0,k)=c0
+        end do
+      end do
+*
+      do k=1,Kmm
+        do j=1,Jm
+          do i=1,Im
             call div(i,j,k,u,v,w,d,Imax,Jmax)
             p(i,j,k)=d
           end do
@@ -352,9 +358,9 @@
         end do
       end do
 *
-      do j=1,Jm
-        do i=1,Im
-          do k=1,Km-1
+      do k=1,Km-1
+        do j=1,Jm
+          do i=1,Im
             w(i,j,k)=w(i,j,k)-(p(i,j,k+1)-p(i,j,k))/ht
           end do
         end do
