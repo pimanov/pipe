@@ -20,8 +20,7 @@
      >/proc/Np,Npm
 *
       iserv=0
-      one=1.d0
-      pi=4.d0*atan(one)
+      pi=4.d0*atan(1.d0)
 *
 * dimt
       Km=2**lt
