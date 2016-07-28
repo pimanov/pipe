@@ -2,11 +2,10 @@
       subroutine com
       implicit real*8 (a-h,o-z)
       include 'mpif.h'
-      real*8 nsym
       common
-     >/dim/Xmax,epsr,nsym
+     >/dim/Xmax,epsr,dsym
      >/dimx/hx,Im,Imm,lx
-     >/dimr/rt(0:128),rt1(0:128),yt(129),yt1(129),hr,Jm
+     >/dimr/rt(0:129),rt1(0:129),yt(0:129),yt1(0:129),hr,Jm
      >/dimt/ht,Km,lt
      >/Re/Re
      >/rlx/rlx(2048)
@@ -26,7 +25,7 @@
 *
 * dimt
       Km=2**lt
-      ht=pi/(nsym*Km)
+      ht=pi/(dsym*Km)
 * dimx
       Imm=2**lx
       Im=Imm/Npm
@@ -36,13 +35,13 @@
       set0=1.d0
       set1=epsr
       hr=1.d0/Jm
-      do j=0,Jm
+      do j=0,Jm+1
         ro=j*hr
         rt(j)=rrt(ro,0)
         rt1(j)=rrt(ro,1)*hr
-        ro=(j+0.5d0)*hr
-        yt(j+1)=rrt(ro,0)
-        yt1(j+1)=rrt(ro,1)*hr
+        ro=(j-0.5d0)*hr
+        yt(j)=rrt(ro,0)
+        yt1(j)=rrt(ro,1)*hr
       end do
       do j=1,Jm
         c=1.d0/(yt(j)*yt1(j))

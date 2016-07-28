@@ -4,7 +4,6 @@
       include 'mpif.h'
       parameter (Imax=513, Jmax=129, Kmax=129)
       character*24 fncp
-      real*8 nsym
       dimension
      > u(0:Imax,0:Jmax,0:Kmax)
      >,v(0:Imax,0:Jmax,0:Kmax)
@@ -12,9 +11,9 @@
      >,p(0:Imax,0:Jmax,0:Kmax)
      >,buf(2*Imax*Jmax*Kmax)
       common
-     >/dim/Xmax,epsr,nsym
+     >/dim/Xmax,epsr,dsym
      >/dimx/hx,Im,Imm,lx
-     >/dimr/rt(0:128),rt1(0:128),yt(129),yt1(129),hr,Jm
+     >/dimr/rt(0:129),rt1(0:129),yt(0:129),yt1(0:129),hr,Jm
      >/dimt/ht,Km,lt
      >/Re/Re
      >/proc/Np,Npm
@@ -29,7 +28,7 @@
         open(5,file='init.car')
         read(5,*) Xmax, lx
         read(5,*) epsr, Jm
-        read(5,*) nsym, lt
+        read(5,*) dsym, lt
         read(5,*) Re
         read(5,*) dt
         read(5,*) a
@@ -46,14 +45,14 @@
       call MPI_BCAST(lx,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(Jm,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(lt,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
-      call MPI_BCAST(nsym,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
+      call MPI_BCAST(dsym,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(a,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
 *
       call com
       if(Np.eq.0) then      
       write(*,*)' ***************************************************'
       write(*,*)' *        Number of processors =',Npm,'          *'
-      write(*,200) t,dt,a,Re,Xmax,epsr,Imm,Jm,Km,nsym
+      write(*,200) t,dt,a,Re,Xmax,epsr,Imm,Jm,Km,dsym
       write(*,*)' ***************************************************'
 200   format('    t=',1pe10.3,' dt=',e9.2,' amp=',e9.2,/,
      >'    Re=',e9.2,/,
@@ -174,7 +173,7 @@
       if(Np.eq.0) then
         open(9,file=fncp,form='unformatted')
         Dp=p(0,0,0)
-        write(9)t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,nsym
+        write(9)t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,dsym
       end if
       do k=1,Km
         do j=1,Jm
