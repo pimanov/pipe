@@ -14,9 +14,8 @@
      >/prv/apv(128),bpv(128),cpv(128)
      >/prw/apw(128),bpw(128),cpw(128)
      >/Re/Re
-      ct=Re/tau
 *
-
+      ct=Re/tau
 *
 * At
       do i=1,Im
@@ -27,8 +26,8 @@
             bp(k)=-ap(k)-cp(k)-ct
             dp(k)=-ct*u(i,j,k)
           end do
-            bp(1)=bp(1)+ap(1)
-            bp(Km)=bp(Km)+cp(Km)
+          bp(1)=bp(1)+ap(1)
+          bp(Km)=bp(Km)+cp(Km)
           call prog3(ap,bp,cp,dp,ep,Km)
           do k=1,Km
             u(i,j,k)=ep(k)
@@ -39,8 +38,8 @@
             bp(k)=-ap(k)-cp(k)-ct
             dp(k)=-ct*v(i,j,k)
           end do
-            bp(1)=bp(1)+ap(1)
-            bp(Km)=bp(Km)+cp(Km)
+          bp(1)=bp(1)+ap(1)
+          bp(Km)=bp(Km)+cp(Km)
           call prog3(ap,bp,cp,dp,ep,Km)
           do k=1,Km
             v(i,j,k)=ep(k)

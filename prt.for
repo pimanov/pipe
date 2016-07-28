@@ -24,11 +24,12 @@
       enrg=0.d0
       dd=0.d0
       do k=1,Km
+        rr=rt1(0)/2
         do j=1,Jm
           Ss=Ss+ht*yt1(j)
           ubulk=ubulk+u(1,j,k)*ht*yt1(j)
           do i=1,Im
-            uP=0.d0
+            uP=1.0-rr**2
             volume=volume+ht*yt1(j)*hx
             enrg=enrg+(u(i,j,k)-uP)**2*ht*yt1(j)*hx
      >                    +v(i,j,k)**2*ht*rt1(j)*hx
@@ -36,6 +37,7 @@
             call div(i,j,k,u,v,w,d,Imax,Jmax)
             dd=max(dd,abs(d))
           end do
+          rr=rr+rt1(j)
         end do
       end do
       ubulk=ubulk/Ss
