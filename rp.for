@@ -22,6 +22,8 @@
      >/proc/Np,Npm
 *
       t=t
+      c0=0.d0
+*
 * Boundary conditions
       Np0=Np-1
       if(Np.eq.0)Np0=Npm-1
@@ -81,49 +83,45 @@
         end do
       end do
 *
-      do i=0,Im
+      do i=0,Im+1
         do j=1,Jm
           u(i,j,0)=u(i,j,1)
           u(i,j,Km+1)=u(i,j,Km)
         end do
-        do k=1,Km
+        do k=0,Km+1
           u(i,0,k)=u(i,1,k)
           u(i,Jm+1,k)=-u(i,Jm,k)
         end do
       end do
       do k=1,Km
-        do i=1,Im
-          v(i,Jm,k)=0.d0
-          v(i,0,k)=0.d0
+        do i=0,Im+1
+          v(i,0,k)=c0
+          v(i,Jm,k)=c0
         end do
       end do
-      do j=1,Jm
-        do i=1,Im
+      do j=0,Jm
+        do i=0,Im+1
           v(i,j,0)=v(i,j,1)
           v(i,j,Km+1)=v(i,j,Km)
         end do
       end do
       do j=1,Jm
         do i=0,Im+1
-          w(i,j,0)=0.d0
-          w(i,j,Km)=0.d0
+          w(i,j,0)=c0
+          w(i,j,Km)=c0
         end do
       end do
       do k=0,Km
-        do i=1,Im
+        do i=0,Im+1
           w(i,0,k)=w(i,1,k)*yt(1)/yt(0)
           w(i,Jm+1,k)=-w(i,Jm,k)*yt(Jm)/yt(Jm+1)
         end do
       end do
 *
 * Vorticities
-      do i=1,Im
-        j=0
-          do k=0,Km
-            ox(i,j,k)=0.d0
-          end do
-        do j=1,Jm
-          do k=0,Km
+      do k=0,Km
+        do j=0,Jm
+          do i=1,Im
             w0=w(i,j,k)
             w1=w(i,j+1,k)
             v0=v(i,j,k)
@@ -146,7 +144,7 @@
         end do
       end do
       do k=1,Km
-        do j=1,Jm
+        do j=0,Jm
           do i=0,Im
             u0=u(i,j,k)
             u1=u(i,j+1,k)
@@ -159,9 +157,9 @@
       end do
 *
 * Nonlinear terms
-      do i=1,Im
+      do k=1,Km
         do j=1,Jm
-          do k=1,Km
+          do i=1,Im
             v0=0.5d0*(v(i,j-1,k)+v(i+1,j-1,k))
             v1=0.5d0*(v(i,j,k)+v(i+1,j,k))
             ot0=rt(j-1)*rt1(j-1)*ot(i,j-1,k)
@@ -177,8 +175,8 @@
         end do
       end do
       do k=1,Km
-        do i=1,Im
-          do j=1,Jm-1
+        do j=1,Jm-1
+          do i=1,Im
             w0=0.5d0*(w(i,j,k-1)+w(i,j+1,k-1))
             w1=0.5d0*(w(i,j,k)+w(i,j+1,k))
             ox0=ox(i,j,k-1)
@@ -191,11 +189,9 @@
      >           0.5d0*((w0*ox0+w1*ox1)
      >                 -(u0*ot0+u1*ot1))
           end do
-          vt(i,Jm,k)=0.d0
-          vt(i,0,k)=0.d0
         end do
       end do
-      do k=1,Km
+      do k=1,Km-1
         do j=1,Jm
           do i=1,Im
             u0=0.5d0*(u(i-1,j,k)+u(i-1,j,k+1))
@@ -214,9 +210,9 @@
       end do
 *
 * Viscous terms
-      do i=1,Im
+      do k=1,Km
         do j=1,Jm
-          do k=1,Km
+          do i=1,Im
             ot0=ot(i,j-1,k)
             ot1=ot(i,j,k)
             or0=or(i,j,k-1)
@@ -240,7 +236,7 @@
           end do
         end do
       end do
-      do k=1,Km
+      do k=1,Km-1
         do j=1,Jm
           do i=1,Im
             ox0=ox(i,j-1,k)
@@ -253,5 +249,6 @@
           end do
         end do
       end do
+*
       return
       end

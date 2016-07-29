@@ -27,8 +27,8 @@
             bp(k)=-ap(k)-cp(k)-ct*yt(j)**2
             dp(k)=-ct*u(i,j,k)*yt(j)**2
           end do
-            bp(1)=bp(1)+ap(1)
-            bp(Km)=bp(Km)+cp(Km)
+          bp(1)=bp(1)+ap(1)
+          bp(Km)=bp(Km)+cp(Km)
           call prog3(ap,bp,cp,dp,ep,Km)
           do k=1,Km
             u(i,j,k)=ep(k)
@@ -39,8 +39,8 @@
             bp(k)=-ap(k)-cp(k)-ct*yt(j)**2
             dp(k)=-ct*v(i,j,k)*yt(j)**2
           end do
-            bp(1)=bp(1)+ap(1)
-            bp(Km)=bp(Km)+cp(Km)
+          bp(1)=bp(1)+ap(1)
+          bp(Km)=bp(Km)+cp(Km)
           call prog3(ap,bp,cp,dp,ep,Km)
           do k=1,Km
             v(i,j,k)=ep(k)

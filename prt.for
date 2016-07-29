@@ -24,11 +24,12 @@
       enrg=0.d0
       dd=0.d0
       do k=1,Km
+        rr=rt1(0)/2
         do j=1,Jm
           Ss=Ss+yt(j)*ht*yt1(j)
           ubulk=ubulk+u(1,j,k)*yt(j)*ht*yt1(j)
           do i=1,Im
-            uP=1.d0-yt(j)**2
+            uP=1.0-rr**2
             volume=volume+yt(j)*ht*yt1(j)*hx
             enrg=enrg+(u(i,j,k)-uP)**2*yt(j)*ht*yt1(j)*hx
      >                    +v(i,j,k)**2*rt(j)*ht*rt1(j)*hx
@@ -36,6 +37,7 @@
             call div(i,j,k,u,v,w,d,Imax,Jmax)
             dd=max(dd,abs(d))
           end do
+          rr=rr+rt1(j)
         end do
       end do
       ubulk=ubulk/Ss
@@ -94,8 +96,8 @@
         write(*,110)t,dt,amp,enrg,ucl,Dp,cf,ubulk,dd,u1,v1
       end if 
 120   format(15e25.15)
-110   format('t=',f10.4,',dt=',f10.4,',amp=',e12.4,',enr=',e12.4,',Ucl='
-     > ,e12.4,',Dp=',e12.4,',cf=',e12.4,',ub=',e12.4,',dd=',e12.4
-     > ,',u*=',e12.4,',v*=',e12.4)
+110   format(' t=',f10.4,',  dt=',f10.4,',  amp=',e12.4,',  enr=',e12.4
+     > ,',  Ucl=',e12.4,',  Dp=',e12.4,',  cf=',e12.4,',  ub=',e12.4
+     > ,',  dd=',e12.4,',  u*=',e12.4,',  v*=',e12.4)
       return
       end

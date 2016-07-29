@@ -22,13 +22,19 @@
      >/pry/apy(128),bpy(128),cpy(128)
      >/proc/Np,Npm
 *
+      c0=0.d0
+      c1=1.d0
+      c12=0.5d0
+      c23=2.d0/3.d0
       Km=Kmm/Npm
+      Im2=Imm/2
+      cik=4.d0/(Im2*Kmm)
 *
 * Boundary conditions
       Np0=Np-1
-      if(Np.eq.0)Np0=Npm-1
+      if(Np.eq.0) Np0=Npm-1
       Np1=Np+1
-      if(Np.eq.Npm-1)Np1=0
+      if(Np.eq.Npm-1) Np1=0
       l=0
       do k=1,Kmm
         do j=1,Jm
@@ -49,19 +55,22 @@
           u(0,j,k)=buf(l)
         end do
       end do
-*
-      Im2=Imm/2
-      cik=4.d0/(Im2*Kmm)
-*
-      do i=1,Im
-        do j=1,Jm
-          w(i,j,0)=0.d0
-          w(i,j,Kmm)=0.d0
+      do j=1,Jm
+        do i=1,Im
+          w(i,j,0)=c0
+          w(i,j,Kmm)=c0
         end do
-        do k=1,Kmm
-          v(i,Jm,k)=0.d0
-          v(i,0,k)=0.d0
-          do j=1,Jm
+      end do
+      do k=1,Kmm
+        do i=1,Im
+          v(i,Jm,k)=c0
+          v(i,0,k)=c0
+        end do
+      end do
+*
+      do k=1,Kmm
+        do j=1,Jm
+          do i=1,Im
             call div(i,j,k,u,v,w,d,Imax,Jmax)
             p(i,j,k)=d
           end do
@@ -175,7 +184,7 @@
             bp(Jm)=bp(Jm)+cpy(Jm)
             Jm1=Jm
             ep(Jm)=0.d0
-            if(rlx(il).eq.0.d0.and.rlt(kl).eq.0.d0)Jm1=Jm-1
+            if(rlx(il).eq.0.d0.and.rlt(kl).eq.0.d0) Jm1=Jm-1
             call prog3(apy,bp,cpy,dp,ep,Jm1)
             do j=1,Jm
               p(i,j,k1)=ep(j)
@@ -278,9 +287,9 @@
 *
 * Boundary conditions
       Np0=Np-1
-      if(Np.eq.0)Np0=Npm-1
+      if(Np.eq.0) Np0=Npm-1
       Np1=Np+1
-      if(Np.eq.Npm-1)Np1=0
+      if(Np.eq.Npm-1) Np1=0
       l=0
       do k=1,Kmm
         do j=1,Jm
@@ -303,7 +312,7 @@
       end do
 *
 *  Mean pressure gradient
-      Ub=Um*(curv*2.d0/3.d0+(1.d0-curv)*0.5d0)
+      Ub=Um*(curv*c23+(c1-curv)*c12)
       ss=0.d0
       su=0.d0
       do j=1,Jm
@@ -353,9 +362,9 @@
         end do
       end do
 *
-      do j=1,Jm
-        do i=1,Im
-          do k=1,Km-1
+      do k=1,Km-1
+        do j=1,Jm
+          do i=1,Im
             w(i,j,k)=w(i,j,k)-(p(i,j,k+1)-p(i,j,k))/(yt(j)*ht)
           end do
         end do
