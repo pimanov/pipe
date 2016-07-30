@@ -120,7 +120,7 @@
 *
 * Vorticities
       do k=0,Km
-        do j=0,Jm
+        do j=1,Jm
           do i=1,Im
             w0=w(i,j,k)
             w1=w(i,j+1,k)
@@ -130,6 +130,10 @@
      >                -(v1-v0)/ht)/rt(j)
           end do
         end do
+        j=0
+          do i=1,Im
+            ox(i,j,k)=0.d0
+          end do
       end do
       do k=0,Km
         do j=1,Jm
