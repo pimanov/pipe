@@ -468,7 +468,7 @@ def get_xmeans(vel):
 # In[54]:
 
 def xmeans_plot(vel):
-    U,V,W,P = xmean_decomp(vel)
+    U,V,W,P = get_xmeans(vel)
     OX = get_ox(V,W)
     
     plt.subplot(1,3,1)
