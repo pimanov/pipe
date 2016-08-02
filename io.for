@@ -1,6 +1,6 @@
 *
 *
-      subroutine init_cp(fncp,t,dt,u,v,w,buf,Imax,Jmax,Kmax)
+      subroutine init_cp(fncp,t,dt,Dp,u,v,w,buf,Imax,Jmax,Kmax)
       implicit real*8 (a-h,o-z)
       include 'mpif.h'
       integer status(MPI_STATUS_SIZE)
@@ -24,6 +24,7 @@
       end if
       call MPI_BCAST(t,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(dt,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
+      call MPI_BCAST(Dp,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(Re,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(Xmax,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(epsr,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)

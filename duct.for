@@ -3,11 +3,14 @@
       implicit real*8 (a-h,o-z)
       include 'mpif.h'
       parameter (Imax=513, Jmax=129, Kmax=129)
-      character*24 fncp,fndat
+      character*24 fnbcp,fncp,fndat
       dimension
      > u(0:Imax,0:Jmax,0:Kmax)
      >,v(0:Imax,0:Jmax,0:Kmax)
      >,w(0:Imax,0:Jmax,0:Kmax)
+     >,ub(0:Imax,0:Jmax,0:Kmax)
+     >,vb(0:Imax,0:Jmax,0:Kmax)
+     >,wb(0:Imax,0:Jmax,0:Kmax)
      >,u1(0:Imax,0:Jmax,0:Kmax)
      >,v1(0:Imax,0:Jmax,0:Kmax)
      >,w1(0:Imax,0:Jmax,0:Kmax)
@@ -20,6 +23,9 @@
      >,ox(0:Imax,0:Jmax,0:Kmax)
      >,or(0:Imax,0:Jmax,0:Kmax)
      >,ot(0:Imax,0:Jmax,0:Kmax)
+     >,bx(0:Imax,0:Jmax,0:Kmax)
+     >,br(0:Imax,0:Jmax,0:Kmax)
+     >,bt(0:Imax,0:Jmax,0:Kmax)
      >,p(0:Imax,0:Jmax,0:Kmax)
      >,q(0:Imax,0:Jmax,0:Kmax)
      >,buf(2*Imax*Jmax*Kmax)
@@ -46,7 +52,7 @@
         read(5,*) nwrt
         read(5,*) tmax
         read(5,*) dtmax
-        read(5,*) cf
+        read(5,*) fnbcp 
         read(5,*) fncp
         read(5,*) fndat
         close(5)
@@ -56,10 +62,16 @@
       call MPI_BCAST(nwrt,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(tmax,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(dtmax,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
-      call MPI_BCAST(cf,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
 *
-      call init_cp(fncp,t,dt,u,v,w,buf,Imax,Jmax,Kmax)
+      call init_cp(fnbcp,t,dt,cf,ub,vb,wb,buf,Imax,Jmax,Kmax)
+      if(Np.eq.0)then
+        write(*,*)' ***************************************************'
+        write(*,*)' *        base:                                    *'
+        write(*,200) t,dt,Re,Xmax,epsr,Imm,Jm,Km,dsym
+        write(*,*)' ***************************************************'
+      endif
 *
+      call init_cp(fncp,t,dt,Dp,u,v,w,buf,Imax,Jmax,Kmax)
       if(Np.eq.0)then
         write(*,*)' ***************************************************'
         write(*,*)' *        Number of processors =',Npm,'          *'
@@ -71,7 +83,8 @@
      >'    Im=',i4,' Jm=',i4,' Km=',i4,' nsym=',e9.2)
 *
       dt=min(dt,dtmax)
-      call rp(t,u,v,w,u1,v1,w1,ox,or,ot,buf,Imax,Jmax)
+      call bc_om(ub,vb,wb,bx,br,bt,buf,Imax,Jmax)
+      call rp(t,ub,vb,wb,bx,br,bt,u,v,w,u1,v1,w1,ox,or,ot,buf,Imax,Jmax)
       call pres(u1,v1,w1,p,c0,buf,Imax,Jmax)
       if(Np.eq.0) open(8,file=fndat,access='append')
       call servis(t,u,v,w,ox,or,ot,p,0,Imax,Jmax)
@@ -80,8 +93,8 @@
       lwrt=0
 *
 10    continue
-        call step(t,dt,tol,u,v,w,u1,v1,w1,u2,v2,w2
-     >   ,u3,v3,w3,ox,or,ot,p,q,buf,Imax,Jmax)
+        call step(t,dt,tol,ub,vb,wb,bx,br,bt,u,v,w,
+     >   u1,v1,w1,u2,v2,w2,u3,v3,w3,ox,or,ot,p,q,buf,Imax,Jmax)
         lprt=lprt+1
         lwrt=lwrt+1
         dt=min(dt,dtmax)

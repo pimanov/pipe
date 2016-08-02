@@ -1,6 +1,6 @@
 *
-      subroutine step(t,dt,tol,u,v,w,u1,v1,w1,u2,v2,w2
-     > ,u3,v3,w3,ox,or,ot,p,q,buf,Imax,Jmax)
+      subroutine step(t,dt,tol,ub,vb,wb,bx,br,bt,u,v,w,
+     > u1,v1,w1,u2,v2,w2,u3,v3,w3,ox,or,ot,p,q,buf,Imax,Jmax)
       implicit real*8 (a-h,o-z)
       include 'mpif.h'
       dimension
@@ -68,7 +68,8 @@
         end do
       end do
 * 2-nd step
-      call rp(t1,u1,v1,w1,u2,v2,w2,ox,or,ot,buf,Imax,Jmax)
+      call rp(t1,ub,vb,wb,bx,br,bt,
+     > u1,v1,w1,u2,v2,w2,ox,or,ot,buf,Imax,Jmax)
       call pres(u2,v2,w2,p,c0,buf,Imax,Jmax)
       do k=1,Km
         do j=1,Jm
@@ -113,7 +114,8 @@
         end do
       end do
 * 4-th step
-      call rp(t1,u2,v2,w2,u1,v1,w1,ox,or,ot,buf,Imax,Jmax)
+      call rp(t1,ub,vb,wb,bx,br,bt,
+     > u2,v2,w2,u1,v1,w1,ox,or,ot,buf,Imax,Jmax)
       call gradp(u1,v1,w1,p,Imax,Jmax)
       do k=1,Km
         do j=1,Jm
@@ -140,9 +142,10 @@
           end do
         end do
       end do
-      call pres(u1,v1,w1,q,c23,buf,Imax,Jmax)
+      call pres(u1,v1,w1,q,c0,buf,Imax,Jmax)
 * Accuracy estimation
       error=0.d0
+      umax=0.d0
       do k=1,Km
         do j=1,Jm
           do i=1,Im
@@ -150,16 +153,24 @@
             vv=v1(i,j,k)-v3(i,j,k)
             ww=w1(i,j,k)-w3(i,j,k)
             error=max(error,abs(uu),abs(vv),abs(ww))
+            uu=u1(i,j,k)+u3(i,j,k)
+            vv=v1(i,j,k)+v3(i,j,k)
+            ww=w1(i,j,k)+w3(i,j,k)
+            umax=max(umax,abs(uu),abs(vv),abs(ww))
           end do
         end do
       end do
       call MPI_ALLREDUCE(error,errors,1,MPI_DOUBLE_PRECISION,MPI_MAX
      >               ,MPI_COMM_WORLD,ier)
-      fac=(tol/errors)**c13
+      call MPI_ALLREDUCE(umax,umaxs,1,MPI_DOUBLE_PRECISION,MPI_MAX
+     >               ,MPI_COMM_WORLD,ier)
+      error = errors/umaxs
+      fac=(tol/error)**c13
       if(fac.lt.facmin) then
         dt=dt*fac
         if(Np.eq.0)write(*,*)'  STEP:  fac=',fac,'  dt=',dt
-        call rp(t,u,v,w,u1,v1,w1,ox,or,ot,buf,Imax,Jmax)
+        call rp(t,ub,vb,wb,bx,br,bt,
+     > u,v,w,u1,v1,w1,ox,or,ot,buf,Imax,Jmax)
         call pres(u1,v1,w1,p,c0,buf,Imax,Jmax)
         goto 1
       end if
@@ -175,7 +186,8 @@
       end do
       t=t+dt
       dt=fac*dt
-      call rp(t,u,v,w,u1,v1,w1,ox,or,ot,buf,Imax,Jmax)
+      call rp(t,ub,vb,wb,bx,br,bt,
+     > u,v,w,u1,v1,w1,ox,or,ot,buf,Imax,Jmax)
       call pres(u1,v1,w1,p,c0,buf,Imax,Jmax)
       return
       end
