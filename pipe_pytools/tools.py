@@ -206,8 +206,8 @@ def put_cp(fn,t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,vel):
     return
 
 
-def put_car(tmax, dtmax, cf, cpfn, tol=0.01, kprt=10, kwrt=100000, prtfn="a0.dat"):
-    f = open("pipe.car","w")
+def put_car(tmax, dtmax, cf, cpfn, tol=0.01, kprt=10, kwrt=100000, prtfn="a0.dat", fname="pipe.car"):
+    f = open(fname,"w")
     f.write("%f - tol\n" % tol)
     f.write("%d - kprt\n" % kprt)
     f.write("%d - kwrt\n" % kwrt)
