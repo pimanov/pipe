@@ -1,13 +1,13 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[55]:
 
 import numpy as np
 import math
 
 
-# In[2]:
+# In[56]:
 
 import matplotlib.pyplot as plt
 get_ipython().magic('matplotlib inline')
@@ -15,7 +15,7 @@ get_ipython().magic('matplotlib inline')
 
 # # Grid
 
-# In[3]:
+# In[57]:
 
 class Rrt:
     def __init__(self, y0, y01):
@@ -51,7 +51,7 @@ class Rrt:
     i1 = lambda self, x: 1. + self.aset * (self.bset - 3.*(1.+self.bset)*x**2 + 5.*x**4)
 
 
-# In[35]:
+# In[58]:
 
 Xmax,Zmax,epsr,nsym = 4*[float("nan")]
 xf,xn,hx,lx,Im = None, None, float('nan'), 0, 1
@@ -60,7 +60,7 @@ thn,zn,thf,zf,ht,lt,Km = 4*[None] + [float('nan'), 0, 1]
 Re, cf = 2*[float('nan')]
 
 
-# In[5]:
+# In[59]:
 
 def init_r():
     global rn, yn, rt1, rf, yf, yt1
@@ -111,7 +111,7 @@ def __str__():
 
 # # Calc
 
-# In[6]:
+# In[60]:
 
 def mod_bc(vel):
         
@@ -141,7 +141,7 @@ def mod_bc(vel):
     w[:,-1,:] = - w[:,-2,:]
 
 
-# In[7]:
+# In[61]:
 
 def get_om(vel):
     mod_bc(vel)
@@ -180,7 +180,7 @@ def get_om(vel):
     return om
 
 
-# In[12]:
+# In[62]:
 
 def get_nl(vel, om):
     u,v,w = vel
@@ -232,7 +232,7 @@ def get_nl(vel, om):
     return velt
 
 
-# In[13]:
+# In[63]:
 
 def get_nl_part(vel,om):
     u,v,w = vel
@@ -277,7 +277,7 @@ def get_nl_part(vel,om):
     return vt1, vt2, wt1, wt2
 
 
-# In[16]:
+# In[64]:
 
 def get_cux(vel,om):
     u = vel[0]
@@ -298,7 +298,7 @@ def get_cux(vel,om):
     return cux
 
 
-# In[17]:
+# In[65]:
 
 def get_d1x(vel,om):
     u = vel[0]
@@ -320,7 +320,7 @@ def get_d1x(vel,om):
     return d1x
 
 
-# In[18]:
+# In[66]:
 
 def get_ox(v,w):
     ox = np.zeros_like(v)
@@ -336,7 +336,7 @@ def get_ox(v,w):
     return ox
 
 
-# In[19]:
+# In[67]:
 
 def get_nl_terms(vel,om):
     vt1, vt2, wt1, wt2 = get_nl_part(vel,om)
@@ -361,12 +361,12 @@ def get_nl_terms(vel,om):
 
 # # Read/Write
 
-# In[123]:
+# In[68]:
 
 import pipe_pytools.tools as tools
 
 
-# In[124]:
+# In[69]:
 
 def init():
     init_x()
@@ -374,7 +374,7 @@ def init():
     init_th()
 
 
-# In[125]:
+# In[70]:
 
 def read_dcp(fname, is_cf_in=False):
     
@@ -390,7 +390,7 @@ def read_dcp(fname, is_cf_in=False):
     return t,dt,vel
 
 
-# In[126]:
+# In[71]:
 
 def write_dcp(fname, t, dt, vel, is_cf_in=True):
     Dp = cf if is_cf_in else 0.0
@@ -401,7 +401,7 @@ def write_dcp(fname, t, dt, vel, is_cf_in=True):
 
 # # Elementary
 
-# In[127]:
+# In[72]:
 
 def thmean(vel):
     VEL = np.empty_like(vel)
@@ -409,7 +409,7 @@ def thmean(vel):
     return VEL
 
 
-# In[128]:
+# In[73]:
 
 def xmean(vel):
     VEL = np.empty_like(vel)
@@ -417,7 +417,7 @@ def xmean(vel):
     return VEL
 
 
-# In[129]:
+# In[74]:
 
 def cs_mean(u):
     return ((u[1:-1].mean(0).T * rt1)[1:-1].sum(-1))
@@ -425,7 +425,7 @@ def cs_mean(u):
 
 # # Plots
 
-# In[48]:
+# In[75]:
 
 def cs_plot(*args, **kwargs):
     plt.contourf(*args, **kwargs)
@@ -437,14 +437,14 @@ def cs_plot(*args, **kwargs):
     ax.set_aspect('equal')
 
 
-# In[49]:
+# In[76]:
 
 def aplot(n):
     a = np.loadtxt("a0.dat", usecols=[0,n], unpack=True)
     plt.plot(a[0],a[1])
 
 
-# In[53]:
+# In[96]:
 
 def get_xmeans(vel):
     U,V,W = VEL = vel.T[1:-1].mean(0).T
@@ -459,13 +459,18 @@ def get_xmeans(vel):
     for k in range(1,Km+1):
         for j in range(1,Jm+1):
             for i in range(1,Im+1):
-                puls[k,j] = vel1T[i,j,k,0]**2 +                 0.25*(vel1T[i,j-1,k,1] + vel1T[i,j,k,1])**2 +                 0.25*(vel1T[i,j,k-1,2] + vel1T[i,j,k,2])**2
+                puls[k,j] += vel1T[i,j,k,0]**2 +                 0.25*(vel1T[i,j-1,k,1] + vel1T[i,j,k,1])**2 +                 0.25*(vel1T[i,j,k-1,2] + vel1T[i,j,k,2])**2
     puls /= Im
     puls **= 0.5
+    
+    puls[0,:] = puls[1,:]
+    puls[-1,:] = puls[-2,:]
+    puls[:,0] = puls[:,1]
+    puls[:,-1] = - puls[:,-2]
     return U,V,W,puls
 
 
-# In[54]:
+# In[97]:
 
 def xmeans_plot(vel):
     U,V,W,P = get_xmeans(vel)
@@ -489,7 +494,7 @@ def xmeans_plot(vel):
 
 # # Calc
 
-# In[29]:
+# In[79]:
 
 def MPI_calc(vel, t1, dtmax, t2=0, dt=0, kprt=1, kwrt=10000, tol=0.01, 
              cpfn="tmp.dcp", prtfn="a0.dat", np=4, run_file="duct.out"):
