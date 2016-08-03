@@ -3,7 +3,7 @@
       implicit real*8 (a-h,o-z)
       include 'mpif.h'
       parameter (Imax=513, Jmax=129, Kmax=129)
-      character*24 fnbcp,fncp,fndat
+      character*24 fncp,fndat
       dimension
      > u(0:Imax,0:Jmax,0:Kmax)
      >,v(0:Imax,0:Jmax,0:Kmax)
@@ -52,7 +52,7 @@
         read(5,*) nwrt
         read(5,*) tmax
         read(5,*) dtmax
-        read(5,*) fnbcp 
+        read(5,*) cf
         read(5,*) fncp
         read(5,*) fndat
         close(5)
@@ -62,8 +62,9 @@
       call MPI_BCAST(nwrt,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(tmax,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(dtmax,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
+      call MPI_BCAST(cf,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
 *
-      call init_cp(fnbcp,t,dt,cf,ub,vb,wb,buf,Imax,Jmax,Kmax)
+      call init_cp("base.dcp",t,dt,ub,vb,wb,buf,Imax,Jmax,Kmax)
       if(Np.eq.0)then
         write(*,*)' ***************************************************'
         write(*,*)' *        base:                                    *'
@@ -71,7 +72,7 @@
         write(*,*)' ***************************************************'
       endif
 *
-      call init_cp(fncp,t,dt,Dp,u,v,w,buf,Imax,Jmax,Kmax)
+      call init_cp(fncp,t,dt,u,v,w,buf,Imax,Jmax,Kmax)
       if(Np.eq.0)then
         write(*,*)' ***************************************************'
         write(*,*)' *        Number of processors =',Npm,'          *'
