@@ -494,6 +494,12 @@ def xmeans_plot(vel):
 
 # # Calc
 
+# In[1]:
+
+def MPI_calc_init():
+    pass
+
+
 # In[79]:
 
 def MPI_calc(vel, t1, dtmax, t2=0, dt=0, kprt=1, kwrt=10000, tol=0.01, 
@@ -516,7 +522,7 @@ def MPI_calc(vel, t1, dtmax, t2=0, dt=0, kprt=1, kwrt=10000, tol=0.01,
     tools.put_car(tmax, dt, cf, cpfn, tol=tol, kprt=kprt, kwrt=kwrt, prtfn=prtfn, fname="duct.car")
     comand = "mpirun -np %d ./%s" % (np, run_file)
     get_ipython().system('$comand')
-    t,dt,vel = read_dcp(fncp)
+    t,dt,vel = read_dcp(cpfn)
     
     return t,dt,vel
 
