@@ -3,7 +3,7 @@
       implicit real*8 (a-h,o-z)
       include 'mpif.h'
       parameter (Imax=513, Jmax=129, Kmax=129)
-      character*24 fncp,fndat
+      character*24 fnbcp,fncp,fndat
       dimension
      > u(0:Imax,0:Jmax,0:Kmax)
      >,v(0:Imax,0:Jmax,0:Kmax)
@@ -39,7 +39,6 @@
      >/cf/cf
 *
       c0=0.d0
-      c23=2.d0/3.d0
 *
       call MPI_INIT(ier)
       call MPI_COMM_SIZE(MPI_COMM_WORLD,Npm,ier)
@@ -64,7 +63,8 @@
       call MPI_BCAST(dtmax,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(cf,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
 *
-      call init_cp("base.dcp",t,dt,ub,vb,wb,buf,Imax,Jmax,Kmax)
+      fnbcp="base.dcp"
+      call init_cp(fnbcp,t,dt,ub,vb,wb,buf,Imax,Jmax,Kmax)
       if(Np.eq.0)then
         write(*,*)' ***************************************************'
         write(*,*)' *        base:                                    *'
@@ -85,6 +85,7 @@
 *
       dt=min(dt,dtmax)
       call bc_om(ub,vb,wb,bx,br,bt,buf,Imax,Jmax)
+      call pres(u,v,w,q,c0,buf,Imax,Jmax)
       call rp(t,ub,vb,wb,bx,br,bt,u,v,w,u1,v1,w1,ox,or,ot,buf,Imax,Jmax)
       call pres(u1,v1,w1,p,c0,buf,Imax,Jmax)
       if(Np.eq.0) open(8,file=fndat,access='append')
