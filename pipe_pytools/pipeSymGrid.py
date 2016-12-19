@@ -576,7 +576,7 @@ def MPI_calc_init():
 # In[27]:
 
 def MPI_calc(vel, t1, dtmax, t2=0, dt=0, kprt=1, kwrt=10000, tol=0.01, 
-             cpfn="tmp.scp", prtfn="a0.dat", np=4, run_file="pipe.out"):
+             cpfn="tmp.dcp", prtfn="a0.dat", np=4, run_file="pipe.out"):
     if t2:
         t = t1
         tmax = t2
@@ -591,11 +591,11 @@ def MPI_calc(vel, t1, dtmax, t2=0, dt=0, kprt=1, kwrt=10000, tol=0.01,
     if cf != cf: 
         Exception("cf is nan")
         
-    write_scp(cpfn, t, dt, vel)
+    write_dcp(cpfn, t, dt, vel)
     tools.put_car(tmax, dt, cf, cpfn, tol=tol, kprt=kprt, kwrt=kwrt, prtfn=prtfn, fname="pipe.car")
     comand = "mpirun -np %d ./%s" % (np, run_file)
-    get_ipython().system(u'$comand')
-    t,dt,vel = read_scp(cpfn)
+    _ = get_ipython().getoutput(u'$comand')
+    t,dt,vel = read_dcp(cpfn)
     
     return t,dt,vel
 
