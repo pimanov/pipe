@@ -462,9 +462,9 @@ import matplotlib.pyplot as plt
 import matplotlib.tri as tri
 
 
-# In[22]:
+# In[2]:
 
-def cs_plot(u, rthloc="ff", *args, **kwargs):
+def cs_contourf_plot(u, rthloc="ff", *args, **kwargs):
     
     radius = {'f': rf.copy(), 'n': rn[:-1].copy()}[rthloc[0]]    
     radius[0] = 0.0
@@ -473,7 +473,7 @@ def cs_plot(u, rthloc="ff", *args, **kwargs):
     angles = {'f': thf.copy(), 'n': thn[:-1].copy()}[rthloc[1]]
     angles[0] = 0.0
     angles[-1] = Zmax
-    angles -= 3*math.pi/4 
+    angles -= 0.75*math.pi
     angles = np.repeat(angles[ ..., np.newaxis ], len(radius), axis=1)
 
     x = (radius * np.cos(angles) ).flatten()
@@ -504,10 +504,25 @@ def cs_plot(u, rthloc="ff", *args, **kwargs):
     #ax.xaxis.set_major_locator(plt.NullLocator())
     #ax.yaxis.set_major_locator(plt.NullLocator())
     plt.tricontourf( triang, z, *args, **kwargs)
-    plt.xlim(-math.sqrt(2)/2,math.sqrt(2)/2)                                                                                        
+    plt.xlim(-math.sqrt(2)/2,math.sqrt(2)/2)
     plt.ylim(-1,0) 
     
     return
+
+
+# In[4]:
+
+def cs_arrows_plot((v,w), (dj,dk)=(3,3), ll=3, *args, **kwargs):
+    for kk in range(1, Km/2+1, dk):
+        for k in [kk, Km - kk]:
+            for j in range(1, Jm+1, dj):
+                vv = 0.5 * (v[k+1,j] + v[k,j]) * ll
+                ww = - 0.5 * (w[k,j+1] + w[k,j]) * ll
+                xx = yn[j] * math.cos(thn[k] - 0.75*math.pi)
+                yy = yn[j] * math.sin(thn[k] - 0.75*math.pi)
+                vx = vv * math.cos(thn[k] - 0.75*math.pi) - ww * math.sin(thn[k] - 0.75*math.pi)
+                vy = vv * math.sin(thn[k] - 0.75*math.pi) + ww * math.cos(thn[k] - 0.75*math.pi)
+                plt.arrow(xx, yy, vx, vy, *args, **kwargs)
 
 
 # In[23]:

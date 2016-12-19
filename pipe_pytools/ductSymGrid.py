@@ -10,7 +10,7 @@ import math
 # In[56]:
 
 import matplotlib.pyplot as plt
-get_ipython().magic('matplotlib inline')
+get_ipython().magic(u'matplotlib inline')
 
 
 # # Grid
@@ -51,7 +51,7 @@ class Rrt:
     i1 = lambda self, x: 1. + self.aset * (self.bset - 3.*(1.+self.bset)*x**2 + 5.*x**4)
 
 
-# In[58]:
+# In[23]:
 
 Xmax,Zmax,epsr,nsym = 4*[float("nan")]
 xf,xn,hx,lx,Im = None, None, float('nan'), 0, 1
@@ -60,7 +60,7 @@ thn,zn,thf,zf,ht,lt,Km = 4*[None] + [float('nan'), 0, 1]
 Re, cf = 2*[float('nan')]
 
 
-# In[59]:
+# In[24]:
 
 def init_r():
     global rn, yn, rt1, rf, yf, yt1
@@ -111,7 +111,7 @@ def __str__():
 
 # # Calc
 
-# In[60]:
+# In[25]:
 
 def mod_bc(vel):
         
@@ -141,7 +141,7 @@ def mod_bc(vel):
     w[:,-1,:] = - w[:,-2,:]
 
 
-# In[61]:
+# In[26]:
 
 def get_om(vel):
     mod_bc(vel)
@@ -180,7 +180,7 @@ def get_om(vel):
     return om
 
 
-# In[62]:
+# In[27]:
 
 def get_nl(vel, om):
     u,v,w = vel
@@ -232,7 +232,7 @@ def get_nl(vel, om):
     return velt
 
 
-# In[63]:
+# In[28]:
 
 def get_nl_part(vel,om):
     u,v,w = vel
@@ -277,7 +277,7 @@ def get_nl_part(vel,om):
     return vt1, vt2, wt1, wt2
 
 
-# In[64]:
+# In[29]:
 
 def get_cux(vel,om):
     u = vel[0]
@@ -298,7 +298,7 @@ def get_cux(vel,om):
     return cux
 
 
-# In[65]:
+# In[30]:
 
 def get_d1x(vel,om):
     u = vel[0]
@@ -320,7 +320,7 @@ def get_d1x(vel,om):
     return d1x
 
 
-# In[66]:
+# In[31]:
 
 def get_ox(v,w):
     ox = np.zeros_like(v)
@@ -336,7 +336,7 @@ def get_ox(v,w):
     return ox
 
 
-# In[67]:
+# In[32]:
 
 def get_nl_terms(vel,om):
     vt1, vt2, wt1, wt2 = get_nl_part(vel,om)
@@ -361,12 +361,12 @@ def get_nl_terms(vel,om):
 
 # # Read/Write
 
-# In[68]:
+# In[33]:
 
 import pipe_pytools.tools as tools
 
 
-# In[69]:
+# In[34]:
 
 def init():
     init_x()
@@ -374,7 +374,7 @@ def init():
     init_th()
 
 
-# In[70]:
+# In[35]:
 
 def read_dcp(fname, is_cf_in=False):
     
@@ -390,7 +390,7 @@ def read_dcp(fname, is_cf_in=False):
     return t,dt,vel
 
 
-# In[71]:
+# In[36]:
 
 def write_dcp(fname, t, dt, vel, is_cf_in=True):
     Dp = cf if is_cf_in else 0.0
@@ -401,7 +401,7 @@ def write_dcp(fname, t, dt, vel, is_cf_in=True):
 
 # # Elementary
 
-# In[72]:
+# In[37]:
 
 def thmean(vel):
     VEL = np.empty_like(vel)
@@ -409,7 +409,7 @@ def thmean(vel):
     return VEL
 
 
-# In[73]:
+# In[38]:
 
 def xmean(vel):
     VEL = np.empty_like(vel)
@@ -417,7 +417,7 @@ def xmean(vel):
     return VEL
 
 
-# In[74]:
+# In[39]:
 
 def cs_mean(u):
     return ((u[1:-1].mean(0).T * rt1)[1:-1].sum(-1))
@@ -425,16 +425,29 @@ def cs_mean(u):
 
 # # Plots
 
-# In[75]:
+# In[40]:
 
-def cs_plot(*args, **kwargs):
+def cs_contourf_plot(*args, **kwargs):
     plt.contourf(*args, **kwargs)
-    plt.xlim(0,Zmax)
+    plt.xlim(-math.sqrt(2)/2 + 0.5, math.sqrt(2)/2 + 0.5)
+    #plt.xlim(0,1)
     plt.ylim(0,1)
     ax = plt.gca()
     ax.xaxis.set_major_locator(plt.NullLocator())
     ax.yaxis.set_major_locator(plt.NullLocator())
     ax.set_aspect('equal')
+    ax.axis('off')
+
+
+# In[20]:
+
+def cs_arrows_plot((v,w), (dj,dk)=(3,3), ll=3, *args, **kwargs):
+    for kk in range(1, Km/2+1, dk):
+        for k in [kk, Km - kk]:
+            for j in range(1, Jm+1, dj):
+                vy = - 0.5 * (v[k+1,j] + v[k,j]) * ll
+                vx = 0.5 * (w[k,j+1] + w[k,j]) * ll
+                plt.arrow(thn[k], yn[j], vx, vy, *args, **kwargs)
 
 
 # In[76]:
@@ -510,7 +523,7 @@ def MPI_calc(vel, t1, dtmax, t2=0, dt=0, kprt=1, kwrt=10000, tol=0.01,
     else:
         t = 0.0
         tmax = t1
-        get_ipython().system('rm -f $prtfn')
+        get_ipython().system(u'rm -f $prtfn')
         
     if not dt:
         dt = dtmax
@@ -521,7 +534,7 @@ def MPI_calc(vel, t1, dtmax, t2=0, dt=0, kprt=1, kwrt=10000, tol=0.01,
     write_dcp(cpfn, t, dt, vel)
     tools.put_car(tmax, dt, cf, cpfn, tol=tol, kprt=kprt, kwrt=kwrt, prtfn=prtfn, fname="duct.car")
     comand = "mpirun -np %d ./%s" % (np, run_file)
-    get_ipython().system('$comand')
+    get_ipython().system(u'$comand')
     t,dt,vel = read_dcp(cpfn)
     
     return t,dt,vel
