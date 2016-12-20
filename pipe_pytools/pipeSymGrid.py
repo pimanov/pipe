@@ -517,9 +517,9 @@ def cs_arrows_plot((v,w), (dj,dk)=(3,3), ll=3, *args, **kwargs):
         for k in [kk, Km - kk]:
             for j in range(1, Jm+1, dj):
                 vv = 0.5 * (v[k+1,j] + v[k,j]) * ll
-                ww = - 0.5 * (w[k,j+1] + w[k,j]) * ll
-                xx = yn[j] * math.cos(thn[k] - 0.75*math.pi)
-                yy = yn[j] * math.sin(thn[k] - 0.75*math.pi)
+                ww = 0.5 * (w[k,j+1] + w[k,j]) * ll
+                xx = rn[j] * math.cos(thn[k] - 0.75*math.pi)
+                yy = rn[j] * math.sin(thn[k] - 0.75*math.pi)
                 vx = vv * math.cos(thn[k] - 0.75*math.pi) - ww * math.sin(thn[k] - 0.75*math.pi)
                 vy = vv * math.sin(thn[k] - 0.75*math.pi) + ww * math.cos(thn[k] - 0.75*math.pi)
                 plt.arrow(xx, yy, vx, vy, *args, **kwargs)
