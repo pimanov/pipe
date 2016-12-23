@@ -101,8 +101,7 @@ def init_x():
 
 def __str__():
     ret = "## pipe sym geometry module\n"
-    ret += "Xmax = %f R\n" % Xmax                                                                                                   
-    ret += "nsym = %s\n" % str(nsym) 
+    ret += "Xmax = %sR, nsym = %s\n" % (str(Xmax), str(nsym))
     ret += "Im * Jm * Km = %d x %d x %d\n" % (Im,Jm,Km)
     ret += "epsr=%f, nsym=%f, hx=%f, ht=%f\n" % (epsr, nsym, hx, ht)
     ret += "Re=%f, cf=%f" % (Re, cf)
@@ -513,16 +512,15 @@ def cs_contourf_plot(u, rthloc="ff", *args, **kwargs):
 # In[4]:
 
 def cs_arrows_plot((v,w), (dj,dk)=(3,3), ll=3, *args, **kwargs):
-    for kk in range(1, Km/2+1, dk):
-        for k in [kk, Km - kk]:
-            for j in range(1, Jm+1, dj):
-                vv = 0.5 * (v[k+1,j] + v[k,j]) * ll
-                ww = 0.5 * (w[k,j+1] + w[k,j]) * ll
-                xx = rn[j] * math.cos(thn[k] - 0.75*math.pi)
-                yy = rn[j] * math.sin(thn[k] - 0.75*math.pi)
-                vx = vv * math.cos(thn[k] - 0.75*math.pi) - ww * math.sin(thn[k] - 0.75*math.pi)
-                vy = vv * math.sin(thn[k] - 0.75*math.pi) + ww * math.cos(thn[k] - 0.75*math.pi)
-                plt.arrow(xx, yy, vx, vy, *args, **kwargs)
+    for k in range(1, Km+1, dk):
+        for j in range(1, Jm+1, dj):
+            vv = 0.5 * (v[k+1,j] + v[k,j]) * ll
+            ww = 0.5 * (w[k,j+1] + w[k,j]) * ll
+            xx = rn[j] * math.cos(thn[k] - 0.75*math.pi)
+            yy = rn[j] * math.sin(thn[k] - 0.75*math.pi)
+            vx = vv * math.cos(thn[k] - 0.75*math.pi) - ww * math.sin(thn[k] - 0.75*math.pi)
+            vy = vv * math.sin(thn[k] - 0.75*math.pi) + ww * math.cos(thn[k] - 0.75*math.pi)
+            plt.arrow(xx, yy, vx, vy, *args, **kwargs)
 
 
 # In[23]:
@@ -566,17 +564,17 @@ def xmeans_plot(vel):
     
     plt.subplot(1,3,1)
     umax = U[1:-1,1:-1].max()
-    cs_plot(U, "ff", np.linspace(0, 1, 21))
+    cs_contourf_plot(U, "ff", np.linspace(0, 1, 21))
     plt.xlabel("U, max=%f" % umax, fontsize=14)
     
     plt.subplot(1,3,2)
     oxm = OX[1:-1,1:-1].max()
-    cs_plot(OX, "nn", np.linspace(-oxm, oxm, 21))
+    cs_contourf_plot(OX, "nn", np.linspace(-oxm, oxm, 21))
     plt.xlabel("OX, max=%f" % oxm, fontsize=14)
     
     plt.subplot(1,3,3)
     pm = P[1:-1,1:-1].max()
-    cs_plot(P, "nn", np.linspace(0, pm, 21))
+    cs_contourf_plot(P, "nn", np.linspace(0, pm, 21))
     plt.xlabel("puls, max=%f" % pm, fontsize=14)
 
 
@@ -609,7 +607,7 @@ def MPI_calc(vel, t1, dtmax, t2=0, dt=0, kprt=1, kwrt=10000, tol=0.01,
     write_dcp(cpfn, t, dt, vel)
     tools.put_car(tmax, dt, cf, cpfn, tol=tol, kprt=kprt, kwrt=kwrt, prtfn=prtfn, fname="pipe.car")
     comand = "mpirun -np %d ./%s" % (np, run_file)
-    _ = get_ipython().getoutput(u'$comand')
+    get_ipython().system(u'$comand')
     t,dt,vel = read_dcp(cpfn)
     
     return t,dt,vel
