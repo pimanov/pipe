@@ -50,9 +50,10 @@
       read(5,*) nwrt
       read(5,*) tmax
       read(5,*) dtmax
-      read(5,*) fnbcp
+      read(5,*) cf
       read(5,*) fncp
       read(5,*) fndat
+      fnbcp='base.dcp'
       istop=0
       open(9,file=fncp,form='unformatted',status='old',err=111)
       end if
@@ -67,6 +68,7 @@
       call MPI_BCAST(nwrt,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(tmax,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(dtmax,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
+      call MPI_BCAST(cf,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
 *
       call MPI_BCAST(t,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(dt,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
@@ -81,7 +83,7 @@
       call com
       if(Np.eq.0) then      
       write(*,*)' ***************************************************'
-      write(*,*)' *        Number of processors =',Npm,'          *'
+      write(*,*)' * Number of processors =',Npm,', cf = ', cf,'     *'
       write(*,200) t,dt,Dp,Re,Xmax,epsr,Imm,Jm,Km,dsym
       write(*,*)' ***************************************************'
 200   format('    t=',1pe10.3,' dt=',e9.2,' Dp=',e9.2,/,
@@ -140,17 +142,15 @@
 223   call MPI_BCAST(istop,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
       if(istop.ne.0) goto 333
       if(Np.eq.0)then
-        read(9)t1,dt1,cf,Re1,Xmax1,epsr1,lx1,Jm1,lt1,dsym1
+        read(9)t1,dt1,cf1,Re1,Xmax1,epsr1,lx1,Jm1,lt1,dsym1
       end if
-*
-      call MPI_BCAST(cf,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
 *
       if(Np.eq.0) then      
         Im1=2**lx1
         Km1=2**lt1
-        write(*,201) cf,Xmax1,epsr1,Im1,Jm1,Km1,dsym1
+        write(*,201) cf1,Xmax1,epsr1,Im1,Jm1,Km1,dsym1
         write(*,*)' ***************************************************'
-201   format('base: cf=',f9.7,' Xmax=',e9.2,' epsr=',e9.2,/,
+201   format('base: cf1=',f9.7,' Xmax=',e9.2,' epsr=',e9.2,/,
      >'     Im=',i4,' Jm=',i4,' Km=',i4,' Nsym=',e9.2)
 *
         if(Im.gt.Im1) then
