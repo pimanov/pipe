@@ -427,8 +427,24 @@ def cs_mean(u):
 
 # In[40]:
 
-def cs_contourf_plot(*args, **kwargs):
-    plt.contourf(*args, **kwargs)
+def cs_contourf_plot(u, yzloc="ff", *args, **kwargs):
+    if yzloc[0] == 'f':
+        y = yf.copy()
+        y[0] = 0.0
+        y[-1] = 1.0
+    else:
+        y = yn[:-1].copy()
+        u = u[:,:-1]
+        
+    if yzloc[1] == 'f':
+        z = zf.copy()
+        z[0] = 0.0
+        z[-1] = Zmax
+    else:
+        z = zn[:-1].copy()
+        u = u[:-1,:]
+        
+    plt.contourf(z, y, u.T, *args, **kwargs)
     plt.xlim(-math.sqrt(2)/2 + 0.5, math.sqrt(2)/2 + 0.5)
     #plt.xlim(0,1)
     plt.ylim(0,1)
@@ -442,12 +458,11 @@ def cs_contourf_plot(*args, **kwargs):
 # In[20]:
 
 def cs_arrows_plot((v,w), (dj,dk)=(3,3), ll=3, *args, **kwargs):
-    for kk in range(1, Km/2+1, dk):
-        for k in [kk, Km - kk]:
-            for j in range(1, Jm+1, dj):
-                vy = - 0.5 * (v[k+1,j] + v[k,j]) * ll
-                vx = 0.5 * (w[k,j+1] + w[k,j]) * ll
-                plt.arrow(thn[k], yn[j], vx, vy, *args, **kwargs)
+    for k in range(1, Km+1, dk):
+        for j in range(1, Jm+1, dj):
+            vy = - 0.5 * (v[k+1,j] + v[k,j]) * ll
+            vx = 0.5 * (w[k,j+1] + w[k,j]) * ll
+            plt.arrow(thn[k], yn[j], vx, vy, *args, **kwargs)
 
 
 # In[76]:
@@ -491,17 +506,17 @@ def xmeans_plot(vel):
     
     plt.subplot(1,3,1)
     umax = U[1:-1,1:-1].max()
-    cs_plot(thf, yf, U.T, np.linspace(0, 1, 21))
+    cs_contourf_plot(U, "ff", np.linspace(0, 1, 21))
     plt.xlabel("U, max=%f" % umax, fontsize=14)
     
     plt.subplot(1,3,2)
     oxm = OX[1:-1,1:-1].max()
-    cs_plot(thn, yn, OX.T, np.linspace(-oxm, oxm, 21))
+    cs_contourf_plot(OX, "nn", np.linspace(-oxm, oxm, 21))
     plt.xlabel("OX, max=%f" % oxm, fontsize=14)
     
     plt.subplot(1,3,3)
     pm = P[1:-1,1:-1].max()
-    cs_plot(thn, yn, P.T, np.linspace(0, pm, 21))
+    cs_contourf_plot(P, "nn", np.linspace(0, pm, 21))
     plt.xlabel("puls, max=%f" % pm, fontsize=14)
 
 
