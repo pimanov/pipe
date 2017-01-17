@@ -455,6 +455,36 @@ def cs_contourf_plot(u, yzloc="ff", *args, **kwargs):
     ax.axis('off')
 
 
+# In[ ]:
+
+def cs_contour_plot(u, yzloc="ff", *args, **kwargs):
+    if yzloc[0] == 'f':
+        y = yf.copy()
+        y[-1] = 0.0
+        y[0] = 1.0
+    else:
+        y = yn[:-1].copy()
+        u = u[:,:-1]
+        
+    if yzloc[1] == 'f':
+        th = thf.copy()
+        th[0] = 0.0
+        th[-1] = Zmax
+    else:
+        th = thn[:-1].copy()
+        u = u[:-1,:]
+        
+    plt.contour(th, y, u.T, *args, **kwargs)
+    plt.xlim(-math.sqrt(2)/2 + 0.5, math.sqrt(2)/2 + 0.5)
+    #plt.xlim(0,1)
+    plt.ylim(0,1)
+    ax = plt.gca()
+    ax.xaxis.set_major_locator(plt.NullLocator())
+    ax.yaxis.set_major_locator(plt.NullLocator())
+    ax.set_aspect('equal')
+    ax.axis('off')
+
+
 # In[20]:
 
 def cs_arrows_plot((v,w), (dj,dk)=(3,3), ll=3, *args, **kwargs):

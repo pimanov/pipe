@@ -509,6 +509,54 @@ def cs_contourf_plot(u, rthloc="ff", *args, **kwargs):
     return
 
 
+# In[ ]:
+
+def cs_contour_plot(u, rthloc="ff", *args, **kwargs):
+    
+    radius = {'f': rf.copy(), 'n': rn[:-1].copy()}[rthloc[0]]    
+    radius[0] = 0.0
+    radius[-1] = 1.0
+    
+    angles = {'f': thf.copy(), 'n': thn[:-1].copy()}[rthloc[1]]
+    angles[0] = 0.0
+    angles[-1] = Zmax
+    angles -= 0.75*math.pi
+    angles = np.repeat(angles[ ..., np.newaxis ], len(radius), axis=1)
+
+    x = (radius * np.cos(angles) ).flatten()
+    y = (radius * np.sin(angles) ).flatten()
+    triang = tri.Triangulation(x, y)
+
+    ucl = u[1:-1,1].mean()
+    
+    z = u.copy()
+    
+    if rthloc[0] == 'f':
+        z[:,0] = ucl
+        z[:,-1] = 0.0
+    else:
+        z = z[:,:-1]
+        
+    if rthloc[1] == 'f':
+        z[0] = z[1]
+        z[-1] = z[-2]
+    else:
+        z = z[:-1,:]
+    
+    z = z.flatten()
+    
+    ax = plt.gca()
+    ax.axis('off')
+    ax.set_aspect('equal')
+    #ax.xaxis.set_major_locator(plt.NullLocator())
+    #ax.yaxis.set_major_locator(plt.NullLocator())
+    plt.tricontour( triang, z, *args, **kwargs)
+    plt.xlim(-math.sqrt(2)/2,math.sqrt(2)/2)
+    plt.ylim(-1,0) 
+    
+    return
+
+
 # In[4]:
 
 def cs_arrows_plot((v,w), (dj,dk)=(3,3), ll=3, *args, **kwargs):
