@@ -3,7 +3,7 @@
       implicit real*8 (a-h,o-z)
       include 'mpif.h'
       common
-     >/dim/Xmax,epsr,nsym
+     >/dim/Xmax,epsr,dsym
      >/dimx/hx,Im,Imm,lx
      >/dimr/rt(0:129),rt1(0:129),yt(0:129),yt1(0:129),hr,Jm
      >/dimt/ht,Km,lt
@@ -25,7 +25,7 @@
 *
 * dimt
       Km=2**lt
-      ht=pi/(nsym*Km)
+      ht=pi/(dsym*Km)
 * dimx
       Imm=2**lx
       Im=Imm/Npm

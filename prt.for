@@ -8,7 +8,7 @@
      >,w(0:Imax,0:Jmax,0:*)
      >,p(0:Imax,0:Jmax,0:*)
       common
-     >/dim/Xmax,epsr,nsym
+     >/dim/Xmax,epsr,dsym
      >/dimx/hx,Im,Imm,lx
      >/dimr/rt(0:129),rt1(0:129),yt(0:129),yt1(0:129),hr,Jm
      >/dimt/ht,Km,lt
@@ -43,10 +43,10 @@
 
       call MPI_ALLREDUCE(volume,vols,1,MPI_DOUBLE_PRECISION,MPI_SUM
      >               ,MPI_COMM_WORLD,ier)
-      volume=vols*2*nsym
+      volume=vols*2*dsym
       call MPI_ALLREDUCE(enrg,enrgs,1,MPI_DOUBLE_PRECISION,MPI_SUM
      >               ,MPI_COMM_WORLD,ier)
-      enrg=enrgs*2*nsym
+      enrg=enrgs*2*dsym
       call MPI_ALLREDUCE(dd,dds,1,MPI_DOUBLE_PRECISION,MPI_MAX
      >               ,MPI_COMM_WORLD,ier)
       dd=dds
@@ -74,7 +74,7 @@
       end do
       call MPI_ALLREDUCE(amp,amps,1,MPI_DOUBLE_PRECISION,MPI_SUM
      >               ,MPI_COMM_WORLD,ier)
-      amp=sqrt(amps*2*nsym)
+      amp=sqrt(amps*2*dsym)
 
       ucl=0.d0
       do k=1,Km

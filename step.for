@@ -1,8 +1,6 @@
 *
-      subroutine step(t,dt,tol
-     > ,u,v,w,u1,v1,w1,u2,v2,w2
-     > ,u3,v3,w3,ox,or,ot,p,q
-     > ,buf,Imax,Jmax)
+      subroutine step(t,dt,tol,u,v,w,u1,v1,w1,u2,v2,w2
+     > ,u3,v3,w3,ox,or,ot,p,q,buf,Imax,Jmax)
       implicit real*8 (a-h,o-z)
       include 'mpif.h'
       dimension
