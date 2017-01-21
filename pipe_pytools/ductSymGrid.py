@@ -452,7 +452,11 @@ def cs_contourf_plot(u, yzloc="ff", *args, **kwargs):
     ax.xaxis.set_major_locator(plt.NullLocator())
     ax.yaxis.set_major_locator(plt.NullLocator())
     ax.set_aspect('equal')
-    ax.axis('off')
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['bottom'].set_visible(False)
+    ax.spines['left'].set_visible(False)
+    #ax.axis('off')
 
 
 # In[ ]:
@@ -481,8 +485,12 @@ def cs_contour_plot(u, yzloc="ff", *args, **kwargs):
     ax = plt.gca()
     ax.xaxis.set_major_locator(plt.NullLocator())
     ax.yaxis.set_major_locator(plt.NullLocator())
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['bottom'].set_visible(False)
+    ax.spines['left'].set_visible(False)
     ax.set_aspect('equal')
-    ax.axis('off')
+    #ax.axis('off')
 
 
 # In[20]:
