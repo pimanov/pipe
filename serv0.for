@@ -1,7 +1,7 @@
 *
-      subroutine servis(t,OXgen,u,v,w,ox,or,ot,p,ii,Imax,Jmax)
+      subroutine servis(t,g1,g2,u,v,w,ox,or,ot,p,ii,buf,Imax,Jmax)
       implicit real*8 (a-h,o-z)
-      character*24   fngcp
+      character*24 fngcp
       dimension
      > u(0:Imax,0:Jmax,0:*)
      >,v(0:Imax,0:Jmax,0:*)
@@ -10,7 +10,9 @@
      >,or(0:Imax,0:Jmax,0:*)
      >,ot(0:Imax,0:Jmax,0:*)
      >,p(0:Imax,0:Jmax,0:*)
-     >,OXgen(0:Imax,0:Jmax,0:*)
+     >,g2(0:Imax,0:Jmax,0:*)
+     >,g1(0:Imax,0:Jmax,0:*)
+     >,buf(*)
       common
 *     >/dim/Xmax,epsr,dsym
      >/dimx/hx,Im,Imm,lx
@@ -19,7 +21,7 @@
      >/servst/iserv
      >/servsn/nserv
 *
-      fngcp = "OXgen.scp"
+      fngcp="OXgen.scp"
 *
       if (iserv.eq.0) then
         iserv = 1
@@ -27,10 +29,12 @@
         do k=1,Km
           do j=1,Jm
             do i=1,Im
-              OXgen(i,j,k) = 0.d0
+              g1(i,j,k) = 0.d0
+              g2(i,j,k) = 0.d0
             end do
           end do
         end do
+        return
       end if
 *
       if(ii.eq.0) then
@@ -43,22 +47,27 @@
       ox_fnn=ox(i,j,k)
       ux_fnn=((u(i,j+1,k+1)+u(i,j+1,k)+u(i,j,k+1)+u(i,j,k))- 
      >(u(i-1,j+1,k+1)+u(i-1,j+1,k)+u(i-1,j,k+1)+u(i-1,j,k)))/(4*hx)
-      OXgen(i,j,k)=OXgen(i,j,k)-u_fnn*oxx_fnn+ox_fnn*ux_fnn
+      g1(i,j,k)=g1(i,j,k)-u_fnn*oxx_fnn
+      g2(i,j,k)=g2(i,j,k)+ox_fnn*ux_fnn
             end do
           end do
         end do
-        nserv = nserv + 1
+        nserv=nserv+1
       end if
 *
       if(ii.eq.2) then
         do k=1,Km
           do j=1,Jm
             do i=1,Im
-              OXgen(i,j,k) = OXgen(i,j,k) / nserv
+              g1(i,j,k)=g1(i,j,k)/nserv
+              g2(i,j,k)=g2(i,j,k)/nserv
             end do
           end do
         end do
-        call write_cp(0.0,0.0,0.0,OXgen,OXgen,OXgen,fngcp,buf,Imax,Jmax)
+        dt=0.25
+        Dp=0.0
+        call write_cp(t,dt,Dp,g1,g2,w,fngcp,buf,Imax,Jmax)
+*
       end if
       return
       end
