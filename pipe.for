@@ -69,7 +69,7 @@
       endif
 200   format('    t=',1pe10.3,' dt=',e9.2,/,
      >'    Re=',e9.2,' Xmax=',e9.2,' epsr=',e9.2,/,
-     >'    Im=',i4,' Jm=',i4,' Km=',i4,' nsym=',e9.2)
+     >'    Im=',i4,' Jm=',i4,' Km=',i4,' dsym=',e9.2)
 *
       call rp(t,u,v,w,u1,v1,w1,ox,or,ot,buf,Imax,Jmax)
       call pres(u1,v1,w1,p,c0,buf,Imax,Jmax)
