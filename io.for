@@ -11,7 +11,7 @@
      >,w(0:Imax,0:Jmax,0:*)
      >,buf(*)
       common
-     >/dim/Xmax,epsr,nsym
+     >/dim/Xmax,epsr,dsym
      >/dimx/hx,Im,Imm,lx
      >/dimr/rt(0:129),rt1(0:129),yt(0:129),yt1(0:129),hr,Jm
      >/dimt/ht,Km,lt
@@ -20,7 +20,7 @@
 *
       if(Np.eq.0) then
         open(9,file=fncp,form='unformatted',status='old',err=111)
-        read(9)t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,nsym
+        read(9)t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,dsym
       end if
       call MPI_BCAST(t,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(dt,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
@@ -30,7 +30,7 @@
       call MPI_BCAST(lx,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(Jm,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(lt,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
-      call MPI_BCAST(nsym,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
+      call MPI_BCAST(dsym,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
 *
       call com
 *
@@ -99,7 +99,7 @@
      >,w(0:Imax,0:Jmax,0:*)
      >,buf(*)
       common
-     >/dim/Xmax,epsr,nsym
+     >/dim/Xmax,epsr,dsym
      >/dimx/hx,Im,Imm,lx
      >/dimr/rt(0:129),rt1(0:129),yt(0:129),yt1(0:129),hr,Jm
      >/dimt/ht,Km,lt
@@ -108,7 +108,7 @@
 *
       if(Np.eq.0) then
         open(9,file=fncp,form='unformatted')
-        write(9)t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,nsym
+        write(9)t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,dsym
       end if
 *
       do k=1,Km

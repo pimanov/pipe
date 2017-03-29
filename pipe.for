@@ -24,7 +24,7 @@
      >,q(0:Imax,0:Jmax,0:Kmax)
      >,buf(2*Imax*Jmax*Kmax)
       common
-     >/dim/Xmax,epsr,nsym
+     >/dim/Xmax,epsr,dsym
      >/dimx/hx,Im,Imm,lx
      >/dimr/rt(0:129),rt1(0:129),yt(0:129),yt1(0:129),hr,Jm
      >/dimt/ht,Km,lt
@@ -64,12 +64,12 @@
       if(Np.eq.0) then
         write(*,*)' ***************************************************'
         write(*,*)' *        Number of processors =',Npm,'          *'
-        write(*,200) t,dt,Re,Xmax,epsr,Imm,Jm,Km,nsym
+        write(*,200) t,dt,Re,Xmax,epsr,Imm,Jm,Km,dsym
         write(*,*)' ***************************************************'
       endif
 200   format('    t=',1pe10.3,' dt=',e9.2,/,
      >'    Re=',e9.2,' Xmax=',e9.2,' epsr=',e9.2,/,
-     >'    Im=',i4,' Jm=',i4,' Km=',i4,' nsym=',i4)
+     >'    Im=',i4,' Jm=',i4,' Km=',i4,' dsym=',e9.2)
 *
       call rp(t,u,v,w,u1,v1,w1,ox,or,ot,buf,Imax,Jmax)
       call pres(u1,v1,w1,p,c0,buf,Imax,Jmax)
