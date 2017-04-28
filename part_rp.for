@@ -37,8 +37,8 @@
      >,v(0:Imax,0:Jmax,0:*)
      >,w(0:Imax,0:Jmax,0:*)
      >,vt1(0:Imax,0:Jmax,0:*)
-     >,wt1(0:Imax,0:Jmax,0:*)
      >,vt2(0:Imax,0:Jmax,0:*)
+     >,wt1(0:Imax,0:Jmax,0:*)
      >,wt2(0:Imax,0:Jmax,0:*)
      >,ox(0:Imax,0:Jmax,0:*)
      >,or(0:Imax,0:Jmax,0:*)
@@ -109,9 +109,7 @@
             ox1=ox(i,j,k)
             ot0=ot(i-1,j,k)
             ot1=ot(i,j,k)
-            vt(i,j,k)=vt(i,j,k)
-     >               -((ox1-ox0)/(rt(j)*ht)
-     >                -(ot1-ot0)/hx)/Re
+            vt(i,j,k)=-((ox1-ox0)/(rt(j)*ht)-(ot1-ot0)/hx)/Re
           end do
         end do
       end do
@@ -122,9 +120,7 @@
             ox1=ox(i,j,k)
             or0=or(i-1,j,k)
             or1=or(i,j,k)
-            wt(i,j,k)=wt(i,j,k)
-     >               -((or1-or0)/hx
-     >                -(ox1-ox0)/yt1(j))/Re
+            wt(i,j,k)=-((or1-or0)/hx-(ox1-ox0)/yt1(j))/Re
           end do
         end do
       end do

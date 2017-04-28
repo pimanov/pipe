@@ -1,7 +1,9 @@
 *
-      subroutine servis(t,g1,g2,g3,g4,u,v,w,ox,or,ot,p,ii,buf,Imax,Jmax)
+      subroutine servis(t,g1,g2,g3,g4,g5,
+     >u,v,w,ox,or,ot,p,ii,buf,Imax,Jmax)
       implicit real*8 (a-h,o-z)
-      character*24 fngcp
+      parameter (Imx=257, Jmx=129, Kmx=129)
+      character*24 fngcp1, fngcp2
       dimension
      > u(0:Imax,0:Jmax,0:*)
      >,v(0:Imax,0:Jmax,0:*)
@@ -14,10 +16,17 @@
      >,g2(0:Imax,0:Jmax,0:*)
      >,g3(0:Imax,0:Jmax,0:*)
      >,g4(0:Imax,0:Jmax,0:*)
+     >,g5(0:Imax,0:Jmax,0:*)
      >,buf(*)
-     >,wt(0:257,0:41,0:33),wt1(0:257,0:41,0:33),wt2(0:257,0:41,0:33)
-     >,vt(0:257,0:41,0:33),vt1(0:257,0:41,0:33),vt2(0:257,0:41,0:33)
-     >,ox1(0:257,0:41,0:33),ox2(0:257,0:41,0:33),visc(0:257,0:41,0:33)
+     >,wt(0:Imx,0:Jmx,0:Kmx)
+     >,wt1(0:Imx,0:Jmx,0:Kmx)
+     >,wt2(0:Imx,0:Jmx,0:Kmx)
+     >,vt(0:Imx,0:Jmx,0:Kmx)
+     >,vt1(0:Imx,0:Jmx,0:Kmx)
+     >,vt2(0:Imx,0:Jmx,0:Kmx)
+     >,ox1(0:Imx,0:Jmx,0:Kmx)
+     >,ox2(0:Imx,0:Jmx,0:Kmx)
+     >,visc(0:Imx,0:Jmx,0:Kmx)
       common
 *     >/dim/Xmax,epsr,dsym
      >/dimx/hx,Im,Imm,lx
@@ -27,8 +36,8 @@
      >/servsn/nserv
      >/cf/cf
 *
-      fngcp="OXgen1.scp"
-      fngcp="OXgen2.scp"
+      fngcp1="OXgen1.scp"
+      fngcp2="OXgen2.scp"
 *
       if (iserv.eq.0) then
         iserv = 1
@@ -40,6 +49,7 @@
               g2(i,j,k)=0.d0
               g3(i,j,k)=0.d0
               g4(i,j,k)=0.d0
+              g5(i,j,k)=0.d0
             end do
           end do
         end do
@@ -48,7 +58,6 @@
 *
       if(ii.eq.1) then
         call get_nl_part(u,v,w,ox,or,ot,vt1,vt2,wt1,wt2,Imax,Jmax)
-        return
         call get_rotx(vt1,wt1,ox1,Imax,Jmax)   
         call get_rotx(vt2,wt2,ox2,Imax,Jmax)   
         call get_visc(ox,or,ot,vt,wt,Imax,Jmax)
@@ -67,12 +76,12 @@
 
               dtx=ox1(i,j,k)-cux
               ctx=ox2(i,j,k)-d1x
-              cxx=cux+d1x
 
-              g1(i,j,k)=g1(i,j,k)+cxx
-              g2(i,j,k)=g2(i,j,k)+ctx
-              g3(i,j,k)=g3(i,j,k)+dtx
-              g4(i,j,k)=g4(i,j,k)+visc(i,j,k)
+              g1(i,j,k)=g1(i,j,k)+cux
+              g2(i,j,k)=g2(i,j,k)+d1x
+              g3(i,j,k)=g3(i,j,k)+ctx
+              g4(i,j,k)=g4(i,j,k)+dtx
+              g5(i,j,k)=g5(i,j,k)+visc(i,j,k)
             end do
           end do
         end do
@@ -87,13 +96,14 @@
               g2(i,j,k)=g2(i,j,k)/nserv
               g3(i,j,k)=g3(i,j,k)/nserv
               g4(i,j,k)=g4(i,j,k)/nserv
+              g5(i,j,k)=g5(i,j,k)/nserv
             end do
           end do
         end do
         dt=0.25
         Dp=0.0
-        call write_cp(t,dt,Dp,g1,g2,g3,fngcp2,buf,Imax,Jmax)
-        call write_cp(t,dt,Dp,g4,v,w,fngcp1,buf,Imax,Jmax)
+        call write_cp(t,dt,Dp,g1,g2,g3,fngcp1,buf,Imax,Jmax)
+        call write_cp(t,dt,Dp,g4,g5,w,fngcp2,buf,Imax,Jmax)
 *
       end if
       return
