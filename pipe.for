@@ -25,6 +25,8 @@
      >,buf(2*Imax*Jmax*Kmax)
      >,g1(0:Imax,0:Jmax,0:Kmax)
      >,g2(0:Imax,0:Jmax,0:Kmax)
+     >,g3(0:Imax,0:Jmax,0:Kmax)
+     >,g4(0:Imax,0:Jmax,0:Kmax)
       common
      >/dim/Xmax,epsr,dsym
      >/dimx/hx,Im,Imm,lx
@@ -77,7 +79,7 @@
       call pres(u1,v1,w1,p,c0,buf,Imax,Jmax)
 *
       if(Np.eq.0) open(8,file=fndat,access='append')
-      call servis(t,g1,g2,u,v,w,ox,or,ot,p,0,buf,Imax,Jmax)
+      call servis(t,g1,g2,g3,g4,u,v,w,ox,or,ot,p,0,buf,Imax,Jmax)
       call prt(t,dt,u,v,w,p,Imax,Jmax)
       lprt=0
       lwrt=0
@@ -88,15 +90,15 @@
         lprt=lprt+1
         lwrt=lwrt+1
         dt=min(dt,dtmax)
-        call servis(t,g1,g2,u,v,w,ox,or,ot,p,0,buf,Imax,Jmax)
+        call servis(t,g1,g2,g3,g4,u,v,w,ox,or,ot,p,0,buf,Imax,Jmax)
         if(lprt.ge.nprt.or.t+0.01*dt.ge.tmax) then
           lprt=0
-          call servis(t,g1,g2,u,v,w,ox,or,ot,p,1,buf,Imax,Jmax)
+          call servis(t,g1,g2,g3,g4,u,v,w,ox,or,ot,p,1,buf,Imax,Jmax)
           call prt(t,dt,u,v,w,p,Imax,Jmax)
         end if
         if(lwrt.ge.nwrt.or.t+0.01*dt.ge.tmax) then
           lwrt=0
-          call servis(t,g1,g2,u,v,w,ox,or,ot,p,2,buf,Imax,Jmax)
+          call servis(t,g1,g2,g3,g4,u,v,w,ox,or,ot,p,2,buf,Imax,Jmax)
           Dp=p(0,0,0)
           call write_cp(t,dt,Dp,u,v,w,fncp,buf,Imax,Jmax)
           if(Np.eq.0)then
