@@ -2,7 +2,7 @@
 *     program an
       implicit real*8 (a-h,o-z)
       include 'mpif.h'
-      parameter (Imax=513, Jmax=129, Kmax=129)
+      parameter (Imax=257, Jmax=129, Kmax=129)
       character*24 fncp,fndat,fnbcp
       dimension
      > u(0:Imax,0:Jmax,0:Kmax)
@@ -29,6 +29,11 @@
      >,p(0:Imax,0:Jmax,0:Kmax)
      >,q(0:Imax,0:Jmax,0:Kmax)
      >,buf(2*Imax*Jmax*Kmax)
+     >,g1(0:Imax,0:Jmax,0:Kmax)
+     >,g2(0:Imax,0:Jmax,0:Kmax)
+     >,g3(0:Imax,0:Jmax,0:Kmax)
+     >,g4(0:Imax,0:Jmax,0:Kmax)
+     >,g5(0:Imax,0:Jmax,0:Kmax)
       common
      >/dim/Xmax,epsr,dsym
      >/dimx/hx,Im,Imm,lx
@@ -38,249 +43,109 @@
      >/proc/Np,Npm
      >/cf/cf
 *
-      integer status(MPI_STATUS_SIZE)
+      c0=0.d0
+      c12=0.5d0
+*
       call MPI_INIT(ier)
       call MPI_COMM_SIZE(MPI_COMM_WORLD,Npm,ier)
       call MPI_COMM_RANK(MPI_COMM_WORLD,Np,ier)
- 
-      if(Np.eq.0)then
-      open(5,file='pipe.car')
-      read(5,*) tol
-      read(5,*) nprt
-      read(5,*) nwrt
-      read(5,*) tmax
-      read(5,*) dtmax
-      read(5,*) cf
-      read(5,*) fncp
-      read(5,*) fndat
-      fnbcp='base.dcp'
-      istop=0
-      open(9,file=fncp,form='unformatted',status='old',err=111)
-      end if
-222   call MPI_BCAST(istop,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
-      if(istop.ne.0) goto 333
-      if(Np.eq.0)then
-      read(9)t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,dsym
+      if(Np.eq.0) then
+        write(*,*)' *        Number of processors =',Npm,'          *'
       end if
 *
+      if(Np.eq.0) then
+        open(5,file='pipe.car')
+        read(5,*) tol
+        read(5,*) nprt
+        read(5,*) nwrt
+        read(5,*) tmax
+        read(5,*) dtmax
+        read(5,*) cf
+        read(5,*) fncp
+        read(5,*) fndat
+        close(5)
+        fnbcp='base.dcp'
+      end if
       call MPI_BCAST(tol,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(nprt,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(nwrt,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(tmax,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(dtmax,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
       call MPI_BCAST(cf,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
-*
-      call MPI_BCAST(t,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
-      call MPI_BCAST(dt,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
-      call MPI_BCAST(Re,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
-      call MPI_BCAST(Xmax,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
-      call MPI_BCAST(epsr,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
-      call MPI_BCAST(lx,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
-      call MPI_BCAST(Jm,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
-      call MPI_BCAST(lt,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
-      call MPI_BCAST(dsym,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ier)
-*
-      call com
-      if(Np.eq.0) then      
-      write(*,*)' ***************************************************'
-      write(*,*)' * Number of processors =',Npm,', cf = ', cf,'     *'
-      write(*,200) t,dt,Dp,Re,Xmax,epsr,Imm,Jm,Km,dsym
-      write(*,*)' ***************************************************'
-200   format('    t=',1pe10.3,' dt=',e9.2,' Dp=',e9.2,/,
-     >'    Re=',e9.2,' Xmax=',e9.2,' epsr=',e9.2,/,
-     >'     Im=',i4,' Jm=',i4,' Km=',i4,' Nsym=',e9.2)
-*
-      if(Im.gt.Imax-1.or.Im*Npm.gt.2048) then
-        write(*,*)'  Im=',Im,'  is greater than   Imax-1=',Imax-1
-        goto 333
-      end if
-      if(Jm.gt.Jmax-1.or.Jm.gt.128) then
-        write(*,*)'  Jm=',Jm,'  is greater than   Jmax-1=',Jmax-1
-        goto 333
-      end if
-      if(Km.gt.Kmax-1.or.Km.gt.256) then
-        write(*,*)'  Km=',Km,'  is greater than   Kmax=',Kmax
-        goto 333
-      end if
-      end if
-*
-      do k=1,Km
-        do j=1,Jm
-          if(Np.eq.0) then
-            read(9)(buf(i),i=1,Imm)
-            read(9)(buf(i+Imm),i=1,Imm)
-            read(9)(buf(i+2*Imm),i=1,Imm)
-            do i=1,Im
-              u(i,j,k)=buf(i)
-              v(i,j,k)=buf(i+Imm)
-              w(i,j,k)=buf(i+2*Imm)
-            end do
-            do n=1,Npm-1
-              call MPI_SEND(buf(n*Im+1),Im,MPI_DOUBLE_PRECISION
-     >                     ,n,1,MPI_COMM_WORLD,ier)              
-              call MPI_SEND(buf(n*Im+1+Imm),Im,MPI_DOUBLE_PRECISION
-     >                     ,n,2,MPI_COMM_WORLD,ier)              
-              call MPI_SEND(buf(n*Im+1+2*Imm),Im,MPI_DOUBLE_PRECISION
-     >                     ,n,3,MPI_COMM_WORLD,ier)             
-            end do
-          else
-            call MPI_RECV(u(1,j,k),Im,MPI_DOUBLE_PRECISION,0,1
-     >                   ,MPI_COMM_WORLD,status,ier)
-            call MPI_RECV(v(1,j,k),Im,MPI_DOUBLE_PRECISION,0,2
-     >                   ,MPI_COMM_WORLD,status,ier)
-            call MPI_RECV(w(1,j,k),Im,MPI_DOUBLE_PRECISION,0,3
-     >                   ,MPI_COMM_WORLD,status,ier)
-          end if
-          call MPI_BARRIER(MPI_COMM_WORLD,ier)
-        end do
-      end do
       if(Np.eq.0) then
-        close(9)
-        istop=0
-        open(9,file=fnbcp,form='unformatted',status='old',err=112)
-      end if
-223   call MPI_BCAST(istop,1,MPI_INTEGER,0,MPI_COMM_WORLD,ier)
-      if(istop.ne.0) goto 333
-      if(Np.eq.0)then
-        read(9)t1,dt1,cf1,Re1,Xmax1,epsr1,lx1,Jm1,lt1,dsym1
-      end if
+        write(*,*) 'tol=',tol,',nprt=',nprt,'nwrt=',nwrt
+        write(*,*) 'tmax=',tmax,',dtmax=',dtmax,',cf=',cf
+      endif
 *
-      if(Np.eq.0) then      
-        Im1=2**lx1
-        Km1=2**lt1
-        write(*,201) cf1,Xmax1,epsr1,Im1,Jm1,Km1,dsym1
+      call init_cp(fnbcp,t,dt,ub,vb,wb,buf,Imax,Jmax,Kmax)
+      if(Np.eq.0) then
         write(*,*)' ***************************************************'
-201   format('base: cf1=',f9.7,' Xmax=',e9.2,' epsr=',e9.2,/,
-     >'     Im=',i4,' Jm=',i4,' Km=',i4,' Nsym=',e9.2)
-*
-        if(Im.gt.Im1) then
-          write(*,*)'  base Im=',Im1,' != perturb Im=',Im
-          goto 333
-        end if
-        if(Jm.gt.Jm1) then
-          write(*,*)'  base Jm=',Jm1,' != perturb Jm=',Jm
-          goto 333
-        end if
-        if(Km.gt.Km1) then
-          write(*,*)'  base Km=',Km1,' != perturb Km=',Km
-          goto 333
-        end if
+        write(*,*)' *        base:                                  *'
+        write(*,200) t,dt,Re,Xmax,epsr,Imm,Jm,Km,dsym
+        write(*,*)' ***************************************************'
+      endif
+      lx1 = lx
+      Jm1 = Jm
+      lt1 = lt
+      epsr1 = epsr
+      Xmax1 = Xmax
+      dsym1 = dsym
+      call init_cp(fncp,t,dt,u,v,w,buf,Imax,Jmax,Kmax)
+      if(Np.eq.0) then
+        write(*,*)' ***************************************************'
+        write(*,*)' *        lin:                                   *'
+        write(*,200) t,dt,Re,Xmax,epsr,Imm,Jm,Km,dsym
+        write(*,*)' ***************************************************'
+      endif
+      if(lx.ne.lx1.or.Jm.ne.Jm1.or.lt.ne.lt1) then
+        write(*,*)'  mesh is differ'
+        call MPI_ABORT(444)
       end if
-*
-      do k=1,Km
-        do j=1,Jm
-          if(Np.eq.0) then
-            read(9)(buf(i),i=1,Imm)
-            read(9)(buf(i+Imm),i=1,Imm)
-            read(9)(buf(i+2*Imm),i=1,Imm)
-            do i=1,Im
-              ub(i,j,k)=buf(i)
-              vb(i,j,k)=buf(i+Imm)
-              wb(i,j,k)=buf(i+2*Imm)
-            end do
-            do n=1,Npm-1
-              call MPI_SEND(buf(n*Im+1),Im,MPI_DOUBLE_PRECISION
-     >                     ,n,1,MPI_COMM_WORLD,ier)              
-              call MPI_SEND(buf(n*Im+1+Imm),Im,MPI_DOUBLE_PRECISION
-     >                     ,n,2,MPI_COMM_WORLD,ier)              
-              call MPI_SEND(buf(n*Im+1+2*Imm),Im,MPI_DOUBLE_PRECISION
-     >                     ,n,3,MPI_COMM_WORLD,ier)             
-            end do
-          else
-            call MPI_RECV(ub(1,j,k),Im,MPI_DOUBLE_PRECISION,0,1
-     >                   ,MPI_COMM_WORLD,status,ier)
-            call MPI_RECV(vb(1,j,k),Im,MPI_DOUBLE_PRECISION,0,2
-     >                   ,MPI_COMM_WORLD,status,ier)
-            call MPI_RECV(wb(1,j,k),Im,MPI_DOUBLE_PRECISION,0,3
-     >                   ,MPI_COMM_WORLD,status,ier)
-          end if
-          call MPI_BARRIER(MPI_COMM_WORLD,ier)
-        end do
-      end do
-      if(Np.eq.0) close(9)
+      if(epsr.ne.epsr1.or.Xmax.ne.Xmax1.or.dsym.ne.dsym1) then
+        write(*,*)'  mesh is differ'
+        call MPI_ABORT(555)
+      end if
       dt=min(dt,dtmax)
+200   format('    t=',1pe10.3,' dt=',e9.2,/,
+     >'    Re=',e9.2,' Xmax=',e9.2,' epsr=',e9.2,/,
+     >'    Im=',i4,' Jm=',i4,' Km=',i4,' nsym=',e9.2)
 *
       call bc_om(t,ub,vb,wb,bx,br,bt,buf,Imax,Jmax)
       call rp(t,ub,vb,wb,bx,br,bt,u,v,w,u1,v1,w1,ox,or,ot,buf,Imax,Jmax)
-*
-      p(0,0,1)=0.d0
-      call pres(u1,v1,w1,p,buf,Imax,Jmax)
+      call pres(u1,v1,w1,p,c0,buf,Imax,Jmax)
 *
       if(Np.eq.0) open(8,file=fndat,access='append')
-*
-      call servis(t,u,v,w,ox,or,ot,p,0,Imax,Jmax)
+      call servis(t,g1,g2,g3,g4,g5,u,v,w,ox,or,ot,p,0,buf,Imax,Jmax)
       call prt(t,dt,u,v,w,p,Imax,Jmax)
       lprt=0
       lwrt=0
 10    continue
-      call step(t,dt,tol,ub,vb,wb,bx,br,bt
-     > ,u,v,w,u1,v1,w1,u2,v2,w2,u3,v3,w3,ox,or,ot,p,q
-     > ,buf,Imax,Jmax)
-      lprt=lprt+1
-      lwrt=lwrt+1
-      dt=min(dt,dtmax)
-      call servis(t,u,v,w,ox,or,ot,p,0,Imax,Jmax)
-      if(lprt.ge.nprt.or.t.ge.tmax) then
-        lprt=0
-        call servis(t,u,v,w,ox,or,ot,p,1,Imax,Jmax)
-        call prt(t,dt,u,v,w,p,Imax,Jmax)
-      end if
-      if(lwrt.ge.nwrt.or.t+0.01*dt.ge.tmax) then
-        lwrt=0
-        call servis(t,u,v,w,ox,or,ot,p,2,Imax,Jmax)
-        if(Np.eq.0) then
-          open(9,file=fncp,form='unformatted')
-          Dp=p(0,0,0)
-          write(9)t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,dsym
+        call step(t,dt,tol,ub,vb,wb,bx,br,bt
+     >   ,u,v,w,u1,v1,w1,u2,v2,w2,u3,v3,w3,ox,or,ot,p,q
+     >   ,buf,Imax,Jmax)
+        lprt=lprt+1
+        lwrt=lwrt+1
+        dt=min(dt,dtmax)
+        call servis(t,g1,g2,g3,g4,g5,u,v,w,ox,or,ot,p,0,buf,Imax,Jmax)
+        if(lprt.ge.nprt.or.t+0.01*dt.ge.tmax) then
+          lprt=0
+          call servis(t,g1,g2,g3,g4,g5,u,v,w,ox,or,ot,p,1,buf,Imax,Jmax)
+          call prt(t,dt,u,v,w,p,Imax,Jmax)
         end if
-        do k=1,Km
-          do j=1,Jm
-            if(Np.eq.0) then
-              do i=1,Im
-                buf(i)=u(i,j,k)
-                buf(i+Imm)=v(i,j,k)
-                buf(i+2*Imm)=w(i,j,k)
-              end do
-              do n=1,Npm-1
-                call MPI_RECV(buf(n*Im+1),Im,MPI_DOUBLE_PRECISION
-     >                     ,n,1,MPI_COMM_WORLD,status,ier)
-                call MPI_RECV(buf(n*Im+1+Imm),Im,MPI_DOUBLE_PRECISION
-     >                     ,n,2,MPI_COMM_WORLD,status,ier)
-                call MPI_RECV(buf(n*Im+1+2*Imm),Im,MPI_DOUBLE_PRECISION
-     >                     ,n,3,MPI_COMM_WORLD,status,ier)
-              end do
-              write(9)(buf(i),i=1,Imm)
-              write(9)(buf(i+Imm),i=1,Imm)
-              write(9)(buf(i+2*Imm),i=1,Imm)
-            else
-              call MPI_SEND(u(1,j,k),Im,MPI_DOUBLE_PRECISION,0,1
-     >                     ,MPI_COMM_WORLD,ier)              
-              call MPI_SEND(v(1,j,k),Im,MPI_DOUBLE_PRECISION,0,2
-     >                     ,MPI_COMM_WORLD,ier)              
-              call MPI_SEND(w(1,j,k),Im,MPI_DOUBLE_PRECISION,0,3
-     >                     ,MPI_COMM_WORLD,ier)   
-            end if
-            call MPI_BARRIER(MPI_COMM_WORLD,ier)
-          end do
-        end do
+        if(lwrt.ge.nwrt.or.t+0.01*dt.ge.tmax) then
+          lwrt=0
+          call servis(t,g1,g2,g3,g4,g5,u,v,w,ox,or,ot,p,2,buf,Imax,Jmax)
+        end if
         if(Np.eq.0) then
-          close(9)
+          call write_cp(t,dt,cf,u,v,w,fncp,buf,Imax,Jmax)
           close(8)
           write(*,*)'*************************************************'
           write(*,*)'*               Control Point                   *'
           write(*,*)'*************************************************'
           open(8,file=fndat,access='append')
         end if
-      end if 
       if(t+0.01*dt.lt.tmax) goto 10
 *
-333   continue
       call MPI_FINALIZE(ier)
       stop
-111   write(*,*)'  File ',fncp,' was not found'
-      istop=1
-      goto 222
-112   write(*,*)'  File ',fnbcp,' was not found'
-      istop=1
-      goto 223
       end

@@ -65,6 +65,7 @@
             bp(j)=bpy(j)-ct
             dp(j)=-ct*u(i,j,k)
           end do
+          bp(1)=bp(1)+apy(1)
           bp(Jm)=bp(Jm)-cpy(Jm)
           call prog3(apy,bp,cpy,dp,ep,Jm)
           do j=1,Jm
@@ -82,6 +83,7 @@
             bp(j)=bpy(j)-ct
             dp(j)=-ct*yt(j)*w(i,j,k)
           end do
+          bp(1)=bp(1)+apy(1)
           bp(Jm)=bp(Jm)-cpy(Jm)
           call prog3(apy,bp,cpy,dp,ep,Jm)
           do j=1,Jm

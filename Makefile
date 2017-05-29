@@ -3,11 +3,12 @@ compile_flags = -Wall -Ofast
 link_flags = -Wall
 
 programs = pipe
-subprograms = com fft8 lin pres prog3 prt rp rrt8 serv0 step bc_om add_nl visc
+subprograms = com fft8 lin pres prog3 prt rp rrt8 serv0 step io bc_om add_nl visc part_rp
 objects = $(addsuffix .o, $(subprograms))
 
 
 all: $(addsuffix .out, $(programs))
+	cp pipe.out ..
 
 
 %.out: %.o $(objects) 
