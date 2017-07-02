@@ -461,7 +461,7 @@ import matplotlib.pyplot as plt
 import matplotlib.tri as tri
 
 
-# In[2]:
+# In[1]:
 
 def cs_contourf_plot(u, rthloc="ff", *args, **kwargs):
     
@@ -506,14 +506,12 @@ def cs_contourf_plot(u, rthloc="ff", *args, **kwargs):
     ax.yaxis.set_major_locator(plt.NullLocator())
     #ax.axis('off')
     ax.set_aspect('equal')
-    plt.tricontourf( triang, z, *args, **kwargs)
     plt.xlim(-math.sqrt(2)/2,math.sqrt(2)/2)
     plt.ylim(-1,0) 
-    
-    return
+    return plt.tricontourf( triang, z, *args, **kwargs)
 
 
-# In[ ]:
+# In[2]:
 
 def cs_contour_plot(u, rthloc="ff", *args, **kwargs):
     
@@ -558,11 +556,9 @@ def cs_contour_plot(u, rthloc="ff", *args, **kwargs):
     ax.spines['left'].set_visible(False)
     ax.xaxis.set_major_locator(plt.NullLocator())
     ax.yaxis.set_major_locator(plt.NullLocator())
-    plt.tricontour( triang, z, *args, **kwargs)
     plt.xlim(-math.sqrt(2)/2,math.sqrt(2)/2)
     plt.ylim(-1,0) 
-    
-    return
+    return plt.tricontour( triang, z, *args, **kwargs)
 
 
 # In[4]:
