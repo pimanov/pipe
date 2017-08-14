@@ -125,6 +125,17 @@ def rp(t, vel, velt, om):
     wr.rp(t, vel[0].T, vel[1].T, vel[2].T, velt[0].T, velt[1].T, velt[2].T, om[0].T, om[1].T, om[2].T)
     return velt, om
 
+def bc_om(t, vel, om):
+    wr.bc_om(t, vel[0].T, vel[1].T, vel[2].T, om[0].T, om[1].T, om[2].T)
+    return om
+
+def add_nl(t, vel, velt, om):
+    wr.add_nl(t, vel[0].T, vel[1].T, vel[2].T, velt[0].T, velt[1].T, velt[2].T, om[0].T, om[1].T, om[2].T)
+    return velt
+
+def visc(t, vel, velt, om):
+    wr.visc(t, velt[0].T, velt[1].T, velt[2].T, om[0].T, om[1].T, om[2].T)
+    return velt
 
 # In[11]:
 

@@ -7,7 +7,8 @@ ext1 = Extension(name = 'pipeSym_wrapper',
                             'com.for', 'divmax.for', 'fft8.for', 
                             'init_like.for', 'lin.for', 'read.for', 
                             'pres.for', 'prog3.for', 'rp.for', 
-                            'rrt8.for', 'write.for', 'step.for'
+                            'rrt8.for', 'write.for', 'step.for',
+                            'bc_om.for', 'add_nl.for', 'visc.for'
                            ]
                 )
 
