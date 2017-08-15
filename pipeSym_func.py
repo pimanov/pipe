@@ -133,7 +133,7 @@ def add_nl(t, vel, velt, om):
     wr.add_nl(t, vel[0].T, vel[1].T, vel[2].T, velt[0].T, velt[1].T, velt[2].T, om[0].T, om[1].T, om[2].T)
     return velt
 
-def visc(t, vel, velt, om):
+def visc(t, velt, om):
     wr.visc(t, velt[0].T, velt[1].T, velt[2].T, om[0].T, om[1].T, om[2].T)
     return velt
 
@@ -143,6 +143,9 @@ def pres(vel, p, ub):
     wr.pres(vel[0].T, vel[1].T, vel[2].T, p.T, ub)
     return vel, p
 
+def sub_grad(vel, p):
+    wr.gradp(vel[0].T, vel[1].T, vel[2].T, p.T)
+    return vel
 
 # In[11]:
 

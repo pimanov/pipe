@@ -250,6 +250,29 @@ python module pipeSym_wrapper ! in
             common /rlx/ rlx
             common /rlt/ rlt
         end subroutine pres
+        subroutine gradp(u,v,w,p,Imax,Jmax) ! in :pipeSym:pres.for
+            real*8, intent(inout), dimension(Imax+1, Jmax+1, *) :: u
+            real*8, intent(inout), dimension(Imax+1, Jmax+1, *), depend(Imax,Jmax) :: v
+            real*8, intent(inout), dimension(Imax+1, Jmax+1, *), depend(Imax,Jmax) :: w
+            real*8, intent(inout), dimension(Imax+1, Jmax+1, *), depend(Imax,Jmax) :: p
+            integer, intent(hide), depend(u) :: Imax=(shape(u,0)-1)
+            integer, intent(hide), depend(u) :: Jmax=(shape(u,1)-1)
+            real*8 :: hx
+            integer :: Im
+            integer :: lx
+            real*8 dimension(130) :: rt
+            real*8 dimension(130) :: rt1
+            real*8 dimension(130) :: yt
+            real*8 dimension(130) :: yt1
+            real*8 :: hr
+            integer :: Jm
+            real*8 :: ht
+            integer :: Km
+            integer :: lt
+            common /dimx/ hx,Im,lx
+            common /dimr/ rt,rt1,yt,yt1,hr,Jm
+            common /dimt/ ht,Km,lt
+        end subroutine gradp
         subroutine rp(t,u,v,w,ut,vt,wt,ox,or,ot,Imax,Jmax) ! in :pipeSym:rp.for
             real*8, intent(in) :: t
             real*8, intent(inout), dimension(Imax+1,Jmax+1,*) :: u
