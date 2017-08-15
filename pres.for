@@ -216,3 +216,25 @@
       return
       end
 *
+      subroutine ffsum(u,v,w,p,Imax,Jmax)
+      implicit real*8 (a-h,o-z)
+      dimension
+     > u(0:Imax,0:Jmax,0:*)
+     >,v(0:Imax,0:Jmax,0:*)
+     >,w(0:Imax,0:Jmax,0:*)
+     >,p(0:Imax,0:Jmax,0:*)
+      common
+     >/dimx/hx,Im,lx
+     >/dimr/rt(0:129),rt1(0:129),yt(0:129),yt1(0:129),hr,Jm
+     >/dimt/ht,Km,lt
+      do k=1,Km
+        do j=1,Jm
+          do i=1,Im
+            p(i,j,k)=(u(i-1,j,k)+u(i,j,k)+
+     >        v(i,j-1,k)+v(i,j,k)+w(i,j,k-1)+w(i,j,k))/2
+          end do
+        end do
+      end do
+      return
+      end
+*

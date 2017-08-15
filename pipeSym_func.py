@@ -135,7 +135,23 @@ def nl(vel, om):
     wr.add_nl(0, vel[0].T, vel[1].T, vel[2].T, velt[0].T, velt[1].T, velt[2].T, om[0].T, om[1].T, om[2].T)
     return velt
 
-def visc(om):
+def ffsum(vel):
+    p = new_z_pfield()
+    wr.ffsum(vel[0].T, vel[1].T, vel[2].T, p.T)
+    return p
+
+def conv(vel1, vel2=None):
+    if type(vel2) is type(None):
+        om1 = bc_om(vel1)
+        res = nl(vel1, om1) + sgrad(ffsum(0.5*vel1**2))
+    else:
+        om1 = bc_om(vel1)
+        om2 = bc_om(vel2)
+        res = nl(vel1, om2) + nl(vel2, om1) + sgrad(ffsum(vel1*vel2))
+    return res
+
+def visc(vel):
+    om = bc_om(vel)
     velt = new_z_vfield()
     wr.visc(0, velt[0].T, velt[1].T, velt[2].T, om[0].T, om[1].T, om[2].T)
     return velt
