@@ -312,8 +312,8 @@ python module pipeSym_wrapper ! in
             real*8, intent(inout), dimension(Imax+1,Jmax+1,*), depend(Imax,Jmax) :: ox
             real*8, intent(inout), dimension(Imax+1,Jmax+1,*), depend(Imax,Jmax) :: or
             real*8, intent(inout), dimension(Imax+1,Jmax+1,*), depend(Imax,Jmax) :: ot
-            integer, intent(hide), depend(u) :: Imax = (shape(ut,0)-1)
-            integer, intent(hide), depend(u) :: Jmax = (shape(ut,1)-1)
+            integer, intent(hide), depend(ut) :: Imax = (shape(ut,0)-1)
+            integer, intent(hide), depend(ut) :: Jmax = (shape(ut,1)-1)
             real*8 dimension(130) :: rt
             real*8 dimension(130) :: rt1
             real*8 dimension(130) :: yt
