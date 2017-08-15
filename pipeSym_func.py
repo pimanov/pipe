@@ -125,27 +125,31 @@ def rp(t, vel, velt, om):
     wr.rp(t, vel[0].T, vel[1].T, vel[2].T, velt[0].T, velt[1].T, velt[2].T, om[0].T, om[1].T, om[2].T)
     return velt, om
 
-def bc_om(t, vel, om):
-    wr.bc_om(t, vel[0].T, vel[1].T, vel[2].T, om[0].T, om[1].T, om[2].T)
+def bc_om(vel):
+    om = new_z_vfield()
+    wr.bc_om(0, vel[0].T, vel[1].T, vel[2].T, om[0].T, om[1].T, om[2].T)
     return om
 
-def add_nl(t, vel, velt, om):
-    wr.add_nl(t, vel[0].T, vel[1].T, vel[2].T, velt[0].T, velt[1].T, velt[2].T, om[0].T, om[1].T, om[2].T)
+def nl(vel, om):
+    velt = new_z_vfield()
+    wr.add_nl(0, vel[0].T, vel[1].T, vel[2].T, velt[0].T, velt[1].T, velt[2].T, om[0].T, om[1].T, om[2].T)
     return velt
 
-def visc(t, velt, om):
-    wr.visc(t, velt[0].T, velt[1].T, velt[2].T, om[0].T, om[1].T, om[2].T)
+def visc(om):
+    velt = new_z_vfield()
+    wr.visc(0, velt[0].T, velt[1].T, velt[2].T, om[0].T, om[1].T, om[2].T)
     return velt
+
+def sgrad(p):
+    vel = new_z_vfield()
+    wr.gradp(vel[0].T, vel[1].T, vel[2].T, p.T)
+    return vel
 
 # In[11]:
 
 def pres(vel, p, ub):
     wr.pres(vel[0].T, vel[1].T, vel[2].T, p.T, ub)
     return vel, p
-
-def sub_grad(vel, p):
-    wr.gradp(vel[0].T, vel[1].T, vel[2].T, p.T)
-    return vel
 
 # In[11]:
 
