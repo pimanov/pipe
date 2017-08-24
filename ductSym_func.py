@@ -80,6 +80,20 @@ def step(t, dt, vel, velt, om, p, cf, tol=0.01):
 
 
 # In[10]:
+def bc_om(vel, om=None):
+    if type(om) == type(None): om = new_z_vfield()
+    wr.bc_om(vel[0].T, vel[1].T, vel[2].T, om[0].T, om[1].T, om[2].T)
+    return om
+
+def add_nl(vel, om, velt=None):
+    if type(velt) == type(None): velt = new_z_vfield()
+    wr.add_nl(vel[0].T,vel[1].T,vel[2].T,om[0].T,om[1].T,om[2].T,velt[0].T,velt[1].T,velt[2].T)
+    return velt 
+
+def visc(om, velt=None):
+    if type(velt) == type(None): velt = new_z_vfield()
+    wr.visc(om[0].T,om[1].T,om[2].T,velt[0].T,velt[1].T,velt[2].T)
+    return velt
 
 def rp(vel, t=0.0, velt=None, om=None):
     if type(velt) == type(None): velt = new_z_vfield()
