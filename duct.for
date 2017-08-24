@@ -73,8 +73,7 @@
 *
       call rp(t,u,v,w,u1,v1,w1,ox,or,ot,Imax,Jmax)
 *
-      p(0,0,1)=0.d0
-      call pres(u1,v1,w1,p,Imax,Jmax)
+      call pres(u1,v1,w1,p,0.d0,Imax,Jmax)
 *
       open(8,file=fndat,access='append')
 *

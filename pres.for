@@ -1,5 +1,5 @@
 *
-      subroutine pres(u,v,w,p,Imax,Jmax)
+      subroutine pres(u,v,w,p,Ub,Imax,Jmax)
       implicit real*8 (a-h,o-z)
       dimension
      > u(0:Imax,0:Jmax,0:*)
@@ -18,6 +18,7 @@
      >/rlt/rlt(256)
      >/pry/apy(128),bpy(128),cpy(128)
 *
+      c0=0.d0
       Im2=Im/2
       cik=4.d0/(Im2*Km)
 *
@@ -27,14 +28,22 @@
           u(0,j,k)=u(Im,j,k)
         end do
       end do
-      do i=1,Im
-        do j=1,Jm
-          w(i,j,0)=0.d0
+      do j=1,Jm
+        do i=1,Im
+          w(i,j,0)=c0
+          w(i,j,Km)=c0
         end do
-        do k=1,Km
-          v(i,0,k)=0.d0
-          v(i,Jm,k)=0.d0
-          do j=1,Jm
+      end do
+      do k=1,Km
+        do i=1,Im
+          v(i,Jm,k)=c0
+          v(i,0,k)=c0
+        end do
+      end do
+*
+      do k=1,Km
+        do j=1,Jm
+          do i=1,Im
             call div(i,j,k,u,v,w,d,Imax,Jmax)
             p(i,j,k)=d
           end do
@@ -59,7 +68,7 @@
         do k=1,Km
           do i=1,Im
             b1(i)=p(i,j,k)
-          end do
+          end do 
           do i=1,Im2
             i1=Im+1-i
             a1(i)=0.5d0*(b1(i)+b1(i1))
@@ -74,7 +83,7 @@
           end do
           do i=1,Im
             p(i,j,k)=a1(i)
-          end do
+          end do           
         end do
       end do
 *
@@ -87,40 +96,39 @@
           end do
           bp(1)=bp(1)+apy(1)
           bp(Jm)=bp(Jm)+cpy(Jm)
-          ep(Jm)=0.d0
           Jm1=Jm
+          ep(Jm)=0.d0
           if(rlx(i).eq.0.d0.and.rlt(k).eq.0.d0)Jm1=Jm-1
           call prog3(apy,bp,cpy,dp,ep,Jm1)
           do j=1,Jm
             p(i,j,k)=ep(j)
-          end do 
-        end do
+          end do
+        end do 
       end do
-*
 *
 *  Inverse FFT in x-direction
       do j=1,Jm
         do k=1,Km
           do i=1,Im
             b1(i)=p(i,j,k)
+          end do 
+          do i=1,Im2
+            i1=Im+1-i
+            a1(i)=b1(i)
+            a2(i)=b1(i1)
           end do
-        end do 
-        do i=1,Im2
-          i1=Im+1-i
-          a1(i)=b1(i)
-          a2(i)=b1(i1)
+          call ftc05b(a1,b1,lx-1)
+          call fts05b(a2,b2,lx-1)
+          do i=1,Im2
+            i1=Im+1-i
+            a1(i)=b1(i)+b2(i)
+            a1(i1)=b1(i)-b2(i)
+          end do
+          do i=1,Im
+            p(i,j,k)=a1(i)
+          end do           
         end do
-        call ftc05b(a1,b1,lx-1)
-        call fts05b(a2,b2,lx-1)
-        do i=1,Im2
-          i1=Im+1-i
-          a1(i)=b1(i)+b2(i)
-          a1(i1)=b1(i)-b2(i)
-        end do
-        do i=1,Im
-          p(i,j,k)=a1(i)
-        end do
-      end do           
+      end do
 *
 *   Inverse FFT in tt-direction
       do j=1,Jm
@@ -143,10 +151,10 @@
       end do
 *
 *  Mean pressure gradient
-      Ub=p(0,0,1) 
       ss=0.d0
       su=0.d0
       do j=1,Jm
+        ss=ss+yt1(j)
         ssu=0.d0
         do k=1,Km
           do i=1,Im
@@ -155,7 +163,7 @@
         end do
         su=su+ssu*yt1(j)
       end do
-      Dpp=Ub-su/(Im*Km)
+      Dpp=Ub-su/(Im*Km*ss)
       p(0,0,0)=Dpp
 *
       call gradp(u,v,w,p,Imax,Jmax)
@@ -190,9 +198,9 @@
         end do
       end do
 *
-      do j=1,Jm
-        do i=1,Im
-          do k=1,Km-1
+      do k=1,Km-1
+        do j=1,Jm
+          do i=1,Im
             w(i,j,k)=w(i,j,k)-(p(i,j,k+1)-p(i,j,k))/ht
           end do
         end do
