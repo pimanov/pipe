@@ -75,9 +75,7 @@ def init(Xmax=None, epsr=None, dsym=None, lx=None, Jm=None, lt=None, Re=None, Im
 # In[9]:
 
 def step(t, dt, vel, velt, om, p, cf, tol=0.01):
-    t, dt, tol = wr.step(t, dt, tol, vel[0].T, vel[1].T, vel[2].T, velt[0].T, velt[1].T, velt[2].T, 
-                    om[0].T, om[1].T, om[2].T, p.T, cf)
-    
+    t, dt = wr.step(t, dt, tol, vel[0].T, vel[1].T, vel[2].T, velt[0].T, velt[1].T, velt[2].T, om[0].T, om[1].T, om[2].T, p.T, cf)
     return t, dt, vel, velt, om, p
 
 

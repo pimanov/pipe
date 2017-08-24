@@ -9,7 +9,6 @@
      >/dimr/rt1(0:129),yt1(0:129),hr,Jm
      >/dimt/ht,Km,lt
      >/Re/Re
-     >/cf/cf
 *
       open(9,file=fncp,form='unformatted',status='old',err=111)
       read(9)t,dt,Dp,Re,Xmax,epsr,lx,Jm,lt,dsym

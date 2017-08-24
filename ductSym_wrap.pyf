@@ -99,7 +99,6 @@ python module ductSym_wrap ! in
             real*8 :: Xmax
             real*8 :: epsr
             real*8 :: dsym
-            real*8 :: cf
             real*8 dimension(130) :: rt1
             real*8 dimension(130) :: yt1
             real*8 :: hr
@@ -112,7 +111,6 @@ python module ductSym_wrap ! in
             integer :: Im
             integer :: lx
             common /dim/ Xmax,epsr,dsym
-            common /cf/ cf
             common /dimr/ rt1,yt1,hr,Jm
             common /Re/ Re
             common /dimt/ ht,Km,lt
@@ -210,29 +208,29 @@ python module ductSym_wrap ! in
             integer, optional,check((shape(u,1)-1)==Jmax),depend(u) :: Jmax=(shape(u,1)-1)
             real*8 :: t
         end subroutine rp
-        subroutine step(t,dt,tol,u,v,w,ut,vt,wt,u2,v2,w2,u3,v3,w3,ox,or,ot,p,q,Imax,Jmax) ! in :ductSym_wrap:step.for
-            real*8 intent(in,out) :: t
-            real*8 intent(in,out) :: dt
-            real*8 intent(in,out) :: tol
-            real*8 intent(inout),dimension(Imax + 1,Jmax + 1,*) :: u
-            real*8 intent(inout),dimension(Imax + 1,Jmax + 1,*),depend(Imax,Jmax) :: v
-            real*8 intent(inout),dimension(Imax + 1,Jmax + 1,*),depend(Imax,Jmax) :: w
-            real*8 intent(inout),dimension(Imax + 1,Jmax + 1,*),depend(Imax,Jmax) :: ut
-            real*8 intent(inout),dimension(Imax + 1,Jmax + 1,*),depend(Imax,Jmax) :: vt
-            real*8 intent(inout),dimension(Imax + 1,Jmax + 1,*),depend(Imax,Jmax) :: wt
-            real*8 intent(cache,hide),dimension(Imax + 1,Jmax + 1,shape(u,2)),depend(Imax,Jmax) :: u2
-            real*8 intent(cache,hide),dimension(Imax + 1,Jmax + 1,shape(u,2)),depend(Imax,Jmax) :: v2
-            real*8 intent(cache,hide),dimension(Imax + 1,Jmax + 1,shape(u,2)),depend(Imax,Jmax) :: w2
-            real*8 intent(cache,hide),dimension(Imax + 1,Jmax + 1,shape(u,2)),depend(Imax,Jmax) :: u3
-            real*8 intent(cache,hide),dimension(Imax + 1,Jmax + 1,shape(u,2)),depend(Imax,Jmax) :: v3
-            real*8 intent(cache,hide),dimension(Imax + 1,Jmax + 1,shape(u,2)),depend(Imax,Jmax) :: w3
-            real*8 intent(inout),dimension(Imax + 1,Jmax + 1,*),depend(Imax,Jmax) :: ox
-            real*8 intent(inout),dimension(Imax + 1,Jmax + 1,*),depend(Imax,Jmax) :: or
-            real*8 intent(inout),dimension(Imax + 1,Jmax + 1,*),depend(Imax,Jmax) :: ot
-            real*8 intent(inout),dimension(Imax + 1,Jmax + 1,*),depend(Imax,Jmax) :: p
-            real*8 intent(cache,hide),dimension(Imax + 1,Jmax + 1,shape(u,2)),depend(Imax,Jmax) :: q
-            integer, optional,check((shape(u,0)-1)==Imax),depend(u) :: Imax=(shape(u,0)-1)
-            integer, optional,check((shape(u,1)-1)==Jmax),depend(u) :: Jmax=(shape(u,1)-1)
+        subroutine step(t,dt,tol,u,v,w,ut,vt,wt,u2,v2,w2,u3,v3,w3,ox,or,ot,p,cf,Imax,Jmax) ! in :ductSym_wrap:step.for
+            real*8, intent(in,out) :: t
+            real*8, intent(in,out) :: dt
+            real*8, intent(in) :: tol
+            real*8, intent(inout), dimension(Imax+1,Jmax+1,*)  :: u
+            real*8, intent(inout), dimension(Imax+1,Jmax+1,*), depend(Imax,Jmax) :: v
+            real*8, intent(inout), dimension(Imax+1,Jmax+1,*), depend(Imax,Jmax) :: w
+            real*8, intent(inout), dimension(Imax+1,Jmax+1,*), depend(Imax,Jmax) :: ut
+            real*8, intent(inout), dimension(Imax+1,Jmax+1,*), depend(Imax,Jmax) :: vt
+            real*8, intent(inout), dimension(Imax+1,Jmax+1,*), depend(Imax,Jmax) :: wt
+            real*8, intent(cache,hide), dimension(Imax+1,Jmax+1,shape(u,2)), depend(Imax,Jmax) :: u2
+            real*8, intent(cache,hide), dimension(Imax+1,Jmax+1,shape(u,2)), depend(Imax,Jmax) :: v2
+            real*8, intent(cache,hide), dimension(Imax+1,Jmax+1,shape(u,2)), depend(Imax,Jmax) :: w2
+            real*8, intent(cache,hide), dimension(Imax+1,Jmax+1,shape(u,2)), depend(Imax,Jmax) :: u3
+            real*8, intent(cache,hide), dimension(Imax+1,Jmax+1,shape(u,2)), depend(Imax,Jmax) :: v3
+            real*8, intent(cache,hide), dimension(Imax+1,Jmax+1,shape(u,2)), depend(Imax,Jmax) :: w3
+            real*8, intent(inout), dimension(Imax+1,Jmax+1,*), depend(Imax,Jmax) :: ox
+            real*8, intent(inout), dimension(Imax+1,Jmax+1,*), depend(Imax,Jmax) :: or
+            real*8, intent(inout), dimension(Imax+1,Jmax+1,*), depend(Imax,Jmax) :: ot
+            real*8, intent(inout), dimension(Imax+1,Jmax+1,*), depend(Imax,Jmax) :: p
+            real*8, intent(in) :: cf
+            integer, intent(hide), depend(u) :: Imax=(shape(u,0)-1)
+            integer, intent(hide), depend(u) :: Jmax=(shape(u,1)-1)
             real*8 dimension(130) :: rt1
             real*8 dimension(130) :: yt1
             real*8 :: hr
@@ -240,13 +238,11 @@ python module ductSym_wrap ! in
             real*8 :: hx
             integer :: Im
             integer :: lx
-            real*8 :: cf
             real*8 :: ht
             integer :: Km
             integer :: lt
             common /dimr/ rt1,yt1,hr,Jm
             common /dimx/ hx,Im,lx
-            common /cf/ cf
             common /dimt/ ht,Km,lt
         end subroutine step
         subroutine visc(ox,or,ot,ut,vt,wt,Imax,Jmax) ! in :ductSym_wrap:visc.for
