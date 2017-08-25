@@ -116,6 +116,31 @@ python module ductSym_wrap ! in
             common /dimt/ ht,Km,lt
             common /dimx/ hx,Im,lx
         end subroutine init_like_dcp
+        subroutine gradp(u,v,w,p,Imax,Jmax) ! in :ductSym_wrap:pres.for
+            real*8 intent(inout),dimension(Imax + 1,Jmax + 1,*) :: u
+            real*8 intent(inout),dimension(Imax + 1,Jmax + 1,*),depend(Imax,Jmax) :: v
+            real*8 intent(inout),dimension(Imax + 1,Jmax + 1,*),depend(Imax,Jmax) :: w
+            real*8 intent(inout),dimension(Imax + 1,Jmax + 1,*),depend(Imax,Jmax) :: p
+            integer, optional,check((shape(u,0)-1)==Imax),depend(u) :: Imax=(shape(u,0)-1)
+            integer, optional,check((shape(u,1)-1)==Jmax),depend(u) :: Jmax=(shape(u,1)-1)
+            real*8 :: Xmax
+            real*8 :: epsr
+            real*8 :: dsym
+            real*8 dimension(130) :: rt1
+            real*8 dimension(130) :: yt1
+            real*8 :: hr
+            integer :: Jm
+            real*8 :: ht
+            integer :: Km
+            integer :: lt
+            real*8 :: hx
+            integer :: Im
+            integer :: lx
+            common /dim/ Xmax,epsr,dsym
+            common /dimr/ rt1,yt1,hr,Jm
+            common /dimt/ ht,Km,lt
+            common /dimx/ hx,Im,lx
+        end subroutine gradp
         subroutine pres(u,v,w,p,Ub,Imax,Jmax) ! in :ductSym_wrap:pres.for
             real*8 intent(inout),dimension(Imax + 1,Jmax + 1,*) :: u
             real*8 intent(inout),dimension(Imax + 1,Jmax + 1,*),depend(Imax,Jmax) :: v
@@ -142,27 +167,6 @@ python module ductSym_wrap ! in
             common /dimt/ ht,Km,lt
             common /dimx/ hx,Im,lx
         end subroutine pres
-        subroutine gradp(u,v,w,p,Imax,Jmax) ! in :ductSym_wrap:pres.for
-            real*8 intent(inout),dimension(Imax + 1,Jmax + 1,*) :: u
-            real*8 intent(inout),dimension(Imax + 1,Jmax + 1,*),depend(Imax,Jmax) :: v
-            real*8 intent(inout),dimension(Imax + 1,Jmax + 1,*),depend(Imax,Jmax) :: w
-            real*8 intent(inout),dimension(Imax + 1,Jmax + 1,*),depend(Imax,Jmax) :: p
-            integer, optional,check((shape(u,0)-1)==Imax),depend(u) :: Imax=(shape(u,0)-1)
-            integer, optional,check((shape(u,1)-1)==Jmax),depend(u) :: Jmax=(shape(u,1)-1)
-            real*8 dimension(130) :: rt1
-            real*8 dimension(130) :: yt1
-            real*8 :: hr
-            integer :: Jm
-            real*8 :: hx
-            integer :: Im
-            integer :: lx
-            real*8 :: ht
-            integer :: Km
-            integer :: lt
-            common /dimr/ rt1,yt1,hr,Jm
-            common /dimx/ hx,Im,lx
-            common /dimt/ ht,Km,lt
-        end subroutine gradp
         subroutine read_dcp(fncp,u,v,w,t,dt,dp,Imax,Jmax,Kmax) ! in :ductSym_wrap:read.for
             character*24 :: fncp
             real*8 intent(inout),dimension(Imax + 1,Jmax + 1,Kmax + 1) :: u

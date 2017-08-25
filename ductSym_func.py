@@ -113,6 +113,12 @@ def pres(vel, ub, inplace=False, p=None):
     wr.pres(vel[0].T, vel[1].T, vel[2].T, p.T, ub)
     return vel, p
 
+def grad(vel, p, inplace=False):
+    if not inplace:
+        vel = vel.copy()
+
+    wr.gradp(vel[0].T, vel[1].T, vel[2].T, p.T)
+    return vel
 
 # In[11]:
 
