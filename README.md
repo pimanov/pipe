@@ -1,16 +1,16 @@
-# pipe
-Fortran routine to simulate Navier-Stokes equations in pipe geometry
+# pipe_channel_flow repository
+Fortran code for Direct Numerical Simulation of pipe and channel flows. Code implements a finite-difference method for incompressible Navier–Stokes equations solving described in https://doi.org/10.1016/j.jcp.2006.01.036. 
 
 How is this repository?
 =======================
-primary branches: 
-+ pipe - simplest version of code to time intgration and support tools like init program. 
-+ pipeSym - code to time integration with symmetry reduction (reflection and rotation symmetry).
-+ pipeMPI - MPI version of code to time integration, without init or other support tools. 
-+ pipeSymMPI - MPI version of code to time integration with simmetry reduction (reflection and rotation symmetry), without other tools. 
-+ pytools - python scriptes to manipulation with control points files (change of greed, Re, sym, ... ). 
-+ master - nothing special
+Primary branches: 
++ pipe - simplest version of code for pipe flow time integration and support tools.
++ pipeSym - code for pipe flow time integration with symmetry reduction (reflection and rotation symmetry) and support tools.
++ pipeMPI - MPI version of code from pipe branch. 
++ pipeSymMPI - MPI version of code from pipeSym branch.
++ ductSym - code for channel flow simulation with additional symmetries.
++ ductSymMPI - MPI version of code from ductSym branch.
++ pytools - python scripts for experiments processing
++ master - not in use
 
-Other branches are produced by primary branches with name like (primary_branch_name)-(feature) and contain some spetial cases of code.
-
-  Expirements used code is supplied with tag
+Other branches with names like (primary_branch_name)-(feature) produced from primary branches and contain special cases of code.
