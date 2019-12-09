@@ -1,5 +1,5 @@
 # pipe_channel_flow repository
-Fortran code for Direct Numerical Simulation of pipe and channel flows. Code implements a finite-difference method for incompressible Navier–Stokes equations solving described in https://doi.org/10.1016/j.jcp.2006.01.036. 
+Fortran code for Direct Numerical Simulation of pipe and channel flows. Code implements a finite-difference method for incompressible Navier–Stokes equations; algorithm described in https://doi.org/10.1016/j.jcp.2006.01.036. 
 
 How is this repository?
 =======================
